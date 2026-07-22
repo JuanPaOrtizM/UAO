@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>UAO - Vista previa de anuncios Meta Ads 2026-2S</title>
+<style>
+  :root{
+    --rojo:#DC142D; --rojo-oscuro:#961423; --rojo-claro:#F03C46;
+    --crema:#ECE5DC; --gris-texto:#050505; --gris-sec:#65676b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family: 'DM Sans', Helvetica, Arial, sans-serif;
+    background:var(--crema); margin:0; padding:0; color:#222;
+  }
+  header{
+    background:var(--rojo); color:#fff; padding:28px 24px; text-align:center;
+  }
+  header h1{ margin:0 0 6px; font-size:24px; font-weight:700; }
+  header p{ margin:0; font-size:14px; opacity:0.95; }
+  .wrap{ max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
+  .leyenda{
+    background:#fff; border:1px solid #e0dcd4; border-radius:10px; padding:18px 20px;
+    margin-bottom:26px; font-size:14px; line-height:1.55;
+  }
+  .leyenda h2{ font-size:16px; margin:0 0 8px; color:var(--rojo-oscuro); }
+  .leyenda b{ color:var(--rojo-oscuro); }
+  .grid{ display:grid; grid-template-columns: 380px 1fr; gap:28px; align-items:start; }
+  @media (max-width: 800px){ .grid{ grid-template-columns: 1fr; } }
+  .controles{
+    background:#fff; border:1px solid #e0dcd4; border-radius:10px; padding:18px;
+    position:sticky; top:20px;
+  }
+  .controles label{
+    display:block; font-size:12px; font-weight:700; color:var(--rojo-oscuro);
+    text-transform:uppercase; letter-spacing:0.4px; margin:14px 0 6px;
+  }
+  .controles label:first-of-type{ margin-top:0; }
+  select{
+    width:100%; padding:10px 12px; border-radius:8px; border:1px solid #ccc;
+    font-size:14px; background:#fff; color:#222;
+  }
+  .campo-ficha{
+    margin-top:18px; padding-top:14px; border-top:1px solid #eee; font-size:13px; color:#555;
+  }
+  .campo-ficha div{ margin-bottom:6px; }
+  .campo-ficha b{ color:#222; }
+  .previewCol{ display:flex; flex-direction:column; gap:16px; }
+  .badge-nota{
+    background:#FFF3CD; border:1px solid #f0d98a; color:#7a5b00; font-size:13px;
+    padding:10px 14px; border-radius:8px;
+  }
+  .adCard{
+    background:#fff; border:1px solid #dadde1; border-radius:8px;
+    font-family: Helvetica, Arial, sans-serif; overflow:hidden; max-width:500px;
+  }
+  .adHeader{ display:flex; align-items:center; gap:8px; padding:12px 12px 0; }
+  .avatar{
+    width:36px; height:36px; border-radius:50%; background:var(--rojo); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;
+  }
+  .adHeader .nombre{ font-size:13px; font-weight:600; color:#050505; }
+  .adHeader .tipo{ font-size:12px; color:#65676b; }
+  .adTexto{ padding:8px 12px 10px; font-size:14px; color:#050505; line-height:1.45; }
+  .adImagen{
+    background:var(--rojo); color:#fff; min-height:260px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding:28px 20px; gap:12px;
+  }
+  .adImagen .titular{ font-size:21px; font-weight:700; line-height:1.25; letter-spacing:0.3px; }
+  .adImagen .subtitular{ font-size:14px; font-weight:400; max-width:380px; line-height:1.4; opacity:0.95; }
+  .adFooter{
+    background:#f0f2f5; padding:10px 12px; display:flex; align-items:center;
+    justify-content:space-between; gap:10px;
+  }
+  .adFooter .dominio{ font-size:11px; color:#65676b; text-transform:uppercase; letter-spacing:0.2px; }
+  .adFooter .titulo{ font-size:14px; font-weight:600; color:#050505; }
+  .adFooter .desc{ font-size:12px; color:#65676b; }
+  .adFooter button{
+    flex-shrink:0; background:#e4e6eb; border:none; border-radius:6px; padding:8px 14px;
+    font-size:13px; font-weight:600; color:#050505; cursor:default; white-space:nowrap;
+  }
+  .textosMeta{
+    background:#fff; border:1px solid #e0dcd4; border-radius:10px; padding:16px 18px; font-size:13px;
+  }
+  .textosMeta h3{ font-size:13px; text-transform:uppercase; letter-spacing:0.4px; color:var(--rojo-oscuro); margin:0 0 10px; }
+  .textosMeta table{ width:100%; border-collapse:collapse; }
+  .textosMeta td{ padding:6px 0; border-top:1px solid #f0f0f0; vertical-align:top; }
+  .textosMeta td.k{ width:130px; color:#777; font-weight:600; }
+  footer{ text-align:center; font-size:12px; color:#999; padding:20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Vista previa de anuncios - Meta Ads 2026-2S</h1>
+  <p>Universidad Autonoma de Occidente · Mercadeo Digital</p>
+</header>
+
+<div class="wrap">
+
+  <div class="leyenda">
+    <h2>Como usar este documento</h2>
+    <b>Copy de la pieza (imagen):</b> el titular grande y la linea de apoyo dentro del recuadro rojo son el copy que va IMPRESO en el diseno de la imagen (brief para el disenador). Nunca menciona becas ni matricula.<br>
+    <b>Texto principal, titulo, descripcion y CTA:</b> son los campos que se configuran directamente en Meta Ads Manager, debajo de la imagen. La oferta (inscripcion, cupos) solo aparece en el objetivo <b>Ventas</b>.<br>
+    Selecciona cluster, programa, gancho y objetivo en el panel izquierdo para explorar cualquier combinacion.
+  </div>
+
+  <div class="grid">
+    <div class="controles">
+      <label>Cluster</label>
+      <select id="selCluster"></select>
+
+      <label>Programa</label>
+      <select id="selPrograma"></select>
+
+      <label>Gancho creativo</label>
+      <select id="selGancho"></select>
+
+      <label>Objetivo de campana</label>
+      <select id="selObjetivo"></select>
+
+      <div class="campo-ficha" id="fichaPrograma"></div>
+    </div>
+
+    <div class="previewCol">
+      <div id="notaVerificar" class="badge-nota" style="display:none;"></div>
+
+      <div class="adCard" id="adCard"></div>
+
+      <div class="textosMeta">
+        <h3>Campos para Meta Ads Manager</h3>
+        <table id="tablaTextos"></table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Documento generado para revision interna - Comite Primario Mercadeo Digital UAO</footer>
+
+<script>
+var CLUSTERS = {
+  "Ingenierias": [
+    {codigo:"ING_AMBIENTAL", nombre:"Ingenieria Ambiental", modalidad:"Hibrida dia-noche", beca:"Beca del 50% en concentracion noche", ganchos:[
+      ["Problema", "Cali genera miles de toneladas de residuos cada dia. Alguien tiene que disenar la solucion antes de que colapse.", "Cali genera miles de toneladas de basura cada dia: alguien debe resolverlo."],
+      ["Mito", "Piensas que Ingenieria Ambiental es solo cuidar arboles. La realidad: disenas la infraestructura que evita que una ciudad entera colapse por su propia basura.", "No es solo cuidar arboles: es disenar la infraestructura que salva ciudades."],
+      ["Dia en la vida", "Imagina monitorear la calidad del agua de un rio en la manana y sentarte con el Estado a definir politica ambiental en la tarde.", "Monitorea el agua en la manana y define politica ambiental en la tarde."],
+      ["Dato de impacto", "Los empleos verdes van a crecer mas rapido que casi cualquier otro sector en la proxima decada.", "Los empleos verdes creceran mas que cualquier otro sector esta decada."],
+      ["Identidad", "Si te indigna ver contaminacion y sientes que algo se puede hacer al respecto, esta ingenieria fue disenada para tu forma de pensar.", "Si te indigna la contaminacion, esta ingenieria piensa como tu."]
+    ]},
+    {codigo:"ING_ELECTRONICA_VIRTUAL", nombre:"Ing. Electronica y Telecom (Virtual)", modalidad:"Virtual (ciclos bimestrales)", beca:"Descuento por pronto pago", ganchos:[
+      ["Problema", "Cada segundo que tu internet no se cae, hay un ingeniero electronico detras asegurandose de que asi sea.", "Que tu internet no se caiga es trabajo de un ingeniero electronico."],
+      ["Mito", "No vas a arreglar computadores. Vas a disenar las redes, sensores IoT y dispositivos que conectan ciudades enteras.", "No arreglas computadores: disenas las redes que conectan ciudades."],
+      ["Dia en la vida", "Disenar un sensor IoT en la manana, programar un sistema de automatizacion en la tarde, sin salir de tu casa.", "Disena un sensor IoT en la manana y programalo en la tarde, desde casa."],
+      ["Dato de impacto", "Muy pocas universidades ofrecen esta ingenieria 100% virtual en IoT y redes.", "Pocas universidades ofrecen esta ingenieria 100% virtual en IoT y redes."],
+      ["Identidad", "Si te imaginas creando la proxima generacion de dispositivos conectados, este programa virtual es tu punto de partida.", "Si sueñas con crear los dispositivos conectados del futuro, empieza aqui."]
+    ]},
+    {codigo:"ING_INFORMATICA_VIRTUAL", nombre:"Ing. Informatica (Virtual)", modalidad:"Virtual", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada app que usas hoy la construyo alguien que empezo exactamente donde estas tu ahora: sin saber programar.", "Cada app que usas la creo alguien que empezo sin saber programar."],
+      ["Mito", "Ser ingeniero informatico no es ser bueno con los computadores. Es resolver problemas reales del mundo con logica y creatividad.", "No es ser bueno con los computadores: es resolver problemas con logica."],
+      ["Dia en la vida", "Programar una solucion en la manana, aprender ciberseguridad en la tarde, todo a tu ritmo.", "Programa en la manana, aprende ciberseguridad en la tarde, desde tu casa."],
+      ["Dato de impacto", "El sector tech sigue siendo uno de los que mas contrata en Colombia.", "El sector tech sigue contratando en Colombia aun en tiempos dificiles."],
+      ["Identidad", "Si te gusta armar cosas, resolver acertijos y crear desde cero, la programacion puede ser tu lenguaje natural.", "Si te gusta resolver acertijos y crear desde cero, esto es para ti."]
+    ]},
+    {codigo:"ING_DATOS_IA", nombre:"Ing. de Datos e IA", modalidad:"Hibrida dia-noche", beca:"Beca del 30% en concentracion noche", ganchos:[
+      ["Problema", "Las empresas tienen mas datos de los que saben que hacer con ellos. Alguien tiene que traducir esos numeros en decisiones.", "Las empresas tienen datos de sobra y pocos que sepan traducirlos."],
+      ["Mito", "La Inteligencia Artificial no le va a quitar el trabajo a nadie que sepa usarla. Se lo va a quitar a quien no sepa.", "La IA no reemplaza a quien sabe usarla: reemplaza a quien no."],
+      ["Dia en la vida", "Entrenar un modelo predictivo en la manana, presentar un dashboard a una gerencia en la tarde.", "Entrena un modelo en la manana, presentalo a gerencia en la tarde."],
+      ["Dato de impacto", "Es un programa unico en Colombia. No hay muchos lugares donde puedas estudiar esta combinacion.", "Es un programa unico en Colombia: no hay muchos lugares para estudiar esto."],
+      ["Identidad", "Si te encanta encontrar patrones donde otros solo ven numeros sueltos, esta ingenieria fue hecha para ti.", "Si ves patrones donde otros solo ven numeros, esta carrera es tuya."]
+    ]},
+    {codigo:"ING_BIOMEDICA", nombre:"Ingenieria Biomedica", modalidad:"Presencial (dia)", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Detras de cada maquina que salva una vida en una UCI, hay un ingeniero biomedico que la diseno, calibro o mantuvo funcionando.", "Detras de cada maquina que salva vidas en la UCI, hay un ingeniero biomedico."],
+      ["Mito", "No es medicina y no es solo ingenieria. Es el punto exacto donde ambas se necesitan mutuamente.", "No es medicina ni solo ingenieria: es el punto exacto donde se necesitan."],
+      ["Dia en la vida", "Disenar una protesis en la manana, evaluar equipos medicos en un hospital aliado en la tarde.", "Disena una protesis en la manana, evalua equipos medicos en la tarde."],
+      ["Dato de impacto", "Somos el unico programa con doble acreditacion de Alta Calidad y ABET en el suroccidente colombiano.", "Somos el unico programa con doble acreditacion ABET en el suroccidente."],
+      ["Identidad", "Si la tecnologia te apasiona pero quieres que tu trabajo impacte directo la salud de las personas, esta es tu carrera.", "Si quieres que la tecnologia salve vidas, esta es tu carrera."]
+    ]},
+    {codigo:"ING_ELECTRICA", nombre:"Ingenieria Electrica", modalidad:"Presencial (noche)", beca:"Beca del 30% en concentracion noche", ganchos:[
+      ["Problema", "Cada apagon que no ocurre y cada panel solar que funciona tiene la huella de un ingeniero electrico detras.", "Cada apagon que no ocurre tiene la huella de un ingeniero electrico."],
+      ["Mito", "No vas a cambiar bombillos. Vas a disenar la infraestructura energetica que mueve ciudades enteras.", "No cambias bombillos: disenas la infraestructura energetica que mueve ciudades."],
+      ["Dia en la vida", "Disenar una microrred solar en clase hoy, competir en un Solar Decathlon internacional en un par de anos.", "Disena una microrred solar hoy, compite en un Solar Decathlon manana."],
+      ["Dato de impacto", "Mas de 45 anos formando ingenieros electricos y 12 premios internacionales en Solar Decathlon.", "45 anos de trayectoria y 12 premios internacionales en Solar Decathlon."],
+      ["Identidad", "Si la transicion energetica, la movilidad electrica y las renovables te parecen el futuro, este es tu programa.", "Si crees en la transicion energetica, este es tu programa."]
+    ]},
+    {codigo:"ING_ELECTRONICA_PRESENCIAL", nombre:"Ing. Electronica y Telecom (Presencial)", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada dispositivo inteligente que usas empezo como un circuito armado a mano en la mesa de un laboratorio.", "Cada dispositivo inteligente empezo como un circuito armado en un laboratorio."],
+      ["Mito", "No es solo cablear cosas. Es disenar los sistemas de comunicacion e IoT que sostienen la Industria 4.0.", "No es solo cablear cosas: es disenar los sistemas de la Industria 4.0."],
+      ["Dia en la vida", "Armar un prototipo en el laboratorio en la manana, probarlo en tiempo real en la tarde.", "Arma un prototipo en la manana, pruebalo en tiempo real en la tarde."],
+      ["Dato de impacto", "La transformacion digital de la industria necesita cada ano mas ingenieros en redes inteligentes.", "La Industria 4.0 necesita cada ano mas ingenieros en redes inteligentes."],
+      ["Identidad", "Si te gusta desarmar cosas para entender como funcionan y volverlas a armar mejor, esta ingenieria es para ti.", "Si te gusta desarmar cosas para entenderlas, esta ingenieria es para ti."]
+    ]},
+    {codigo:"ING_INDUSTRIAL", nombre:"Ingenieria Industrial", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Las empresas pierden millones de pesos al ano por procesos ineficientes. Alguien tiene que arreglar eso.", "Las empresas pierden millones al ano por procesos ineficientes: tu puedes arreglarlo."],
+      ["Mito", "Ingenieria Industrial no es un poco de todo. Es la unica carrera disenada para optimizar cualquier sistema.", "No es un poco de todo: es la unica carrera que optimiza cualquier sistema."],
+      ["Dia en la vida", "Redisenar una linea de produccion en la manana, liderar un equipo logistico en la tarde.", "Redisena una linea de produccion hoy, lidera un equipo logistico manana."],
+      ["Dato de impacto", "Es una de las ingenierias con mayor empleabilidad en Colombia.", "Es una de las ingenierias con mayor empleabilidad en Colombia."],
+      ["Identidad", "Si te gusta organizar, optimizar y liderar equipos, esta ingenieria fue hecha para tu forma de pensar.", "Si te gusta organizar y liderar equipos, esta ingenieria es para ti."]
+    ]},
+    {codigo:"ING_INFORMATICA_PRESENCIAL", nombre:"Ing. Informatica (Presencial)", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada app que usas hoy la construyo alguien que, como tu, empezo sin saber programar.", "Cada app que usas la creo alguien que empezo sin saber programar."],
+      ["Mito", "Ser ingeniero informatico no es ser bueno con los computadores. Es resolver problemas reales, en equipo.", "No es ser bueno con los computadores: es resolver problemas con logica."],
+      ["Dia en la vida", "Programar en el laboratorio en la manana, presentar tu proyecto en un semillero en la tarde.", "Programa en el laboratorio hoy, presenta tu proyecto en un semillero manana."],
+      ["Dato de impacto", "El sector tech sigue siendo de los que mas contrata en Colombia.", "El sector tech sigue contratando en Colombia aun en tiempos dificiles."],
+      ["Identidad", "Si te gusta armar cosas, resolver acertijos y crear desde cero, esto es para ti.", "Si te gusta resolver acertijos y crear desde cero, esto es para ti."]
+    ]},
+    {codigo:"ING_MECANICA", nombre:"Ingenieria Mecanica", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada maquina que fabrica, transporta o mueve algo en este pais la diseno un ingeniero mecanico.", "Cada maquina que fabrica o mueve algo la diseno un ingeniero mecanico."],
+      ["Mito", "No es solo arreglar motores. Es disenar, fabricar y automatizar la maquinaria que sostiene la industria.", "No es arreglar motores: es disenar y fabricar la maquinaria de la industria."],
+      ["Dia en la vida", "Disenar una pieza en CAD en la manana, verla fabricada en un torno real en la tarde.", "Disena una pieza en CAD hoy y mirala fabricada en un torno hoy mismo."],
+      ["Dato de impacto", "La manufactura y la automatizacion industrial necesitan cada ano mas ingenieros mecanicos.", "La manufactura y automatizacion necesitan cada ano mas ingenieros mecanicos."],
+      ["Identidad", "Si te fascina entender como funcionan las maquinas y quieres construir las del futuro, esta es tu carrera.", "Si te fascina entender como funcionan las maquinas, esta es tu carrera."]
+    ]},
+    {codigo:"ING_MECATRONICA", nombre:"Ingenieria Mecatronica", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Los robots que ensamblan carros y los brazos que asisten en cirugias nacieron en la mente de un ingeniero mecatronico.", "Los robots que ensamblan carros nacieron en la mente de un ingeniero mecatronico."],
+      ["Mito", "Mecatronica no es mecanica con computadores. Es mecanica, electronica y software integrados desde cero.", "No es mecanica con computadores: es mecanica, electronica y software en uno."],
+      ["Dia en la vida", "Programar un robot en la manana, calibrar sus sensores en la tarde, verlo moverse solo al final del dia.", "Programa un robot en la manana y miralo moverse solo en la tarde."],
+      ["Dato de impacto", "La robotica y la automatizacion son de las areas con mayor proyeccion de crecimiento industrial.", "La robotica es de las areas con mayor proyeccion de crecimiento industrial."],
+      ["Identidad", "Si te encanta la robotica y crear sistemas inteligentes desde cero, esta ingenieria es para ti.", "Si te fascina la robotica y crear sistemas inteligentes, esto es para ti."]
+    ]},
+    {codigo:"ING_MULTIMEDIA", nombre:"Ingenieria Multimedia", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada videojuego, animacion o experiencia en realidad virtual que te atrapo la construyo alguien que estudio exactamente esto.", "Cada videojuego o animacion que te atrapo la creo alguien que estudio esto."],
+      ["Mito", "No es jugar videojuegos todo el dia. Es disenar los mundos digitales que millones de personas van a vivir.", "No es jugar videojuegos todo el dia: es crear los mundos que otros van a vivir."],
+      ["Dia en la vida", "Disenar un personaje en 3D en la manana, programar su animacion en la tarde.", "Disena un personaje en 3D hoy y mira tu creacion cobrar vida hoy mismo."],
+      ["Dato de impacto", "La industria de videojuegos y contenidos interactivos mueve miles de millones de dolares al ano.", "La industria de videojuegos mueve miles de millones de dolares al ano."],
+      ["Identidad", "Si te apasiona crear mundos, contar historias con tecnologia y no imaginas un trabajo sin creatividad, esto es para ti.", "Si te apasiona crear mundos y contar historias, esta es tu ingenieria."]
+    ]}
+  ],
+  "Economicas y Juridicas": [
+    {codigo:"ARQUITECTURA", nombre:"Arquitectura", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cali sigue construyendo sin pensar siempre en como va a vivir la gente ahi dentro. Alguien tiene que disenarlo distinto.", "Cali crece rapido, y alguien debe disenar como se vive ahi dentro."],
+      ["Mito", "Arquitectura no es dibujar bonito. Es resolver como va a vivir, moverse y sentirse una comunidad entera dentro de un espacio.", "No es dibujar bonito: es resolver como vive una comunidad en un espacio."],
+      ["Dia en la vida", "Disenar una fachada en la manana, defender tu proyecto frente a un jurado de docentes en la tarde.", "Disena una fachada hoy, defiende tu proyecto frente a un jurado hoy mismo."],
+      ["Dato de impacto", "Las ciudades colombianas van a necesitar repensar su infraestructura en la proxima decada.", "Las ciudades colombianas necesitaran repensar su infraestructura esta decada."],
+      ["Identidad", "Si te detienes a mirar un edificio y piensas en como se podria mejorar, ya piensas como arquitecto.", "Si miras un edificio y piensas en como mejorarlo, ya piensas como arquitecto."]
+    ]},
+    {codigo:"DISENO_GRAFICO", nombre:"Diseno de la Comunicacion Grafica", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada marca que reconoces al instante existe porque alguien diseno su identidad visual desde cero.", "Cada marca que reconoces al instante la diseno alguien desde cero."],
+      ["Mito", "No es hacer logos bonitos. Es resolver como una marca se comunica visualmente con miles de personas a la vez.", "No es hacer logos bonitos: es comunicar una marca a miles de personas."],
+      ["Dia en la vida", "Bocetar una identidad de marca en la manana, defenderla frente a un cliente ficticio en la tarde.", "Boceta una marca hoy, defiendela frente a un cliente hoy mismo."],
+      ["Dato de impacto", "Las empresas invierten cada ano mas en diseno y experiencia visual que en casi cualquier otro activo de marca.", "Las empresas invierten cada ano mas en diseno de marca."],
+      ["Identidad", "Si ves un diseno mal hecho y no puedes dejar de notarlo, el diseno grafico ya es parte de como piensas.", "Si notas cada diseno mal hecho, ya piensas como disenador grafico."]
+    ]},
+    {codigo:"DERECHO", nombre:"Derecho", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Todos los dias se firman contratos y se decide el futuro de las personas en un tribunal. Alguien tiene que estar ahi, preparado.", "Cada dia se decide el futuro de personas en un tribunal: alguien debe estar preparado."],
+      ["Mito", "No es solo memorizar leyes. Es aprender a argumentar, negociar y defender lo justo, con las palabras correctas.", "No es memorizar leyes: es argumentar y defender lo justo con las palabras correctas."],
+      ["Dia en la vida", "Analizar un caso en la manana, defenderlo en un simulacro de juicio en la tarde.", "Analiza un caso hoy, defiendelo en un simulacro de juicio hoy mismo."],
+      ["Dato de impacto", "El derecho sigue siendo una de las profesiones con mayor proyeccion de liderazgo en Colombia.", "El derecho sigue siendo una de las profesiones con mas proyeccion de liderazgo."],
+      ["Identidad", "Si te gusta debatir, argumentar y defender lo que crees justo, esta carrera fue hecha para tu forma de pensar.", "Si te gusta debatir y defender lo justo, esta carrera es para ti."]
+    ]},
+    {codigo:"PUBLICIDAD_PRESENCIAL", nombre:"Publicidad en Medios Digitales (Presencial)", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada anuncio que te detiene a mitad de scroll lo diseno alguien que entiende como piensa tu cerebro en redes.", "Cada anuncio que te detiene a mitad de scroll lo diseno alguien que entiende tu cerebro."],
+      ["Mito", "No es subir fotos bonitas a Instagram. Es disenar estrategias que hacen que una marca venda en digital.", "No es subir fotos bonitas: es disenar estrategias que hacen vender a una marca."],
+      ["Dia en la vida", "Crear una campana en la manana, analizar sus metricas en la tarde, ajustar la estrategia al dia siguiente.", "Crea una campana hoy, analiza sus metricas hoy mismo."],
+      ["Dato de impacto", "Las marcas mueven cada ano mas presupuesto a lo digital que a cualquier medio tradicional.", "Las marcas mueven cada ano mas presupuesto a lo digital que a lo tradicional."],
+      ["Identidad", "Si te fascina entender por que la gente hace clic en unas cosas y no en otras, este es tu terreno.", "Si te fascina entender por que la gente hace clic, este es tu terreno."]
+    ]},
+    {codigo:"PUBLICIDAD_VIRTUAL", nombre:"Publicidad en Medios Digitales (Virtual)", modalidad:"Virtual", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada anuncio que te detiene a mitad de scroll lo diseno alguien que entiende como piensa tu cerebro en redes.", "Cada anuncio que te detiene a mitad de scroll lo diseno alguien que entiende tu cerebro."],
+      ["Mito", "No es subir fotos bonitas a Instagram. Es disenar estrategias que hacen que una marca venda en digital.", "No es subir fotos bonitas: es disenar estrategias que hacen vender a una marca."],
+      ["Dia en la vida", "Disenar una campana en la manana desde tu casa, analizar sus metricas en la tarde sin salir de ahi.", "Disena una campana hoy desde tu casa, analiza sus metricas hoy mismo."],
+      ["Dato de impacto", "Muy pocas universidades ofrecen publicidad digital 100% virtual con esta profundidad.", "Pocas universidades ofrecen publicidad digital 100% virtual con esta profundidad."],
+      ["Identidad", "Si te fascina el mundo digital y quieres estudiarlo sin pausar tu vida, esta modalidad virtual es para ti.", "Si te fascina lo digital y quieres estudiarlo sin pausar tu vida, esto es para ti."]
+    ]},
+    {codigo:"MERCADEO_GLOBAL_VIRTUAL", nombre:"Mercadeo Global (Virtual)", modalidad:"Virtual", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Las empresas colombianas que quieren vender afuera necesitan a alguien que entienda mercados y negociacion internacional.", "Las empresas que quieren vender afuera necesitan mercadeo global."],
+      ["Mito", "No es solo vender cosas. Es entender por que un mercado compra algo distinto a otro, y disenar la estrategia para cada uno.", "No es solo vender: es entender por que cada mercado compra distinto."],
+      ["Dia en la vida", "Analizar un mercado internacional en la manana, disenar una estrategia de entrada en la tarde, desde donde estes.", "Analiza un mercado hoy, disena una estrategia de entrada hoy mismo."],
+      ["Dato de impacto", "Las exportaciones colombianas siguen creciendo, y necesitan profesionales con visión de mercadeo global.", "Las exportaciones colombianas siguen creciendo y necesitan mercadeo global."],
+      ["Identidad", "Si te fascina entender como piensan los consumidores de otros paises, el mercadeo global es tu campo.", "Si te fascina como piensan consumidores de otros paises, esto es para ti."]
+    ]},
+    {codigo:"ADMINISTRACION_DUAL", nombre:"Administracion de Empresas (Dual)", modalidad:"Dual", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada empresa que crece tiene detras a alguien que sabe organizar recursos, personas y decisiones.", "Toda empresa que crece tiene detras a alguien que organiza bien los recursos."],
+      ["Mito", "No es solo llevar papeles. Es tomar las decisiones que definen si una empresa crece o desaparece.", "No es llevar papeles: es tomar decisiones que definen si una empresa crece."],
+      ["Dia en la vida", "Analizar los numeros de una empresa en la manana, liderar un equipo real en tu practica dual en la tarde.", "Analiza numeros hoy, lidera un equipo real en tu practica dual hoy mismo."],
+      ["Dato de impacto", "La modalidad dual te permite trabajar y estudiar al mismo tiempo, algo que pocos programas ofrecen.", "La modalidad dual te permite trabajar y estudiar al mismo tiempo."],
+      ["Identidad", "Si te gusta liderar, tomar decisiones y ver resultados concretos, la administracion es tu terreno natural.", "Si te gusta liderar y tomar decisiones, esta es tu carrera."]
+    ]},
+    {codigo:"CONTADURIA", nombre:"Contaduria Publica", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada empresa que paga impuestos correctamente y toma buenas decisiones financieras tiene detras a un contador que hizo bien su trabajo.", "Cada decision financiera bien tomada tiene detras a un buen contador."],
+      ["Mito", "No es solo sumar numeros. Es la profesion que sostiene la transparencia financiera de cualquier organizacion.", "No es sumar numeros: es sostener la transparencia financiera de una organizacion."],
+      ["Dia en la vida", "Analizar los estados financieros de una empresa en la manana, presentar recomendaciones estrategicas en la tarde.", "Analiza estados financieros hoy, presenta recomendaciones hoy mismo."],
+      ["Dato de impacto", "La Contaduria Publica sigue siendo una de las profesiones con mayor estabilidad y demanda laboral en Colombia.", "La Contaduria Publica sigue siendo de las profesiones con mas estabilidad laboral."],
+      ["Identidad", "Si te gusta el orden, los numeros y detectar lo que no cuadra, la contaduria es tu terreno natural.", "Si te gusta el orden y detectar lo que no cuadra, esta es tu carrera."]
+    ]},
+    {codigo:"MERCADEO_NEGOCIOS_INTL", nombre:"Mercadeo y Negocios Internacionales", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Las empresas que quieren crecer fuera de Colombia necesitan a alguien que entienda mercadeo y negocios internacionales a la vez.", "Las empresas que quieren crecer afuera necesitan mercadeo y negocios internacionales."],
+      ["Mito", "No es solo hacer publicidad. Es disenar la estrategia completa para que una marca compita en mercados globales.", "No es solo publicidad: es disenar la estrategia para competir en mercados globales."],
+      ["Dia en la vida", "Disenar una estrategia de mercadeo en la manana, estructurar un plan de exportacion en la tarde.", "Disena una estrategia de mercadeo hoy, estructura un plan de exportacion hoy mismo."],
+      ["Dato de impacto", "Colombia sigue firmando acuerdos comerciales que abren nuevos mercados para quien sepa aprovecharlos.", "Colombia sigue abriendo nuevos mercados para quien sepa aprovecharlos."],
+      ["Identidad", "Si te fascina el mundo de los negocios sin fronteras, este programa combina justo lo que buscas.", "Si te fascinan los negocios sin fronteras, este programa es para ti."]
+    ]}
+  ],
+  "Ciencias Sociales": [
+    {codigo:"PSICOLOGIA", nombre:"Psicologia", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada persona que logra superar una crisis emocional tuvo, en algun punto, a un psicologo que la escucho bien.", "Cada persona que supera una crisis tuvo a un psicologo que la escucho bien."],
+      ["Mito", "No es solo escuchar y dar consejos. Es una ciencia que estudia por que las personas piensan, sienten y actuan como lo hacen.", "No es solo escuchar: es una ciencia que estudia como piensa la gente."],
+      ["Dia en la vida", "Aplicar una prueba psicologica en la manana, analizar un caso clinico en la tarde, siempre con supervision docente.", "Aplica una prueba hoy, analiza un caso clinico hoy mismo, con supervision."],
+      ["Dato de impacto", "La salud mental es hoy una de las prioridades mas urgentes en Colombia, y se necesitan mas psicologos formados con rigor.", "La salud mental es una de las prioridades mas urgentes en Colombia."],
+      ["Identidad", "Si la gente te busca para contarte sus problemas y sientes que sabes escuchar, la psicologia puede ser tu vocacion.", "Si la gente te busca para contarte sus problemas, esta puede ser tu vocacion."]
+    ]},
+    {codigo:"NARRATIVAS_ENTRETENIMIENTO", nombre:"Narrativas y Entretenimiento Digital", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada serie, videojuego o contenido interactivo que te atrapo lo diseno alguien que entiende narrativa y tecnologia a la vez.", "Cada contenido interactivo que te atrapo lo diseno alguien que entiende narrativa y tecnologia."],
+      ["Mito", "No es ver series todo el dia. Es disenar las historias y experiencias que van a atrapar a la proxima generacion.", "No es ver series todo el dia: es disenar historias que van a atrapar audiencias."],
+      ["Dia en la vida", "Escribir un guion transmedia en la manana, disenar su experiencia interactiva en la tarde.", "Escribe un guion transmedia hoy, disena su experiencia interactiva hoy mismo."],
+      ["Dato de impacto", "El entretenimiento digital y el streaming siguen creciendo mas rapido que casi cualquier otra industria creativa.", "El entretenimiento digital sigue creciendo mas rapido que casi cualquier industria."],
+      ["Identidad", "Si no puedes dejar de imaginar historias y mundos nuevos, esta carrera convierte esa obsesion en profesion.", "Si no dejas de imaginar historias y mundos nuevos, esta es tu carrera."]
+    ]},
+    {codigo:"CINE", nombre:"Cine", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "Cada pelicula que te hizo llorar o reir tuvo detras un equipo que entendia de narrativa visual, no solo de camaras.", "Cada pelicula que te conmovio tuvo detras un equipo que entendia narrativa visual."],
+      ["Mito", "No es solo grabar videos. Es contar historias con imagen, sonido y ritmo, de una forma que nadie olvide.", "No es solo grabar videos: es contar historias que nadie olvide."],
+      ["Dia en la vida", "Escribir un guion en la manana, dirigir un rodaje con tus compañeros en la tarde.", "Escribe un guion hoy, dirige un rodaje con tus compañeros hoy mismo."],
+      ["Dato de impacto", "La industria audiovisual colombiana sigue creciendo, con producciones que ya compiten en festivales internacionales.", "La industria audiovisual colombiana ya compite en festivales internacionales."],
+      ["Identidad", "Si ves una pelicula y no puedes dejar de pensar en como esta contada, el cine ya es parte de como ves el mundo.", "Si no dejas de pensar en como esta contada una pelicula, el cine es para ti."]
+    ]},
+    {codigo:"COMUNICACION_PERIODISMO", nombre:"Comunicacion Social - Periodismo", modalidad:"Presencial", beca:"Consulta alternativas de financiacion", ganchos:[
+      ["Problema", "En un mundo lleno de desinformacion, alguien tiene que investigar, verificar y contar lo que realmente esta pasando.", "En un mundo lleno de desinformacion, alguien debe investigar y contar la verdad."],
+      ["Mito", "No es solo hablar bien en camara. Es investigar, verificar y comunicar con responsabilidad en un mundo saturado de informacion falsa.", "No es hablar bien en camara: es investigar y comunicar con responsabilidad."],
+      ["Dia en la vida", "Investigar una historia en la manana, producir el reportaje en la tarde.", "Investiga una historia hoy, produce el reportaje hoy mismo."],
+      ["Dato de impacto", "La demanda de comunicadores capaces de manejar medios digitales y verificar informacion crece cada ano.", "La demanda de comunicadores digitales capaces de verificar informacion crece cada ano."],
+      ["Identidad", "Si te indigna la desinformacion y sientes que las historias importantes merecen contarse bien, el periodismo es para ti.", "Si te indigna la desinformacion, el periodismo es para ti."]
+    ]}
+  ],
+  "Institucional UAO": [
+    {codigo:"MARCA_UAO", nombre:"Universidad Autonoma de Occidente", modalidad:"Todas las modalidades", beca:"Ver alternativas de financiacion por programa", ganchos:[
+      ["Problema", "Elegir universidad va a definir los proximos anos de tu vida. No deberias decidirlo sin comparar bien las opciones.", "Elegir universidad va a definir tus proximos anos: compara bien antes de decidir."],
+      ["Mito", "Piensas que todas las universidades ofrecen lo mismo. Muy pocas tienen la acreditacion de Alta Calidad y el reconocimiento internacional que tiene la UAO.", "No todas las universidades son iguales: pocas tienen la acreditacion que tiene la UAO."],
+      ["Dia en la vida", "Imagina estudiar en un campus certificado como el mas sostenible del suroccidente colombiano, con laboratorios reales y docentes reconocidos.", "Imagina estudiar en el campus mas sostenible del suroccidente colombiano."],
+      ["Dato de impacto", "La UAO cuenta con Acreditacion Institucional de Alta Calidad y Acreditacion Internacional CINDA, algo que pocas universidades de la region tienen.", "La UAO tiene Acreditacion de Alta Calidad y Acreditacion Internacional CINDA."],
+      ["Identidad", "Si buscas una universidad con acreditacion real, comunidad y proyeccion internacional, la UAO fue construida para eso.", "Si buscas acreditacion real, comunidad y proyeccion internacional, esta es tu universidad."]
+    ]}
+  ]
+};
+
+var CTA_POR_OBJ = {"Reconocimiento":"Mas informacion","Trafico":"Mas informacion","Clientes potenciales":"Enviar mensaje","Ventas":"Inscribete"};
+var OBJETIVOS = ["Reconocimiento","Trafico","Clientes potenciales","Ventas"];
+
+var CIERRE = {
+  "Reconocimiento": "En la UAO formamos a quienes viven esto todos los dias.",
+  "Trafico": "Descubre como te prepara la UAO para esto. Conoce el programa completo.",
+  "Clientes potenciales": "Escribenos y hablemos de tu futuro, sin ningun costo.",
+  "Ventas": "Inscripciones abiertas para el periodo 2026-2S. Cupos limitados."
+};
+var DESC_META = {
+  "Reconocimiento": "Conoce mas sobre este programa",
+  "Trafico": "Descubre el plan de estudios completo",
+  "Clientes potenciales": "Habla con un asesor sin costo",
+  "Ventas": "Inscripciones abiertas 2026-2S"
+};
+
+var selCluster = document.getElementById('selCluster');
+var selPrograma = document.getElementById('selPrograma');
+var selGancho = document.getElementById('selGancho');
+var selObjetivo = document.getElementById('selObjetivo');
+var adCard = document.getElementById('adCard');
+var tablaTextos = document.getElementById('tablaTextos');
+var fichaPrograma = document.getElementById('fichaPrograma');
+var notaVerificar = document.getElementById('notaVerificar');
+
+Object.keys(CLUSTERS).forEach(function(c){
+  var o = document.createElement('option'); o.value = c; o.textContent = c; selCluster.appendChild(o);
+});
+OBJETIVOS.forEach(function(o){
+  var el = document.createElement('option'); el.value = o; el.textContent = o; selObjetivo.appendChild(el);
+});
+
+function refreshProgramas(){
+  var progs = CLUSTERS[selCluster.value];
+  selPrograma.innerHTML = '';
+  progs.forEach(function(p, i){
+    var o = document.createElement('option'); o.value = i; o.textContent = p.nombre; selPrograma.appendChild(o);
+  });
+}
+function refreshGanchos(){
+  var progs = CLUSTERS[selCluster.value];
+  var p = progs[selPrograma.value];
+  selGancho.innerHTML = '';
+  p.ganchos.forEach(function(g, i){
+    var o = document.createElement('option'); o.value = i; o.textContent = g[0]; selGancho.appendChild(o);
+  });
+}
+
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function render(){
+  var progs = CLUSTERS[selCluster.value];
+  var p = progs[selPrograma.value];
+  var g = p.ganchos[selGancho.value];
+  var tipo = g[0], textoBase = g[1], resumenPieza = g[2];
+  var obj = selObjetivo.value || OBJETIVOS[0];
+  var textoPrincipal = textoBase + ' ' + CIERRE[obj];
+  var desc = DESC_META[obj];
+  var cta = CTA_POR_OBJ[obj];
+
+  adCard.innerHTML =
+    '<div class="adHeader">' +
+      '<div class="avatar">UAO</div>' +
+      '<div>' +
+        '<div class="nombre">Universidad Autonoma de Occidente</div>' +
+        '<div class="tipo">Anuncio</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="adTexto">' + escapeHtml(textoPrincipal) + '</div>' +
+    '<div class="adImagen">' +
+      '<div class="titular">' + tipo.toUpperCase() + '</div>' +
+      '<div class="subtitular">' + escapeHtml(resumenPieza) + '</div>' +
+    '</div>' +
+    '<div class="adFooter">' +
+      '<div style="min-width:0;">' +
+        '<div class="dominio">uao.edu.co</div>' +
+        '<div class="titulo">' + escapeHtml(p.nombre) + '</div>' +
+        '<div class="desc">' + desc + '</div>' +
+      '</div>' +
+      '<button>' + cta + '</button>' +
+    '</div>';
+
+  tablaTextos.innerHTML =
+    '<tr><td class="k">Gancho</td><td>' + tipo + '</td></tr>' +
+    '<tr><td class="k">Objetivo</td><td>' + obj + '</td></tr>' +
+    '<tr><td class="k">Texto principal</td><td>' + escapeHtml(textoPrincipal) + '</td></tr>' +
+    '<tr><td class="k">Titulo del anuncio</td><td>' + escapeHtml(p.nombre) + '</td></tr>' +
+    '<tr><td class="k">Descripcion</td><td>' + desc + '</td></tr>' +
+    '<tr><td class="k">CTA</td><td>' + cta + '</td></tr>' +
+    '<tr><td class="k">Copy pieza (titular)</td><td>' + tipo.toUpperCase() + '</td></tr>' +
+    '<tr><td class="k">Copy pieza (apoyo)</td><td>' + escapeHtml(resumenPieza) + '</td></tr>';
+
+  fichaPrograma.innerHTML =
+    '<div><b>Modalidad:</b> ' + escapeHtml(p.modalidad) + '</div>' +
+    '<div><b>Financiacion:</b> ' + escapeHtml(p.beca) + '</div>' +
+    '<div><b>Codigo:</b> ' + p.codigo + '</div>';
+
+  if(p.beca.indexOf('Consulta') === 0){
+    notaVerificar.style.display = 'block';
+    notaVerificar.innerHTML = 'Verificar cifras de matricula 2026 vigentes en Res-CS-757-2026 antes de publicar este anuncio.';
+  } else {
+    notaVerificar.style.display = 'none';
+  }
+}
+
+selCluster.addEventListener('change', function(){ refreshProgramas(); refreshGanchos(); render(); });
+selPrograma.addEventListener('change', function(){ refreshGanchos(); render(); });
+selGancho.addEventListener('change', render);
+selObjetivo.addEventListener('change', render);
+
+refreshProgramas();
+refreshGanchos();
+render();
+</script>
+</body>
+</html>
