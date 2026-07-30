@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo Google Ads — Fundamentos y Práctica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F7FB;
+    --bg-alt:#FFFFFF;
+    --bg-card:#FFFFFF;
+    --line:#E4E7EF;
+    --ink:#161B2E;
+    --muted:#6B7284;
+    --blue:#2F6FE4;
+    --blue-dim:#E7F0FE;
+    --green:#0EA57E;
+    --green-dim:#E2F8F0;
+    --amber:#D9840F;
+    --amber-dim:#FDF0DA;
+    --coral:#E5484D;
+    --coral-dim:#FDE9E9;
+    --violet:#7C5CFC;
+    --violet-dim:#EFEAFE;
+    --radius:14px;
+    --shadow-sm:0 2px 6px rgba(22,27,46,.05);
+    --shadow-md:0 14px 30px rgba(22,27,46,.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+    height:100vh;
+    width:100vw;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk',system-ui,sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  .app{display:flex;flex-direction:column;height:100vh;width:100vw;position:relative;z-index:1;}
+
+  /* ---------- TOPBAR ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 40px 10px 40px;
+    flex-shrink:0;
+  }
+  .eyebrow-wrap{display:flex;align-items:center;gap:12px;cursor:pointer;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    padding:5px 12px;border-radius:100px;
+    border:1px solid var(--line);
+    color:var(--ink);
+    background:var(--bg-card);
+    transition:.2s;
+  }
+  .eyebrow .dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:8px;position:relative;top:-1px;}
+  .menu-hint{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+  .counter{
+    font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);
+    letter-spacing:.05em;
+  }
+  .counter b{color:var(--ink);font-weight:600;}
+
+  .progress-track{
+    height:3px;width:100%;background:var(--line);border-radius:3px;
+    margin:0 40px;flex-shrink:0;overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,var(--blue),var(--green));
+    border-radius:3px;transition:width .35s ease;
+  }
+
+  /* ---------- DECK ---------- */
+  .deck{flex:1;position:relative;overflow:hidden;}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:50px 90px 70px 90px;
+    opacity:0;visibility:hidden;
+    transform:translateY(14px);
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  .slide.active{opacity:1;visibility:visible;transform:translateY(0);}
+
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;margin:0 0 14px 0;font-weight:600;
+  }
+  h1.headline{font-size:42px;line-height:1.12;margin:0 0 16px 0;font-weight:700;letter-spacing:-.01em;}
+  h2.headline{font-size:32px;line-height:1.16;margin:0 0 14px 0;font-weight:700;letter-spacing:-.01em;}
+  .lead{font-size:18px;line-height:1.55;color:var(--muted);max-width:820px;margin:0 0 28px 0;}
+  .body-scroll{overflow-y:auto;padding-right:6px;}
+
+  /* accent color utility, set via data-accent on slide */
+  .slide[data-accent="blue"] .kicker{color:var(--blue);}
+  .slide[data-accent="green"] .kicker{color:var(--green);}
+  .slide[data-accent="amber"] .kicker{color:var(--amber);}
+  .slide[data-accent="coral"] .kicker{color:var(--coral);}
+  .slide[data-accent="violet"] .kicker{color:var(--violet);}
+
+  /* ---------- TITLE LAYOUT ---------- */
+  .layout-title{align-items:center;justify-content:center;text-align:center;}
+  .layout-title .kicker{width:100%;}
+  .layout-title .big{
+    font-size:64px;line-height:1.05;font-weight:700;letter-spacing:-.02em;
+    margin:0 auto 18px auto;max-width:900px;
+  }
+  .hero-title{font-size:78px;}
+  .hero-accent{
+    background:linear-gradient(100deg, var(--blue), var(--violet) 55%, var(--green));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .layout-title .sub{font-size:19px;color:var(--muted);max-width:640px;line-height:1.6;margin:0 auto;}
+  .title-meta{display:flex;gap:28px;margin-top:44px;justify-content:center;}
+  .title-meta div{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);text-align:left;}
+  .title-meta b{display:block;color:var(--ink);font-size:14px;margin-top:4px;font-family:'Inter',sans-serif;font-weight:600;}
+
+  /* ---------- AGENDA ---------- */
+  .agenda-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 34px;max-width:980px;}
+  .agenda-item{display:flex;gap:16px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);}
+  .agenda-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);min-width:28px;}
+  .agenda-txt b{display:block;font-size:15px;font-weight:600;}
+  .agenda-txt span{font-size:13px;color:var(--muted);}
+
+  /* ---------- BULLETS ---------- */
+  ul.bullets{list-style:none;margin:0;padding:0;max-width:820px;}
+  ul.bullets li{
+    position:relative;padding:10px 0 10px 26px;font-size:16.5px;line-height:1.5;
+    border-bottom:1px solid var(--line);
+  }
+  ul.bullets li:last-child{border-bottom:none;}
+  ul.bullets li::before{
+    content:"";position:absolute;left:0;top:19px;width:8px;height:8px;border-radius:2px;
+    background:var(--blue);
+  }
+  .slide[data-accent="green"] ul.bullets li::before{background:var(--green);}
+  .slide[data-accent="amber"] ul.bullets li::before{background:var(--amber);}
+  .slide[data-accent="coral"] ul.bullets li::before{background:var(--coral);}
+  .slide[data-accent="violet"] ul.bullets li::before{background:var(--violet);}
+  ul.bullets li em{color:var(--muted);font-style:normal;display:block;font-size:14px;margin-top:3px;}
+  ul.bullets li b{font-weight:700;}
+
+  /* ---------- CARDS ---------- */
+  .card-grid{display:grid;gap:16px;max-width:1080px;}
+  .card-grid.cols-2{grid-template-columns:1fr 1fr;}
+  .card-grid.cols-3{grid-template-columns:1fr 1fr 1fr;}
+  .card{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 20px;box-shadow:var(--shadow-sm);
+  }
+  .card .tag{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--blue);margin-bottom:8px;display:block;
+  }
+  .card h3{font-size:17px;margin:0 0 6px 0;font-weight:700;}
+  .card p{font-size:14px;color:var(--muted);margin:0;line-height:1.5;}
+
+  /* ---------- STATS ---------- */
+  .stat-row{display:flex;gap:20px;flex-wrap:wrap;max-width:1080px;}
+  .stat{
+    flex:1;min-width:200px;background:var(--bg-card);border:1px solid var(--line);
+    border-radius:var(--radius);padding:22px 20px;box-shadow:var(--shadow-sm);
+  }
+  .stat .num{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;color:var(--blue);}
+  .stat .label{font-size:13.5px;color:var(--muted);margin-top:6px;line-height:1.4;}
+
+  /* ---------- TABLE ---------- */
+  table.dataTable{width:100%;max-width:1080px;border-collapse:collapse;font-size:14.5px;}
+  table.dataTable th{
+    text-align:left;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+    padding:8px 14px;border-bottom:1px solid var(--line);
+  }
+  table.dataTable td{padding:12px 14px;border-bottom:1px solid var(--line);}
+  table.dataTable tr:last-child td{border-bottom:none;}
+  table.dataTable td.mono{font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--green);}
+  table.dataTable strong{color:var(--ink);}
+
+  /* ---------- STEPS / CHECKLIST ---------- */
+  ol.steps{list-style:none;margin:0;padding:0;max-width:900px;counter-reset:step;}
+  ol.steps li{
+    counter-increment:step;position:relative;padding:12px 0 12px 44px;
+    border-bottom:1px solid var(--line);font-size:15.5px;line-height:1.5;
+  }
+  ol.steps li:last-child{border-bottom:none;}
+  ol.steps li::before{
+    content:counter(step);position:absolute;left:0;top:10px;
+    width:26px;height:26px;border-radius:50%;background:var(--blue-dim);color:var(--blue);
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .slide[data-accent="green"] ol.steps li::before{background:var(--green-dim);color:var(--green);}
+  .slide[data-accent="amber"] ol.steps li::before{background:var(--amber-dim);color:var(--amber);}
+  .slide[data-accent="violet"] ol.steps li::before{background:var(--violet-dim);color:var(--violet);}
+  ol.steps li b{font-weight:700;}
+  ol.steps li .hint{display:block;color:var(--muted);font-size:13.5px;margin-top:3px;}
+  ol.steps li code{
+    background:var(--bg-alt);border:1px solid var(--line);border-radius:6px;
+    padding:2px 7px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--green);
+  }
+
+  /* checklist (checkbox style) */
+  ul.checklist{list-style:none;margin:0;padding:0;max-width:900px;}
+  ul.checklist li{
+    position:relative;padding:9px 0 9px 32px;font-size:15px;border-bottom:1px solid var(--line);
+  }
+  ul.checklist li:last-child{border-bottom:none;}
+  ul.checklist li::before{
+    content:"";position:absolute;left:0;top:11px;width:16px;height:16px;border-radius:4px;
+    border:2px solid var(--muted);
+  }
+
+  /* ---------- QUOTE / FORMULA ---------- */
+  .layout-quote{align-items:center;text-align:center;}
+  .formula{
+    font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:600;
+    background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 46px;margin:10px 0 20px 0;color:var(--ink);box-shadow:var(--shadow-md);
+  }
+  .formula .op{color:var(--muted);margin:0 12px;}
+  .formula .blue{color:var(--blue);}.formula .green{color:var(--green);}.formula .amber{color:var(--amber);}
+
+  /* ---------- SPLIT ---------- */
+  .split{display:flex;gap:40px;max-width:1080px;align-items:flex-start;}
+  .split .col{flex:1;}
+  .split .box{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 22px;box-shadow:var(--shadow-sm);
+  }
+  .split .box h4{margin:0 0 8px 0;font-size:15px;}
+  .split .box p, .split .box li{font-size:14px;color:var(--muted);line-height:1.5;}
+
+  /* ---------- EXERCISE ---------- */
+  .badge-lab{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--amber-dim);color:var(--amber);border:1px solid #F1D9A8;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;
+    text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:16px;
+  }
+  .meta-row{display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap;}
+  .meta-chip{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:10px;
+    padding:10px 16px;font-size:13px;color:var(--muted);box-shadow:var(--shadow-sm);
+  }
+  .meta-chip b{color:var(--ink);display:block;font-size:14px;font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- FOOTER / CONTROLS ---------- */
+  .controls{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 40px 22px 40px;flex-shrink:0;
+  }
+  .nav-btn{
+    background:var(--bg-card);border:1px solid var(--line);color:var(--ink);
+    font-family:'Inter',sans-serif;font-size:14px;font-weight:600;
+    padding:11px 22px;border-radius:100px;cursor:pointer;display:flex;align-items:center;gap:8px;
+    transition:.15s;
+  }
+  .nav-btn:hover{border-color:var(--blue);color:var(--blue);}
+  .nav-btn:disabled{opacity:.3;cursor:default;pointer-events:none;}
+  .kbd-hint{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);}
+
+  /* ---------- JUMP MENU ---------- */
+  .menu-overlay{
+    position:fixed;inset:0;background:rgba(246,247,251,.86);backdrop-filter:blur(8px);
+    display:none;z-index:50;align-items:center;justify-content:center;
+  }
+  .menu-overlay.open{display:flex;}
+  .menu-panel{
+    background:var(--bg-alt);border:1px solid var(--line);border-radius:18px;
+    width:min(760px,88vw);max-height:78vh;overflow-y:auto;padding:26px 10px;box-shadow:var(--shadow-md);
+  }
+  .menu-panel h3{margin:0 18px 14px 18px;font-size:15px;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;}
+  .menu-list{list-style:none;margin:0;padding:0;}
+  .menu-list li{
+    padding:11px 18px;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between;
+    font-size:14.5px;
+  }
+  .menu-list li:hover{background:var(--bg-card);}
+  .menu-list li span.n{font-family:'JetBrains Mono',monospace;color:var(--muted);margin-right:14px;}
+  .menu-section-title{
+    padding:14px 18px 6px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--blue);
+  }
+
+  /* ---------- FONDO DINÁMICO ---------- */
+  .bg-decor{
+    position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;
+  }
+  .blob{
+    position:absolute;border-radius:50%;filter:blur(70px);opacity:.45;will-change:transform;
+  }
+  .blob.b1{width:520px;height:520px;top:-140px;left:-120px;
+    background:radial-gradient(circle, #BFD6FF, transparent 70%);
+    animation:drift1 22s ease-in-out infinite;}
+  .blob.b2{width:460px;height:460px;top:40%;right:-140px;
+    background:radial-gradient(circle, #B9F3DE, transparent 70%);
+    animation:drift2 26s ease-in-out infinite;}
+  .blob.b3{width:420px;height:420px;bottom:-160px;left:18%;
+    background:radial-gradient(circle, #F7DDB0, transparent 70%);
+    animation:drift3 24s ease-in-out infinite;}
+  .blob.b4{width:380px;height:380px;bottom:10%;right:22%;
+    background:radial-gradient(circle, #DCD0FF, transparent 70%);
+    animation:drift4 20s ease-in-out infinite;}
+  @keyframes drift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(80px,60px) scale(1.15);}}
+  @keyframes drift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-70px,-50px) scale(1.1);}}
+  @keyframes drift3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(60px,-70px) scale(1.18);}}
+  @keyframes drift4{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-50px,50px) scale(1.08);}}
+
+  .wave-layer{
+    position:absolute;left:0;bottom:0;width:220%;height:38vh;opacity:.4;
+  }
+  .wave-back{animation:waveDrift1 26s linear infinite;opacity:.35;}
+  .wave-front{animation:waveDrift2 19s linear infinite;opacity:.3;bottom:-2vh;}
+  @keyframes waveDrift1{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @keyframes waveDrift2{from{transform:translateX(-50%);}to{transform:translateX(0);}}
+
+  .light-sweep{
+    position:absolute;top:-20%;width:45%;height:140%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent);
+    filter:blur(30px);mix-blend-mode:soft-light;
+  }
+  .ls1{left:-30%;animation:sweep1 16s ease-in-out infinite;}
+  .ls2{left:40%;animation:sweep2 21s ease-in-out infinite;}
+  @keyframes sweep1{0%,100%{transform:translateX(0) rotate(8deg);}50%{transform:translateX(60vw) rotate(8deg);}}
+  @keyframes sweep2{0%,100%{transform:translateX(0) rotate(-6deg);}50%{transform:translateX(-50vw) rotate(-6deg);}}
+
+  /* ---------- ÍCONOS ILUSTRATIVOS (embebidos en el contenido) ---------- */
+  .content-icon{
+    position:absolute;top:44px;right:80px;animation:iconFloat 6s ease-in-out infinite;
+    filter:drop-shadow(0 14px 18px rgba(22,27,46,.12));z-index:2;
+  }
+  @keyframes iconFloat{
+    0%,100%{transform:translateY(0) rotate(var(--rot,0deg));}
+    50%{transform:translateY(-10px) rotate(calc(var(--rot,0deg) + 3deg));}
+  }
+
+  /* gráfico de barras 3D */
+  .icon-chart{width:64px;height:56px;display:flex;align-items:flex-end;gap:6px;}
+  .icon-chart span{display:block;width:14px;border-radius:5px 5px 3px 3px;
+    box-shadow:inset -3px -2px 5px rgba(0,0,0,.12), inset 2px 3px 4px rgba(255,255,255,.5), 0 8px 12px rgba(47,111,228,.28);}
+  .icon-chart span:nth-child(1){height:24px;background:linear-gradient(160deg,#8FB6FF,var(--blue));}
+  .icon-chart span:nth-child(2){height:40px;background:linear-gradient(160deg,#79A6FF,#2359BF);}
+  .icon-chart span:nth-child(3){height:56px;background:linear-gradient(160deg,#5C8DFF,#1A46A0);}
+
+  /* lupa 3D */
+  .icon-magnifier{width:58px;height:58px;position:relative;}
+  .icon-magnifier .lens{
+    position:absolute;top:0;left:0;width:40px;height:40px;border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, #EAF2FF, var(--blue) 75%);
+    border:5px solid #1E4FAE;
+    box-shadow:0 10px 16px rgba(47,111,228,.35), inset 0 -6px 8px rgba(0,0,0,.18), inset 0 5px 6px rgba(255,255,255,.6);
+  }
+  .icon-magnifier .handle{
+    position:absolute;bottom:-2px;right:-4px;width:26px;height:9px;border-radius:5px;
+    background:linear-gradient(90deg,#1E4FAE,#123572);transform:rotate(45deg);
+    box-shadow:0 4px 8px rgba(0,0,0,.2);
+  }
+
+  /* moneda giratoria 3D real (perspectiva) */
+  .icon-coin{width:58px;height:58px;perspective:400px;position:relative;}
+  .icon-coin .coin{
+    position:absolute;inset:0;border-radius:50%;
+    background:radial-gradient(circle at 35% 28%, #FFEFC7, var(--amber) 78%);
+    box-shadow:0 12px 18px rgba(217,132,15,.4), inset 0 -8px 10px rgba(0,0,0,.2), inset 0 6px 8px rgba(255,255,255,.65);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:#8A5A05;
+    animation:spinCoin 7s linear infinite;
+  }
+  @keyframes spinCoin{from{transform:rotateY(0deg);}to{transform:rotateY(360deg);}}
+
+  /* engranaje 3D giratorio */
+  .icon-gear{width:60px;height:60px;position:relative;animation:spinGear 12s linear infinite;}
+  .icon-gear .teeth{
+    position:absolute;inset:0;
+    background:linear-gradient(150deg,#C6B4FF,var(--violet) 70%);
+    clip-path:polygon(45% 0%,55% 0%,58% 14%,74% 8%,80% 20%,68% 30%,100% 45%,100% 55%,68% 70%,80% 80%,74% 92%,58% 86%,55% 100%,45% 100%,42% 86%,26% 92%,20% 80%,32% 70%,0% 55%,0% 45%,32% 30%,20% 20%,26% 8%,42% 14%);
+    box-shadow:0 12px 18px rgba(124,92,252,.35);
+  }
+  .icon-gear .hole{
+    position:absolute;top:38%;left:38%;width:24%;height:24%;border-radius:50%;background:var(--bg);
+  }
+  @keyframes spinGear{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+  /* embudo de leads 3D */
+  .icon-funnel{width:52px;height:62px;
+    clip-path:polygon(0 0,100% 0,64% 100%,36% 100%);
+    background:linear-gradient(180deg,var(--blue) 0%, var(--green) 55%, var(--amber) 100%);
+    box-shadow:0 14px 20px rgba(22,27,46,.2), inset 4px 0 8px rgba(255,255,255,.25), inset -4px 0 8px rgba(0,0,0,.15);
+  }
+
+  /* diana / objetivo 3D */
+  .icon-target{width:60px;height:60px;border-radius:50%;
+    background:repeating-radial-gradient(circle, var(--coral) 0 7px, #fff 7px 14px);
+    box-shadow:0 12px 18px rgba(229,72,77,.35), inset 0 -6px 10px rgba(0,0,0,.12), inset 0 5px 6px rgba(255,255,255,.5);
+  }
+
+  /* ---------- SCROLLBAR ---------- */
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .slide{padding:30px 26px 30px 26px;}
+    h1.headline{font-size:28px;}
+    .layout-title .big{font-size:38px;}
+    .card-grid.cols-2, .card-grid.cols-3{grid-template-columns:1fr;}
+    .agenda-grid{grid-template-columns:1fr;}
+    .split{flex-direction:column;}
+    .topbar{padding:14px 20px 8px 20px;}
+    .progress-track{margin:0 20px;}
+    .controls{padding:12px 20px 18px 20px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .slide{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-decor" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+
+  <svg class="wave-layer wave-back" viewBox="0 0 1600 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,180 C 200,120 400,240 600,180 C 800,120 1000,240 1200,180 C 1400,120 1500,180 1600,160 L1600,300 L0,300 Z" fill="url(#waveGradA)"/>
+  </svg>
+  <svg class="wave-layer wave-front" viewBox="0 0 1600 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,200 C 250,260 450,150 700,200 C 950,250 1150,150 1400,200 C 1500,220 1550,210 1600,200 L1600,300 L0,300 Z" fill="url(#waveGradB)"/>
+  </svg>
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <linearGradient id="waveGradA" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#BFD6FF"/>
+        <stop offset="50%" stop-color="#DCD0FF"/>
+        <stop offset="100%" stop-color="#B9F3DE"/>
+      </linearGradient>
+      <linearGradient id="waveGradB" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#F7DDB0"/>
+        <stop offset="50%" stop-color="#BFD6FF"/>
+        <stop offset="100%" stop-color="#F7DDB0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="light-sweep ls1"></div>
+  <div class="light-sweep ls2"></div>
+</div>
+
+<div class="app">
+
+  <div class="topbar">
+    <div class="eyebrow-wrap" id="menuOpener">
+      <span class="eyebrow" id="eyebrowLabel"><span class="dot" id="eyebrowDot"></span>Bienvenida</span>
+      <span class="menu-hint">↵ Ver índice</span>
+    </div>
+    <div class="counter"><b id="slideCurrent">01</b> / <span id="slideTotal">40</span></div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <main class="deck" id="deck">
+
+    <!-- 1 -->
+    <section class="slide layout-title" data-accent="blue" data-section="Bienvenida">
+      <div class="kicker">MÓDULO · GOOGLE ADS</div>
+      <h1 class="big hero-title">Fundamentos de Google Ads<br><span class="hero-accent">de cero a tu primera campaña</span></h1>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Fundamentos">
+      <div class="content-icon" style="--rot:-4deg;"><div class="icon-magnifier"><div class="lens"></div><div class="handle"></div></div></div>
+      <div class="kicker">Fundamentos</div>
+      <h1 class="headline">¿Qué es Google Ads?</h1>
+      <p class="lead">Es la plataforma publicitaria de Google para mostrar anuncios en sus buscadores y en la red de sitios y apps asociados. El anunciante no paga por aparecer: paga por el resultado que define (clics, llamadas, conversiones), a través de una subasta que ocurre en milisegundos.</p>
+      <ul class="bullets">
+        <li><b>Publicidad de intención:</b> en Search, el anuncio aparece cuando alguien ya está buscando algo relacionado — no interrumpe, responde.<em>A diferencia de la publicidad tradicional, no se compra "espacio", se compra un resultado.</em></li>
+        <li><b>Modelo de pago variable:</b> el costo depende de la subasta en tiempo real, no de una tarifa fija por espacio publicitario.</li>
+        <li><b>Alcance across formatos:</b> texto, imagen, video y shopping, dentro de un mismo ecosistema y panel de control.</li>
+      </ul>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Fundamentos">
+      <div class="content-icon" style="--rot:3deg;"><div class="icon-chart"><span></span><span></span><span></span></div></div>
+      <div class="kicker">Fundamentos</div>
+      <h1 class="headline">El ecosistema de la publicidad digital</h1>
+      <p class="lead">Google Ads no es un solo canal: es un conjunto de inventarios distintos que responden a momentos distintos del usuario.</p>
+      <ul class="bullets">
+        <li><b>Búsqueda (intención activa):</b> el usuario ya escribió lo que quiere. Es el formato con mayor probabilidad de conversión inmediata.</li>
+        <li><b>Display y Video (descubrimiento):</b> el usuario no está buscando activamente; el objetivo es generar reconocimiento o traer de vuelta a alguien que ya visitó el sitio.</li>
+        <li><b>Shopping y Performance Max (conversión asistida por IA):</b> Google combina señales y formatos automáticamente para maximizar un resultado específico.</li>
+      </ul>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide" data-accent="blue" data-section="Fundamentos">
+      <div class="kicker">Fundamentos</div>
+      <h1 class="headline">¿Por qué invertir en Google Ads?</h1>
+      <p class="lead">Cuatro razones por las que la mayoría de organizaciones lo usan como parte central de su mezcla de medios.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="num">100%</div><div class="label">Medible. Cada clic, cada conversión y cada peso invertido queda registrado.</div></div>
+        <div class="stat"><div class="num">↑ / ↓</div><div class="label">Presupuesto flexible: se puede pausar, subir o bajar la inversión en cualquier momento.</div></div>
+        <div class="stat"><div class="num">🎯</div><div class="label">Segmentación fina: por ubicación, dispositivo, momento del día y comportamiento.</div></div>
+        <div class="stat"><div class="num">⚡</div><div class="label">Resultados rápidos: a diferencia del SEO, un anuncio puede recibir tráfico el mismo día.</div></div>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Fundamentos">
+      <div class="kicker">Fundamentos</div>
+      <h1 class="headline">Tipos de campaña: panorama general</h1>
+      <div class="card-grid cols-3">
+        <div class="card"><span class="tag">Search</span><h3>Búsqueda</h3><p>Anuncios de texto en los resultados de Google. La base de casi toda cuenta de generación de leads.</p></div>
+        <div class="card"><span class="tag">Display</span><h3>Display</h3><p>Anuncios visuales en millones de sitios y apps de la Red de Display de Google.</p></div>
+        <div class="card"><span class="tag">Video</span><h3>YouTube</h3><p>Anuncios en video antes, durante o entre contenido de YouTube.</p></div>
+        <div class="card"><span class="tag">Shopping</span><h3>Shopping</h3><p>Fichas de producto con foto y precio, ideal para e-commerce.</p></div>
+        <div class="card"><span class="tag">Automatizada</span><h3>Performance Max</h3><p>Una sola campaña que distribuye el anuncio en todos los inventarios de Google usando IA.</p></div>
+        <div class="card"><span class="tag">Social-like</span><h3>Demand Gen</h3><p>Formatos visuales e inmersivos en YouTube, Discover y Gmail, pensados para generar demanda.</p></div>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Fundamentos">
+      <div class="content-icon" style="--rot:-3deg;"><div class="icon-magnifier"><div class="lens"></div><div class="handle"></div></div></div>
+      <div class="kicker">Tipos de campaña</div>
+      <h1 class="headline">Search — la campaña de intención</h1>
+      <ul class="bullets">
+        <li><b>Qué es:</b> anuncios de texto que aparecen arriba o entre los resultados orgánicos de Google cuando alguien busca palabras relacionadas.</li>
+        <li><b>Cuándo usarla:</b> cuando existe una búsqueda activa y medible relacionada con lo que ofreces (ej. "programa de administración de empresas Cali").</li>
+        <li><b>Fortaleza principal:</b> capturas la demanda en el momento exacto en que existe. Suele tener el mejor costo por conversión entre todos los formatos.</li>
+      </ul>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Fundamentos">
+      <div class="content-icon" style="--rot:4deg;"><div class="icon-funnel"></div></div>
+      <div class="kicker">Tipos de campaña</div>
+      <h1 class="headline">Display — construir y recordar</h1>
+      <ul class="bullets">
+        <li><b>Qué es:</b> banners e imágenes que aparecen en sitios web, apps y Gmail dentro de la Red de Display de Google.</li>
+        <li><b>Cuándo usarla:</b> para dar a conocer una marca o programa, o para remarketing — volver a mostrarle el anuncio a quien ya visitó tu sitio sin convertir.</li>
+        <li><b>Punto de cuidado:</b> el CTR es naturalmente más bajo que en Search porque el usuario no estaba buscando activamente; no se debe comparar con las mismas métricas.</li>
+      </ul>
+    </section>
+
+    <!-- 9 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Fundamentos">
+      <div class="kicker">Tipos de campaña</div>
+      <h1 class="headline">Performance Max, Demand Gen, YouTube y Shopping</h1>
+      <div class="card-grid cols-2">
+        <div class="card"><span class="tag">Performance Max</span><h3>Una campaña, todos los inventarios</h3><p>Google usa el presupuesto y las conversiones definidas para decidir automáticamente dónde y a quién mostrar el anuncio. Requiere buenos activos (textos, imágenes, video) y datos de conversión confiables.</p></div>
+        <div class="card"><span class="tag">Demand Gen</span><h3>Formatos visuales para generar demanda</h3><p>Ideal para audiencias que aún no conocen la marca, con creatividades tipo carrusel o video corto en YouTube, Discover y Gmail.</p></div>
+        <div class="card"><span class="tag">YouTube</span><h3>Video</h3><p>Formatos in-stream (saltables o no) y bumper ads, útiles para reconocimiento de marca o consideración.</p></div>
+        <div class="card"><span class="tag">Shopping</span><h3>Catálogo de producto</h3><p>Requiere un feed de productos conectado (Merchant Center); muestra imagen, precio y tienda directamente en resultados.</p></div>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide layout-bullets" data-accent="amber" data-section="Subasta">
+      <div class="content-icon" style="--rot:5deg;"><div class="icon-gear"><div class="teeth"></div><div class="hole"></div></div></div>
+      <div class="kicker">Cómo funciona por debajo</div>
+      <h1 class="headline">La subasta en tiempo real</h1>
+      <p class="lead">Cada vez que alguien hace una búsqueda, Google ejecuta una subasta entre todos los anunciantes elegibles. Esto ocurre en fracciones de segundo, antes de que la página termine de cargar.</p>
+      <ol class="steps">
+        <li><b>El usuario busca</b><span class="hint">Google identifica todas las palabras clave activas que podrían aplicar a esa búsqueda.</span></li>
+        <li><b>Se filtran los anuncios elegibles</b><span class="hint">Solo entran a la subasta los anuncios con presupuesto disponible y segmentación compatible.</span></li>
+        <li><b>Se calcula el Ad Rank de cada anunciante</b><span class="hint">Combina la puja con la calidad del anuncio — no gana automáticamente quien más paga.</span></li>
+        <li><b>Se define posición y costo real</b><span class="hint">El costo por clic depende del Ad Rank del competidor inmediatamente inferior, no de tu puja máxima.</span></li>
+      </ol>
+    </section>
+
+    <!-- 11 -->
+    <section class="slide layout-quote" data-accent="amber" data-section="Subasta">
+      <div class="kicker">Cómo funciona por debajo</div>
+      <h2 class="headline">La fórmula que decide quién gana</h2>
+      <div class="formula"><span class="blue">Ad Rank</span><span class="op">=</span><span class="amber">Puja</span><span class="op">×</span><span class="green">Quality Score</span></div>
+      <p class="lead" style="margin:0 auto;">Un anunciante con una puja más baja pero un anuncio más relevante puede superar a uno que paga más pero ofrece peor experiencia. También influyen el impacto esperado de las extensiones y el contexto de la búsqueda.</p>
+    </section>
+
+    <!-- 12 -->
+    <section class="slide layout-bullets" data-accent="amber" data-section="Subasta">
+      <div class="kicker">Cómo funciona por debajo</div>
+      <h1 class="headline">Quality Score, en detalle</h1>
+      <p class="lead">Es una estimación de Google (escala 1 a 10) sobre qué tan relevante y útil es tu anuncio para quien lo ve. Se compone de tres factores:</p>
+      <div class="card-grid cols-3">
+        <div class="card"><span class="tag">Relevancia</span><h3>Del anuncio</h3><p>Qué tan bien se relaciona el texto del anuncio con la palabra clave que lo activó.</p></div>
+        <div class="card"><span class="tag">CTR esperado</span><h3>Probabilidad de clic</h3><p>Qué tan probable es que ese anuncio, en esa posición, reciba un clic.</p></div>
+        <div class="card"><span class="tag">Experiencia</span><h3>De la landing page</h3><p>Qué tan relevante, rápida y clara es la página a la que llega el usuario tras el clic.</p></div>
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <section class="slide layout-bullets" data-accent="amber" data-section="Subasta">
+      <div class="content-icon" style="--rot:-3deg;"><div class="icon-chart"><span></span><span></span><span></span></div></div>
+      <div class="kicker">Cómo funciona por debajo</div>
+      <h1 class="headline">Ejemplo numérico de una subasta</h1>
+      <p class="lead">Tres anunciantes compiten por la misma búsqueda. Observa que ganar no depende únicamente de pujar más alto.</p>
+      <table class="dataTable">
+        <tr><th>Anunciante</th><th>Puja máx.</th><th>Quality Score</th><th>Ad Rank</th><th>Posición</th></tr>
+        <tr><td><strong>A</strong></td><td class="mono">$3.000</td><td class="mono">4</td><td class="mono">12.000</td><td>3</td></tr>
+        <tr><td><strong>B</strong></td><td class="mono">$2.200</td><td class="mono">8</td><td class="mono">17.600</td><td>1</td></tr>
+        <tr><td><strong>C</strong></td><td class="mono">$2.500</td><td class="mono">6</td><td class="mono">15.000</td><td>2</td></tr>
+      </table>
+      <p class="lead" style="margin-top:18px;">El anunciante B paga menos por clic que A y C, y aun así obtiene la mejor posición, gracias a un Quality Score más alto.</p>
+    </section>
+
+    <!-- 14 -->
+    <section class="slide layout-bullets" data-accent="violet" data-section="Estructura">
+      <div class="content-icon" style="--rot:4deg;"><div class="icon-funnel"></div></div>
+      <div class="kicker">Estructura de cuenta</div>
+      <h1 class="headline">La jerarquía de una cuenta de Google Ads</h1>
+      <ol class="steps">
+        <li><b>Cuenta</b><span class="hint">El nivel más alto — un correo, una facturación, una zona horaria y moneda únicas.</span></li>
+        <li><b>Campaña</b><span class="hint">Define el objetivo, el tipo de campaña, el presupuesto diario y la segmentación general (ubicación, idioma).</span></li>
+        <li><b>Grupo de anuncios</b><span class="hint">Agrupa palabras clave y anuncios que comparten un mismo tema o intención.</span></li>
+        <li><b>Palabras clave / Anuncios</b><span class="hint">El nivel más específico: qué activa el anuncio y qué mensaje se muestra.</span></li>
+      </ol>
+    </section>
+
+    <!-- 15 -->
+    <section class="slide layout-bullets" data-accent="violet" data-section="Estructura">
+      <div class="content-icon" style="--rot:-4deg;"><div class="icon-target"></div></div>
+      <div class="kicker">Estructura de cuenta</div>
+      <h1 class="headline">Buenas prácticas de estructura</h1>
+      <ul class="bullets">
+        <li><b>Un grupo de anuncios = un tema, no un producto genérico.</b> Mezclar intenciones distintas en el mismo grupo diluye la relevancia y baja el Quality Score.</li>
+        <li><b>Separar por intención de búsqueda</b>: no es lo mismo alguien que busca información general que alguien que busca "inscripciones" o "admisiones".</li>
+        <li><b>Evitar demasiados grupos con pocas búsquedas cada uno</b>: fragmentar en exceso reduce los datos disponibles por grupo y dificulta la optimización.</li>
+        <li><b>Nombrar todo de forma consistente</b>: facilita leer reportes por programa, ciudad o campaña sin adivinar qué contiene cada nivel.</li>
+      </ul>
+    </section>
+
+    <!-- 16 -->
+    <section class="slide layout-bullets" data-accent="violet" data-section="Estructura">
+      <div class="content-icon" style="--rot:3deg;"><div class="icon-magnifier"><div class="lens"></div><div class="handle"></div></div></div>
+      <div class="kicker">Estructura de cuenta</div>
+      <h1 class="headline">Palabras clave: tipos de concordancia</h1>
+      <table class="dataTable">
+        <tr><th>Tipo</th><th>Sintaxis</th><th>Ejemplo activa este anuncio con...</th></tr>
+        <tr><td><strong>Amplia</strong></td><td class="mono">estudiar administración</td><td>búsquedas relacionadas en significado, incluso sin esas palabras exactas.</td></tr>
+        <tr><td><strong>De frase</strong></td><td class="mono">"estudiar administración"</td><td>búsquedas que incluyen ese significado en ese orden, con texto adicional antes o después.</td></tr>
+        <tr><td><strong>Exacta</strong></td><td class="mono">[estudiar administración]</td><td>búsquedas con el mismo significado que la palabra clave, sin variaciones de intención.</td></tr>
+      </table>
+      <p class="lead" style="margin-top:18px;">A mayor amplitud, mayor alcance pero menor control — se recomienda iniciar con frase/exacta y ampliar según resultados.</p>
+    </section>
+
+    <!-- 17 -->
+    <section class="slide layout-bullets" data-accent="violet" data-section="Estructura">
+      <div class="content-icon" style="--rot:-3deg;"><div class="icon-target"></div></div>
+      <div class="kicker">Estructura de cuenta</div>
+      <h1 class="headline">Palabras clave negativas</h1>
+      <p class="lead">Le indican a Google cuándo <b>no</b> debe mostrar tu anuncio, aunque la búsqueda incluya una de tus palabras clave activas.</p>
+      <ul class="bullets">
+        <li><b>Por qué importan:</b> sin negativas, el presupuesto se filtra hacia búsquedas irrelevantes (empleo, precios de competidores, información que no vendes).</li>
+        <li><b>Ejemplo típico en educación:</b> negativizar <code class="mono">trabajo</code>, <code class="mono">empleo</code>, <code class="mono">gratis</code> o el nombre de universidades competidoras si no se desea competir en esas búsquedas.</li>
+        <li><b>Buena práctica:</b> revisar el informe de "términos de búsqueda" semanalmente y convertir en negativas las búsquedas irrelevantes que ya gastaron presupuesto.</li>
+      </ul>
+    </section>
+
+    <!-- 18 -->
+    <section class="slide layout-bullets" data-accent="green" data-section="Anuncios">
+      <div class="content-icon" style="--rot:5deg;"><div class="icon-gear"><div class="teeth"></div><div class="hole"></div></div></div>
+      <div class="kicker">Anuncios y assets</div>
+      <h1 class="headline">Anuncios de búsqueda adaptables (RSA)</h1>
+      <p class="lead">Es el formato estándar de anuncio de texto en Search. En vez de escribir un solo anuncio fijo, se entregan varias variantes y Google prueba combinaciones automáticamente.</p>
+      <ul class="bullets">
+        <li><b>Hasta 15 títulos</b> (30 caracteres cada uno) y <b>hasta 4 descripciones</b> (90 caracteres cada una).</li>
+        <li><b>Google combina y aprende</b> qué títulos y descripciones funcionan mejor juntos, y prioriza esas combinaciones con el tiempo.</li>
+        <li><b>Recomendación:</b> incluir al menos 2-3 títulos con la palabra clave principal, y variar beneficio, llamado a la acción y diferenciador entre los demás.</li>
+      </ul>
+    </section>
+
+    <!-- 19 -->
+    <section class="slide layout-bullets" data-accent="green" data-section="Anuncios">
+      <div class="kicker">Anuncios y assets</div>
+      <h1 class="headline">Extensiones / Assets</h1>
+      <p class="lead">Son elementos adicionales que enriquecen el anuncio sin costo extra por mostrarlos, y que además mejoran el Ad Rank al aumentar el impacto esperado.</p>
+      <div class="card-grid cols-3">
+        <div class="card"><span class="tag">Sitelinks</span><h3>Enlaces de sitio</h3><p>Enlaces adicionales a secciones específicas, como páginas de programas individuales.</p></div>
+        <div class="card"><span class="tag">Llamada</span><h3>Call assets</h3><p>Muestra un botón o número de teléfono directamente en el anuncio.</p></div>
+        <div class="card"><span class="tag">Ubicación</span><h3>Location assets</h3><p>Muestra la dirección física, útil para sedes o puntos de atención.</p></div>
+      </div>
+    </section>
+
+    <!-- 20 -->
+    <section class="slide layout-bullets" data-accent="green" data-section="Anuncios">
+      <div class="content-icon" style="--rot:-4deg;"><div class="icon-target"></div></div>
+      <div class="kicker">Anuncios y assets</div>
+      <h1 class="headline">Buenas prácticas de copy para anuncios</h1>
+      <ul class="bullets">
+        <li><b>Incluir la palabra clave principal</b> en al menos un título — mejora relevancia percibida y Quality Score.</li>
+        <li><b>Un llamado a la acción claro:</b> "Inscríbete hoy", "Conoce el pénsum", "Solicita información" — decirle a la persona qué hacer, no solo describir.</li>
+        <li><b>Diferenciador real, no genérico:</b> evitar frases que cualquier competidor podría usar igual ("la mejor calidad") y preferir datos concretos (acreditación, modalidad, becas).</li>
+        <li><b>Coherencia con la landing page:</b> lo que promete el anuncio debe encontrarse literalmente en la página de destino.</li>
+      </ul>
+    </section>
+
+    <!-- 21 -->
+    <section class="slide" data-accent="amber" data-section="Presupuesto">
+      <div class="content-icon" style="--rot:4deg;"><div class="icon-coin"><div class="coin">$</div></div></div>
+      <div class="kicker">Presupuesto y puja</div>
+      <h1 class="headline">Presupuesto: diario vs. de campaña</h1>
+      <div class="split">
+        <div class="col box">
+          <h4 style="color:var(--ink);font-size:16px;">Presupuesto diario promedio</h4>
+          <p>Es el modelo estándar. Google puede gastar hasta el doble en un día de alta demanda, pero nunca más del promedio mensual (presupuesto diario × 30,4).</p>
+        </div>
+        <div class="col box">
+          <h4 style="color:var(--ink);font-size:16px;">Presupuesto compartido</h4>
+          <p>Varias campañas comparten un mismo monto total; útil cuando se quiere que el sistema decida en qué campaña invertir más según desempeño.</p>
+        </div>
+      </div>
+      <p class="lead" style="margin-top:24px;">Regla práctica: el presupuesto diario debería alcanzar al menos para 10-15 clics según el CPC estimado de la industria, o la campaña no tendrá suficientes datos para aprender.</p>
+    </section>
+
+    <!-- 22 -->
+    <section class="slide layout-bullets" data-accent="amber" data-section="Presupuesto">
+      <div class="content-icon" style="--rot:-3deg;"><div class="icon-coin"><div class="coin">$</div></div></div>
+      <div class="kicker">Presupuesto y puja</div>
+      <h1 class="headline">Estrategias de puja: manual vs. automatizadas</h1>
+      <table class="dataTable">
+        <tr><th>Estrategia</th><th>Quién controla el CPC</th><th>Cuándo usarla</th></tr>
+        <tr><td><strong>CPC manual</strong></td><td>El anunciante, por palabra clave.</td><td>Cuentas nuevas sin historial de conversión, o control muy fino requerido.</td></tr>
+        <tr><td><strong>Maximizar clics</strong></td><td>Google, optimizando volumen de tráfico.</td><td>Objetivo es visibilidad/tráfico, no todavía conversión.</td></tr>
+        <tr><td><strong>Maximizar conversiones</strong></td><td>Google, usando datos históricos de conversión.</td><td>Ya existe seguimiento de conversión confiable.</td></tr>
+        <tr><td><strong>CPA objetivo / ROAS objetivo</strong></td><td>Google, respetando un costo o retorno meta.</td><td>Cuenta madura con volumen de conversiones suficiente (min. ~15-30/mes).</td></tr>
+      </table>
+    </section>
+
+    <!-- 23 -->
+    <section class="slide layout-bullets" data-accent="amber" data-section="Presupuesto">
+      <div class="content-icon" style="--rot:3deg;"><div class="icon-coin"><div class="coin">$</div></div></div>
+      <div class="kicker">Presupuesto y puja</div>
+      <h1 class="headline">¿Cómo elegir la estrategia correcta?</h1>
+      <ol class="steps">
+        <li><b>¿Tienes conversiones registradas y confiables?</b><span class="hint">Si no, empieza en CPC manual o Maximizar clics mientras se valida el tracking.</span></li>
+        <li><b>¿Tienes volumen suficiente de conversiones al mes?</b><span class="hint">Las estrategias automatizadas necesitan datos para aprender; con muy pocas conversiones, funcionan mal.</span></li>
+        <li><b>¿Tu objetivo es costo o retorno?</b><span class="hint">CPA objetivo controla el costo por lead; ROAS objetivo controla el retorno sobre inversión (más común en e-commerce).</span></li>
+      </ol>
+    </section>
+
+    <!-- 24 -->
+    <section class="slide layout-bullets" data-accent="violet" data-section="Segmentación">
+      <div class="content-icon" style="--rot:-4deg;"><div class="icon-target"></div></div>
+      <div class="kicker">Segmentación</div>
+      <h1 class="headline">Ubicación e idioma</h1>
+      <ul class="bullets">
+        <li><b>Ubicación:</b> se puede segmentar por país, departamento, ciudad o radio en kilómetros alrededor de un punto — clave para instituciones con sedes físicas.</li>
+        <li><b>Opciones de presencia:</b> mostrar el anuncio solo a quienes están físicamente en la zona, o también a quienes muestran interés en ella aunque no estén presentes — cada opción cambia mucho el alcance.</li>
+        <li><b>Idioma:</b> se selecciona el idioma que habla la audiencia (según configuración de su navegador/Google), no el idioma del anuncio en sí.</li>
+      </ul>
+    </section>
+
+    <!-- 25 -->
+    <section class="slide layout-bullets" data-accent="violet" data-section="Segmentación">
+      <div class="content-icon" style="--rot:5deg;"><div class="icon-gear"><div class="teeth"></div><div class="hole"></div></div></div>
+      <div class="kicker">Segmentación</div>
+      <h1 class="headline">Dispositivos y programación de anuncios</h1>
+      <ul class="bullets">
+        <li><b>Dispositivos:</b> se puede ajustar la puja al alza o a la baja según si la búsqueda ocurre en móvil, computador o tablet, según en cuál convierte mejor la audiencia.</li>
+        <li><b>Programación (day-parting):</b> mostrar anuncios solo en los días y horas en que hay capacidad de dar respuesta a los leads generados.</li>
+        <li><b>Caso típico:</b> pausar anuncios de generación de leads los fines de semana si nadie del equipo de admisiones puede dar seguimiento hasta el lunes.</li>
+      </ul>
+    </section>
+
+    <!-- 26 -->
+    <section class="slide layout-bullets" data-accent="violet" data-section="Segmentación">
+      <div class="kicker">Segmentación</div>
+      <h1 class="headline">Audiencias</h1>
+      <div class="card-grid cols-3">
+        <div class="card"><span class="tag">Intención</span><h3>Audiencias de intención</h3><p>Personas que han buscado activamente temas relacionados en Google recientemente, sin que hayan visitado tu sitio.</p></div>
+        <div class="card"><span class="tag">Remarketing</span><h3>Quien ya te visitó</h3><p>Personas que ya interactuaron con tu sitio web y no completaron una conversión — el público más "caliente" disponible.</p></div>
+        <div class="card"><span class="tag">Similares</span><h3>Segmentos personalizados</h3><p>Google identifica personas con comportamientos o intereses similares a tus mejores clientes/leads actuales.</p></div>
+      </div>
+    </section>
+
+    <!-- 27 -->
+    <section class="slide layout-bullets" data-accent="green" data-section="Medición">
+      <div class="content-icon" style="--rot:-3deg;"><div class="icon-chart"><span></span><span></span><span></span></div></div>
+      <div class="kicker">Medición</div>
+      <h1 class="headline">¿Por qué medir conversiones es crítico?</h1>
+      <p class="lead">Una conversión es la acción concreta que le importa al negocio: un formulario diligenciado, una llamada, un mensaje por WhatsApp, una compra.</p>
+      <ul class="bullets">
+        <li><b>Sin conversión registrada, no hay optimización real posible</b> — Google no puede aprender a encontrar más personas parecidas a quienes ya convirtieron.</li>
+        <li><b>Las estrategias de puja automatizadas dependen 100% de este dato</b> para funcionar correctamente.</li>
+        <li><b>Permite calcular costo real por resultado</b>, no solo por clic — la métrica que de verdad le importa a quien aprueba el presupuesto.</li>
+      </ul>
+    </section>
+
+    <!-- 28 -->
+    <section class="slide layout-bullets" data-accent="green" data-section="Medición">
+      <div class="kicker">Medición</div>
+      <h1 class="headline">Tipos de conversión más comunes</h1>
+      <div class="card-grid cols-2">
+        <div class="card"><span class="tag">Formulario web</span><h3>Envío de formulario</h3><p>Se dispara cuando alguien completa y envía un formulario, típicamente en la página de "gracias" posterior al envío.</p></div>
+        <div class="card"><span class="tag">Clic a WhatsApp</span><h3>Contacto directo</h3><p>Se dispara cuando alguien hace clic en el botón/enlace de WhatsApp del sitio.</p></div>
+        <div class="card"><span class="tag">Llamada telefónica</span><h3>Clic en número o llamada real</h3><p>Puede medirse por clic en el número desde móvil, o por duración real de la llamada con números de seguimiento.</p></div>
+        <div class="card"><span class="tag">Compra / transacción</span><h3>E-commerce</h3><p>Se dispara al completarse una compra, generalmente con el valor de la transacción incluido.</p></div>
+      </div>
+    </section>
+
+    <!-- 29 -->
+    <section class="slide layout-bullets" data-accent="green" data-section="Medición">
+      <div class="content-icon" style="--rot:4deg;"><div class="icon-chart"><span></span><span></span><span></span></div></div>
+      <div class="kicker">Medición</div>
+      <h1 class="headline">El circuito de medición: Ads + GTM + GA4</h1>
+      <ol class="steps">
+        <li><b>El usuario hace clic en el anuncio</b><span class="hint">Google Ads registra el clic y de dónde vino (campaña, grupo, palabra clave).</span></li>
+        <li><b>Llega al sitio y completa la acción deseada</b><span class="hint">Ej. envía un formulario o hace clic en WhatsApp.</span></li>
+        <li><b>Google Tag Manager detecta el evento y lo envía</b><span class="hint">A través de un trigger configurado, sin que el equipo de desarrollo tenga que tocar código cada vez.</span></li>
+        <li><b>GA4 y Google Ads registran la conversión</b><span class="hint">GA4 la registra como evento; Google Ads la usa para optimizar futuras subastas.</span></li>
+      </ol>
+    </section>
+
+    <!-- 30 -->
+    <section class="slide layout-bullets" data-accent="green" data-section="Medición">
+      <div class="content-icon" style="--rot:-4deg;"><div class="icon-chart"><span></span><span></span><span></span></div></div>
+      <div class="kicker">Medición</div>
+      <h1 class="headline">Métricas clave del panel</h1>
+      <table class="dataTable">
+        <tr><th>Métrica</th><th>Qué mide</th><th>Fórmula</th></tr>
+        <tr><td><strong>CTR</strong></td><td>% de veces que se hizo clic al ver el anuncio.</td><td class="mono">Clics / Impresiones</td></tr>
+        <tr><td><strong>CPC</strong></td><td>Costo promedio pagado por cada clic.</td><td class="mono">Costo / Clics</td></tr>
+        <tr><td><strong>Tasa de conversión</strong></td><td>% de clics que terminaron en conversión.</td><td class="mono">Conversiones / Clics</td></tr>
+        <tr><td><strong>CPA</strong></td><td>Costo promedio por cada conversión obtenida.</td><td class="mono">Costo / Conversiones</td></tr>
+        <tr><td><strong>ROAS</strong></td><td>Retorno de inversión publicitaria (más usado en e-commerce).</td><td class="mono">Ingresos / Costo</td></tr>
+      </table>
+    </section>
+
+    <!-- 31 -->
+    <section class="slide layout-bullets" data-accent="coral" data-section="Buenas prácticas">
+      <div class="content-icon" style="--rot:4deg;"><div class="icon-gear"><div class="teeth"></div><div class="hole"></div></div></div>
+      <div class="kicker">Errores comunes</div>
+      <h1 class="headline">Errores frecuentes de quien empieza en Google Ads</h1>
+      <ul class="bullets">
+        <li><b>Lanzar la campaña sin conversión configurada y validada.</b> Se gasta presupuesto a ciegas y no se puede optimizar después.</li>
+        <li><b>Usar concordancia amplia sin negativas.</b> El presupuesto se dispersa en búsquedas irrelevantes rápidamente.</li>
+        <li><b>Mezclar temas muy distintos en un mismo grupo de anuncios.</b> Baja la relevancia y el Quality Score de todo el grupo.</li>
+        <li><b>Cambiar la campaña constantemente en los primeros días.</b> El sistema necesita una fase de aprendizaje estable para optimizar bien.</li>
+        <li><b>Enviar el tráfico a la página de inicio en vez de una landing específica</b> relacionada exactamente con lo que promete el anuncio.</li>
+      </ul>
+    </section>
+
+    <!-- 32 -->
+    <section class="slide layout-bullets" data-accent="coral" data-section="Buenas prácticas">
+      <div class="content-icon" style="--rot:-3deg;"><div class="icon-target"></div></div>
+      <div class="kicker">Checklist</div>
+      <h1 class="headline">Antes de publicar cualquier campaña</h1>
+      <ul class="checklist">
+        <li>La conversión objetivo está configurada y se validó que dispara correctamente.</li>
+        <li>La estructura de la cuenta agrupa por tema/intención, no por producto genérico.</li>
+        <li>Cada grupo de anuncios tiene al menos 2-3 anuncios adaptables con variaciones reales.</li>
+        <li>Existe una lista base de palabras clave negativas antes del lanzamiento.</li>
+        <li>El presupuesto diario es coherente con el CPC estimado y el volumen de búsquedas.</li>
+        <li>La landing page de destino coincide con lo que promete el anuncio.</li>
+        <li>Ubicación, idioma y dispositivo están segmentados de forma intencional, no por defecto.</li>
+      </ul>
+    </section>
+
+    <!-- 33 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Ejercicio 1">
+      <div class="content-icon" style="--rot:5deg;"><div class="icon-gear"><div class="teeth"></div><div class="hole"></div></div></div>
+      <div class="badge-lab">🧪 Ejercicio práctico 1</div>
+      <h1 class="headline">Configuración de cuenta</h1>
+      <p class="lead">Van a configurar los fundamentos de una cuenta de Google Ads desde cero, dejando lista la base sobre la cual se construirá una campaña en el ejercicio 2.</p>
+      <div class="meta-row">
+        <div class="meta-chip">TIEMPO<b>35-40 min</b></div>
+        <div class="meta-chip">MODALIDAD<b>Individual o en pares</b></div>
+        <div class="meta-chip">REQUIERE<b>Cuenta de Google Ads (sandbox o real, sin campañas activas)</b></div>
+      </div>
+      <ul class="bullets">
+        <li><b>Objetivo:</b> dejar la cuenta correctamente configurada en información de negocio, zona horaria/moneda, y una acción de conversión lista para usarse.</li>
+        <li><b>Entregable:</b> captura de pantalla de la acción de conversión creada y de la configuración de facturación/zona horaria.</li>
+      </ul>
+    </section>
+
+    <!-- 34 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Ejercicio 1">
+      <div class="content-icon" style="--rot:-4deg;"><div class="icon-gear"><div class="teeth"></div><div class="hole"></div></div></div>
+      <div class="badge-lab">🧪 Ejercicio 1 · Pasos 1-5</div>
+      <h1 class="headline">Configuración de cuenta — parte 1</h1>
+      <ol class="steps">
+        <li><b>Ingresa a la cuenta</b> y ubica el menú <code>Herramientas y configuración</code> en la barra superior.</li>
+        <li><b>Revisa "Configuración de la cuenta"</b>: confirma zona horaria y moneda — <b>no se pueden cambiar después</b> de generar el primer gasto, así que valídalas ahora.</li>
+        <li><b>Ve a "Facturación"</b> y revisa (sin completar si es sandbox) qué método de pago pediría la cuenta y bajo qué país/dirección fiscal.</li>
+        <li><b>Abre "Acciones de conversión"</b> dentro de "Medición" y crea una acción nueva de tipo <code>Sitio web</code>.</li>
+        <li><b>Define la conversión como "Envío de formulario"</b>, categoría <code>Lead</code>, y valor "no usar un valor" (por ahora).</li>
+      </ol>
+    </section>
+
+    <!-- 35 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Ejercicio 1">
+      <div class="content-icon" style="--rot:4deg;"><div class="icon-gear"><div class="teeth"></div><div class="hole"></div></div></div>
+      <div class="badge-lab">🧪 Ejercicio 1 · Pasos 6-10</div>
+      <h1 class="headline">Configuración de cuenta — parte 2</h1>
+      <ol class="steps" start="6">
+        <li><b>Configura la ventana de conversión</b> en 30 días (estándar para procesos de decisión no inmediatos, como educación).</li>
+        <li><b>Selecciona el método de registro</b> "Una conversión" por interacción, para no contar el mismo lead dos veces.</li>
+        <li><b>Genera y copia el fragmento de código / etiqueta</b> asociado a esta conversión (aunque no se instale en este ejercicio).</li>
+        <li><b>Verifica en "Estado" de la acción de conversión</b> que aparezca como "Sin verificar" — es el estado esperado antes de instalar el tag.</li>
+        <li><b>Toma captura de pantalla</b> de la acción creada y de la configuración de zona horaria/moneda.</li>
+      </ol>
+      <div class="meta-row" style="margin-top:18px;">
+        <div class="meta-chip">✅ VALIDACIÓN<b>La acción de conversión existe, categoría Lead, ventana 30 días</b></div>
+      </div>
+    </section>
+
+    <!-- 36 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Ejercicio 2">
+      <div class="content-icon" style="--rot:-3deg;"><div class="icon-funnel"></div></div>
+      <div class="badge-lab">🧪 Ejercicio práctico 2</div>
+      <h1 class="headline">Construcción de una campaña</h1>
+      <p class="lead">Con la cuenta ya configurada, van a construir una campaña de Search completa de principio a fin, dejándola en pausa lista para revisión antes de publicar.</p>
+      <div class="meta-row">
+        <div class="meta-chip">TIEMPO<b>45-55 min</b></div>
+        <div class="meta-chip">MODALIDAD<b>Individual o en pares</b></div>
+        <div class="meta-chip">REQUIERE<b>Cuenta configurada en el ejercicio 1</b></div>
+      </div>
+      <ul class="bullets">
+        <li><b>Objetivo:</b> construir una campaña de Search para un programa académico ficticio, con un grupo de anuncios, palabras clave, negativas y dos anuncios adaptables.</li>
+        <li><b>Entregable:</b> la campaña queda creada y <b>en pausa</b> (nunca se publica en vivo durante el ejercicio).</li>
+      </ul>
+    </section>
+
+    <!-- 37 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Ejercicio 2">
+      <div class="content-icon" style="--rot:4deg;"><div class="icon-funnel"></div></div>
+      <div class="badge-lab">🧪 Ejercicio 2 · Pasos 1-6</div>
+      <h1 class="headline">Construcción de campaña — parte 1</h1>
+      <ol class="steps">
+        <li><b>Crea una campaña nueva</b> seleccionando el objetivo <code>Leads</code> y tipo de campaña <code>Búsqueda</code>.</li>
+        <li><b>Elige "Sitio web" como acción de conversión</b> y selecciona la acción creada en el ejercicio 1.</li>
+        <li><b>Define el nombre de la campaña</b> siguiendo una convención clara, por ejemplo: <code>SEARCH_ProgramaFicticio_Leads</code>.</li>
+        <li><b>Configura la red</b>: deja activa solo la Red de Búsqueda (desmarca "Incluir socios de la Red de Display" para este ejercicio).</li>
+        <li><b>Define ubicación</b>: Colombia, o una ciudad específica, y verifica que la opción de presencia sea "Presencia" (no "Presencia o interés").</li>
+        <li><b>Asigna un presupuesto diario</b> de prueba (ej. $50.000 COP) y elige la estrategia de puja <code>Maximizar clics</code> para esta primera versión.</li>
+      </ol>
+    </section>
+
+    <!-- 38 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Ejercicio 2">
+      <div class="content-icon" style="--rot:-4deg;"><div class="icon-funnel"></div></div>
+      <div class="badge-lab">🧪 Ejercicio 2 · Pasos 7-12</div>
+      <h1 class="headline">Construcción de campaña — parte 2</h1>
+      <ol class="steps" start="7">
+        <li><b>Crea un grupo de anuncios</b> con un solo tema, por ejemplo: <code>Admisiones - Programa Ficticio</code>.</li>
+        <li><b>Agrega entre 5 y 8 palabras clave</b>, combinando concordancia de frase y exacta relacionadas al programa.</li>
+        <li><b>Agrega al menos 5 palabras clave negativas</b> (ej. <code>empleo</code>, <code>trabajo</code>, <code>gratis</code>, <code>homologación</code>, competidores directos).</li>
+        <li><b>Redacta un primer anuncio adaptable</b>: mínimo 5 títulos y 2 descripciones, incluyendo la palabra clave principal en al menos un título.</li>
+        <li><b>Redacta un segundo anuncio adaptable</b> con un ángulo distinto (beneficio vs. urgencia/llamado a la acción) para poder comparar desempeño.</li>
+        <li><b>Revisa el resumen de la campaña y guárdala en pausa</b> — no publicar en vivo.</li>
+      </ol>
+      <div class="meta-row" style="margin-top:14px;">
+        <div class="meta-chip">✅ VALIDACIÓN<b>Campaña en pausa, 1 grupo, ≥5 keywords, ≥5 negativas, 2 anuncios</b></div>
+      </div>
+    </section>
+
+    <!-- 39 -->
+    <section class="slide layout-bullets" data-accent="blue" data-section="Cierre">
+      <div class="kicker">Cierre</div>
+      <h1 class="headline">Resumen del módulo</h1>
+      <div class="card-grid cols-3">
+        <div class="card"><span class="tag">Cómo se decide</span><h3>Subasta y Ad Rank</h3><p>Ganar no es pagar más: es combinar puja con calidad y relevancia.</p></div>
+        <div class="card"><span class="tag">Cómo se organiza</span><h3>Estructura de cuenta</h3><p>Cuenta → Campaña → Grupo de anuncios → Palabras clave/Anuncios, agrupando por intención.</p></div>
+        <div class="card"><span class="tag">Cómo se mide</span><h3>Conversiones</h3><p>Sin conversión configurada y validada, no hay optimización real posible.</p></div>
+        <div class="card"><span class="tag">Cómo se controla</span><h3>Presupuesto y puja</h3><p>Elegir la estrategia según madurez de datos, no según lo que "suena mejor".</p></div>
+        <div class="card"><span class="tag">A quién le hablamos</span><h3>Segmentación</h3><p>Ubicación, dispositivo, horario y audiencia son palancas, no configuración por defecto.</p></div>
+        <div class="card"><span class="tag">Qué evitar</span><h3>Errores comunes</h3><p>Amplia sin negativas, grupos mezclados, landing genérica y cambios prematuros.</p></div>
+      </div>
+    </section>
+
+    <!-- 40 -->
+    <section class="slide layout-title" data-accent="blue" data-section="Cierre">
+      <div class="kicker">MÓDULO · GOOGLE ADS</div>
+      <h1 class="big">Preguntas y siguientes pasos</h1>
+      <p class="sub">Con la cuenta configurada y la primera campaña construida en pausa, el siguiente paso natural es validar el tracking en vivo y definir el calendario de publicación.</p>
+      <div class="title-meta">
+        <div>SIGUIENTE PASO<b>Validar conversión en vivo antes de publicar</b></div>
+        <div>RECURSO<b>Checklist de lanzamiento (slide 32)</b></div>
+        <div>CONTACTO<b>Equipo de pauta digital</b></div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="controls">
+    <button class="nav-btn" id="prevBtn">← Anterior</button>
+    <span class="kbd-hint">← → para navegar · Enter para el índice</span>
+    <button class="nav-btn" id="nextBtn">Siguiente →</button>
+  </div>
+</div>
+
+<div class="menu-overlay" id="menuOverlay">
+  <div class="menu-panel">
+    <h3>Índice del módulo</h3>
+    <ul class="menu-list" id="menuList"></ul>
+  </div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let current = 0;
+
+  const accentColors = {blue:'#2F6FE4', green:'#0EA57E', amber:'#D9840F', coral:'#E5484D', violet:'#7C5CFC'};
+
+  const slideCurrent = document.getElementById('slideCurrent');
+  const slideTotal = document.getElementById('slideTotal');
+  const progressFill = document.getElementById('progressFill');
+  const eyebrowLabel = document.getElementById('eyebrowLabel');
+  const eyebrowDot = document.getElementById('eyebrowDot');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const menuOverlay = document.getElementById('menuOverlay');
+  const menuList = document.getElementById('menuList');
+  const menuOpener = document.getElementById('menuOpener');
+
+  slideTotal.textContent = String(total).padStart(2,'0');
+
+  function buildMenu(){
+    let lastSection = null;
+    slides.forEach((s, i) => {
+      const section = s.dataset.section;
+      if(section !== lastSection){
+        const title = document.createElement('div');
+        title.className = 'menu-section-title';
+        title.textContent = section;
+        menuList.appendChild(title);
+        lastSection = section;
+      }
+      const li = document.createElement('li');
+      const headline = s.querySelector('h1, h2');
+      li.innerHTML = `<span><span class="n">${String(i+1).padStart(2,'0')}</span>${headline ? headline.textContent : section}</span>`;
+      li.addEventListener('click', () => { goTo(i); closeMenu(); });
+      menuList.appendChild(li);
+    });
+  }
+
+  function render(){
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    slideCurrent.textContent = String(current+1).padStart(2,'0');
+    progressFill.style.width = ((current) / (total-1) * 100) + '%';
+    const active = slides[current];
+    const accent = active.dataset.accent || 'blue';
+    eyebrowLabel.textContent = active.dataset.section;
+    eyebrowDot.style.background = accentColors[accent];
+    eyebrowLabel.style.color = accentColors[accent];
+    eyebrowLabel.style.borderColor = accentColors[accent] + '55';
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total-1;
+  }
+
+  function goTo(i){
+    current = Math.max(0, Math.min(total-1, i));
+    render();
+  }
+
+  function openMenu(){ menuOverlay.classList.add('open'); }
+  function closeMenu(){ menuOverlay.classList.remove('open'); }
+
+  prevBtn.addEventListener('click', () => goTo(current-1));
+  nextBtn.addEventListener('click', () => goTo(current+1));
+  menuOpener.addEventListener('click', openMenu);
+  menuOverlay.addEventListener('click', (e) => { if(e.target === menuOverlay) closeMenu(); });
+
+  document.addEventListener('keydown', (e) => {
+    if(menuOverlay.classList.contains('open')){
+      if(e.key === 'Escape') closeMenu();
+      return;
+    }
+    if(e.key === 'ArrowRight' || e.key === ' ') { goTo(current+1); e.preventDefault(); }
+    if(e.key === 'ArrowLeft') { goTo(current-1); e.preventDefault(); }
+    if(e.key === 'Enter') { openMenu(); }
+  });
+
+  buildMenu();
+  render();
+</script>
+</body>
+</html>
