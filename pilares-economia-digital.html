@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pilares de la Economía Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#070b18;
+    --navy-900:#0b1330;
+    --navy-800:#111c42;
+    --navy-700:#182a5c;
+    --blue-500:#3468ff;
+    --cyan-400:#3fe0e0;
+    --cyan-300:#7bf1ea;
+    --violet-500:#8b5cf6;
+    --violet-400:#a78bfa;
+    --ink-050:#f4f6ff;
+    --ink-200:#c7d0f2;
+    --ink-400:#8b96c4;
+    --line:rgba(199,208,242,0.14);
+    --glow: 0 0 0 1px rgba(63,224,224,0.18), 0 20px 60px -20px rgba(52,104,255,0.45);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 12% -10%, rgba(139,92,246,0.28), transparent 60%),
+      radial-gradient(ellipse 900px 600px at 100% 0%, rgba(63,224,224,0.16), transparent 55%),
+      radial-gradient(ellipse 1200px 800px at 50% 120%, rgba(52,104,255,0.22), transparent 60%),
+      var(--navy-950);
+    color:var(--ink-050);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+    padding-bottom:80px;
+    overflow-x:hidden;
+  }
+
+  body::before{
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(199,208,242,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(199,208,242,0.035) 1px, transparent 1px);
+    background-size:56px 56px;
+    pointer-events:none;
+    z-index:0;
+    mask-image: radial-gradient(ellipse 100% 60% at 50% 0%, black, transparent);
+  }
+
+  .wrap{max-width:1100px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+  /* HEADER */
+  header{padding:64px 0 40px; text-align:center;}
+
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--cyan-300);
+    background:rgba(63,224,224,0.08);
+    border:1px solid rgba(63,224,224,0.3);
+    padding:6px 14px; border-radius:999px;
+    animation:fadeUp .7s ease both;
+  }
+  .kicker::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--cyan-300); box-shadow:0 0 10px var(--cyan-300);}
+
+  h1{
+    font-family:'Instrument Serif', serif;
+    font-weight:400;
+    font-size:clamp(38px, 6vw, 68px);
+    line-height:1.02;
+    margin:20px 0 14px;
+    background:linear-gradient(100deg, #ffffff 10%, var(--cyan-300) 45%, var(--violet-400) 80%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    animation:fadeUp .8s .05s ease both;
+  }
+  h1 em{font-style:italic; color:var(--violet-400); -webkit-text-fill-color:var(--violet-400);}
+
+  .lede{
+    max-width:620px; margin:0 auto;
+    color:var(--ink-200); font-size:17px; line-height:1.6;
+    animation:fadeUp .8s .1s ease both;
+  }
+
+  @keyframes fadeUp{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+
+  /* PILLAR LEGEND */
+  .legend{
+    margin:44px 0 8px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:linear-gradient(180deg, rgba(24,42,92,0.5), rgba(11,19,48,0.5));
+    backdrop-filter:blur(6px);
+    overflow:hidden;
+    animation:fadeUp .8s .15s ease both;
+  }
+  .legend-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 22px; cursor:pointer; user-select:none;
+  }
+  .legend-head h2{font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-200); font-weight:600;}
+  .legend-head .chevron{transition:transform .3s ease; color:var(--cyan-300); font-size:18px;}
+  .legend.open .chevron{transform:rotate(180deg);}
+  .legend-body{
+    max-height:0; overflow:hidden; transition:max-height .45s ease;
+  }
+  .legend.open .legend-body{max-height:900px;}
+  .pillar-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+    gap:1px; background:var(--line);
+    border-top:1px solid var(--line);
+  }
+  .pillar-item{
+    background:var(--navy-900); padding:20px 22px;
+    display:flex; flex-direction:column; cursor:pointer;
+  }
+  .pillar-item-head{display:flex; gap:16px; align-items:center;}
+  .pillar-item .chev{
+    margin-left:auto; color:var(--ink-400); font-size:16px; transition:transform .3s ease;
+    flex-shrink:0;
+  }
+  .pillar-item.open .chev{transform:rotate(180deg); color:var(--cyan-300);}
+
+  .pillar-icon-wrap{
+    perspective:700px; width:52px; height:52px; flex-shrink:0;
+  }
+  .pillar-icon{
+    width:52px; height:52px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; transform-style:preserve-3d;
+    animation:floatSpin 7s ease-in-out infinite;
+  }
+  @keyframes floatSpin{
+    0%{transform:rotateY(0deg) rotateX(0deg) translateY(0px);}
+    25%{transform:rotateY(90deg) rotateX(8deg) translateY(-5px);}
+    50%{transform:rotateY(180deg) rotateX(0deg) translateY(0px);}
+    75%{transform:rotateY(270deg) rotateX(-8deg) translateY(-5px);}
+    100%{transform:rotateY(360deg) rotateX(0deg) translateY(0px);}
+  }
+  .p1 .pillar-icon{background:linear-gradient(150deg, var(--cyan-300), #1a8f8f); box-shadow:0 10px 20px -6px rgba(63,224,224,0.55), inset 0 -4px 8px rgba(0,0,0,0.25);}
+  .p2 .pillar-icon{background:linear-gradient(150deg, var(--blue-500), #1a2f8f); box-shadow:0 10px 20px -6px rgba(52,104,255,0.55), inset 0 -4px 8px rgba(0,0,0,0.25); animation-delay:.3s;}
+  .p3 .pillar-icon{background:linear-gradient(150deg, var(--violet-400), #4c2b8f); box-shadow:0 10px 20px -6px rgba(139,92,246,0.55), inset 0 -4px 8px rgba(0,0,0,0.25); animation-delay:.6s;}
+  .p4 .pillar-icon{background:linear-gradient(150deg, #4ade80, #157a45); box-shadow:0 10px 20px -6px rgba(74,222,128,0.5), inset 0 -4px 8px rgba(0,0,0,0.25); animation-delay:.9s;}
+  .p5 .pillar-icon{background:linear-gradient(150deg, #fbbf24, #8f5a10); box-shadow:0 10px 20px -6px rgba(251,191,36,0.5), inset 0 -4px 8px rgba(0,0,0,0.25); animation-delay:1.2s;}
+  .p6 .pillar-icon{background:linear-gradient(150deg, #f472b6, #8f2b64); box-shadow:0 10px 20px -6px rgba(244,114,182,0.5), inset 0 -4px 8px rgba(0,0,0,0.25); animation-delay:1.5s;}
+
+  .pillar-num{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--cyan-300); margin-bottom:4px; display:block;
+  }
+  .pillar-text strong{display:block; font-size:15.5px; color:var(--ink-050);}
+  .pillar-desc{
+    max-height:0; overflow:hidden; transition:max-height .4s ease;
+  }
+  .pillar-item.open .pillar-desc{max-height:220px;}
+  .pillar-desc p{font-size:13px; color:var(--ink-400); line-height:1.6; padding-top:14px;}
+
+  /* SECTION NAV */
+  .ex-nav{
+    display:flex; gap:10px; margin:52px 0 0; border-bottom:1px solid var(--line);
+    animation:fadeUp .8s .2s ease both;
+  }
+  .ex-tab{
+    flex:1; text-align:left; background:none; border:none; cursor:pointer;
+    padding:18px 6px 16px; color:var(--ink-400); position:relative;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  .ex-tab .name{display:block; font-size:19px; font-weight:600; color:var(--ink-200);}
+  .ex-tab.active{color:var(--cyan-300);}
+  .ex-tab.active .name{color:#fff;}
+  .ex-tab.active::after{
+    content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px;
+    background:linear-gradient(90deg, var(--cyan-400), var(--violet-500));
+    border-radius:2px;
+  }
+
+  .ex-panel{display:none; animation:fadeUp .5s ease both;}
+  .ex-panel.active{display:block;}
+  .ex-panel-intro{
+    max-width:640px; margin:30px 0 36px; color:var(--ink-400); font-size:15px; line-height:1.6;
+  }
+
+  /* CASE CARDS - PANEL 1 */
+  .cases{display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:20px;}
+
+  .case-card{
+    border-radius:20px; border:1px solid var(--line);
+    background:linear-gradient(165deg, var(--navy-800), var(--navy-900) 60%);
+    overflow:hidden; position:relative; cursor:pointer;
+    transition:box-shadow .3s ease, transform .3s ease, border-color .3s ease;
+  }
+  .case-card:hover{transform:translateY(-3px); border-color:rgba(63,224,224,0.35); box-shadow:var(--glow);}
+
+  .case-top{padding:24px 24px 18px; border-bottom:1px solid var(--line);}
+  .case-brand{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:11px;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--navy-950);
+    background:var(--cyan-300); padding:4px 10px; border-radius:999px; margin-bottom:12px;
+  }
+  .case-card:nth-child(2) .case-brand{background:var(--violet-400);}
+  .case-card:nth-child(3) .case-brand{background:#4ade80;}
+  .case-card:nth-child(4) .case-brand{background:#fbbf24;}
+  .case-top h3{font-family:'Instrument Serif', serif; font-size:26px; font-weight:400; margin-bottom:8px;}
+  .case-top p{font-size:14px; color:var(--ink-400); line-height:1.55;}
+
+  .case-question{padding:18px 24px; background:rgba(139,92,246,0.06);}
+  .case-question .qlabel{font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--violet-400); margin-bottom:6px;}
+  .case-question p{font-size:15px; color:var(--ink-050); line-height:1.5; font-weight:500;}
+
+  .case-cta{
+    padding:14px 24px; display:flex; align-items:center; justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.05em; color:var(--cyan-300);
+  }
+  .case-cta .chev{transition:transform .3s ease;}
+  .case-card.open .case-cta .chev{transform:rotate(180deg);}
+
+  .answer-key{
+    max-height:0; overflow:hidden; transition:max-height .4s ease;
+    background:rgba(11,19,48,0.7); border-top:1px solid var(--line);
+  }
+  .case-card.open .answer-key{max-height:400px;}
+  .answer-key-inner{padding:20px 24px;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;}
+  .chip{
+    font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px;
+    background:rgba(63,224,224,0.12); border:1px solid rgba(63,224,224,0.3); color:var(--cyan-300);
+  }
+  .answer-key-inner p{font-size:13.5px; color:var(--ink-200); line-height:1.55;}
+
+  /* PANEL 2 - CONVERSATION PROMPTS */
+  .debate-list{display:flex; flex-direction:column; gap:16px;}
+  .debate-card{
+    border:1px solid var(--line); border-radius:18px;
+    background:linear-gradient(100deg, var(--navy-800), var(--navy-900));
+    padding:22px 26px; position:relative; overflow:hidden; cursor:pointer;
+    transition:border-color .3s ease, transform .3s ease;
+  }
+  .debate-card:hover{transform:translateX(4px); border-color:rgba(139,92,246,0.4);}
+  .debate-body h4{font-size:17px; font-weight:600; line-height:1.4; margin-bottom:10px;}
+  .debate-body .pillars-tag{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;}
+  .ptag{font-size:11px; padding:3px 9px; border-radius:999px; background:rgba(52,104,255,0.14); color:#a9c0ff; border:1px solid rgba(52,104,255,0.3);}
+  .debate-body .hint{
+    max-height:0; overflow:hidden; transition:max-height .35s ease;
+    font-size:13px; color:var(--ink-400); line-height:1.55; border-left:2px solid rgba(74,222,128,0.5);
+  }
+  .debate-card.open .debate-body .hint{max-height:200px; padding-left:12px; margin-top:10px;}
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <span class="kicker">Conversatorio de clase</span>
+    <h1>Pilares de la <em>economía<br>digital</em></h1>
+    <p class="lede">Vamos a mirar casos que probablemente ya usas todos los días, y después abrimos la conversación en grupo. No hay una única respuesta correcta — el objetivo es pensar en voz alta.</p>
+  </header>
+
+  <div class="legend" id="legend">
+    <div class="legend-head" onclick="document.getElementById('legend').classList.toggle('open')">
+      <h2>Glosario rápido · Los 6 pilares</h2>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="legend-body">
+      <div class="pillar-grid" id="pillarGrid">
+        <div class="pillar-item p1" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">🌐</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Pilar 01</span>
+              <strong>Infraestructura y conectividad</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>La base física sobre la que corre todo lo demás: banda ancha, redes móviles 4G/5G, fibra óptica y centros de datos. Sin esto, ningún otro pilar es posible — es la razón por la que un mismo país puede tener zonas hiperconectadas y zonas casi desconectadas de la economía digital.</p></div>
+        </div>
+        <div class="pillar-item p2" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">🛒</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Pilar 02</span>
+              <strong>Comercio electrónico</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>Marketplaces, tiendas propias online y toda la logística de última milla que hace posible que un producto llegue a la puerta de alguien. Incluye desde grandes plataformas como Mercado Libre hasta un pequeño negocio que vende por WhatsApp y Instagram.</p></div>
+        </div>
+        <div class="pillar-item p3" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">🤝</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Pilar 03</span>
+              <strong>Economía de plataformas</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>Modelos que conectan oferta y demanda en tiempo real —domicilios, transporte, hospedaje, freelancing— y que crecen gracias a efectos de red: entre más usuarios tiene la plataforma, más valiosa se vuelve para todos. Aquí vive también la llamada "gig economy".</p></div>
+        </div>
+        <div class="pillar-item p4" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">💳</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Pilar 04</span>
+              <strong>Servicios financieros digitales</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>Fintech, billeteras digitales, pagos sin efectivo y crédito otorgado con criterios distintos a los de la banca tradicional. Es uno de los pilares con mayor impacto en inclusión financiera en Colombia, donde una parte importante de la población sigue sin acceso a un banco.</p></div>
+        </div>
+        <div class="pillar-item p5" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">🧠</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Pilar 05</span>
+              <strong>Economía de datos e IA</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>Todo lo que las empresas aprenden de nuestro comportamiento digital y usan para personalizar, predecir y automatizar decisiones: qué nos recomiendan, a quién le dan crédito, qué precio nos muestran. Es el pilar que más rápido evoluciona y el que más preguntas abre sobre privacidad.</p></div>
+        </div>
+        <div class="pillar-item p6" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">⚖️</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Pilar 06</span>
+              <strong>Marco regulatorio y gobernanza</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>Las reglas del juego: documentos como el CONPES 4144, los lineamientos del MinTIC, la normativa de protección de datos y ciberseguridad, y la forma en que el Estado decide proteger —o no— a consumidores y trabajadores digitales. Es el pilar que determina qué tan rápido pueden crecer los otros cinco.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="ex-nav">
+    <button class="ex-tab active" onclick="showPanel(1)"><span class="name">Casos reales</span></button>
+    <button class="ex-tab" onclick="showPanel(2)"><span class="name">Para conversar</span></button>
+  </nav>
+
+  <!-- PANEL 1 -->
+  <section class="ex-panel active" id="panel1">
+    <p class="ex-panel-intro">Cuatro marcas colombianas que probablemente ya conoces. Para cada una, piensa qué pilares de la economía digital la sostienen antes de mirar la respuesta.</p>
+
+    <div class="cases">
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Nequi</span>
+          <h3>La billetera que se volvió banco</h3>
+          <p>Nequi nació como billetera digital de Bancolombia y hoy opera pagos, préstamos, inversión y comercio dentro de una sola app, con millones de usuarios que nunca pisaron una sucursal.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Qué pilares hicieron posible que Nequi reemplazara al banco tradicional para tantos usuarios en Colombia?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">4 · Fintech</span>
+              <span class="chip">1 · Infraestructura</span>
+              <span class="chip">5 · Datos e IA</span>
+            </div>
+            <p>El pilar dominante es el financiero digital, apalancado en infraestructura de conectividad móvil masiva y en analítica de datos para scoring crediticio y personalización. Vale la pena discutir si la regulación actúa como freno o como habilitador de confianza.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Rappi</span>
+          <h3>El súper app de la economía gig</h3>
+          <p>Rappi conecta domiciliarios independientes, comercios y consumidores en tiempo real, y ha expandido su modelo a pagos, crédito y turismo dentro del mismo ecosistema.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Qué tensiones genera el modelo de Rappi entre los distintos pilares que combina?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">3 · Plataformas</span>
+              <span class="chip">2 · E-commerce</span>
+              <span class="chip">6 · Regulación</span>
+            </div>
+            <p>El pilar de economía de plataformas es el eje, sostenido por logística de comercio electrónico. La tensión más interesante es con el pilar regulatorio: derechos laborales de los repartidores frente al modelo de "socio independiente".</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Dropi</span>
+          <h3>El motor invisible del dropshipping local</h3>
+          <p>Dropi conecta proveedores con miles de pequeños vendedores que arman tiendas online sin manejar inventario, usando integración logística y pago contraentrega en Colombia y la región.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Por qué Dropi solo pudo escalar en un contexto con ciertos pilares ya maduros?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">2 · E-commerce</span>
+              <span class="chip">1 · Infraestructura</span>
+              <span class="chip">4 · Fintech</span>
+            </div>
+            <p>Dropi depende de infraestructura logística y de conectividad para operar a escala, de comercio electrónico como pilar central, y de pagos digitales (incluido el contraentrega) como puente hacia usuarios con baja bancarización.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Mercado Libre</span>
+          <h3>El marketplace que se volvió ecosistema</h3>
+          <p>Mercado Libre integra marketplace, Mercado Pago y Mercado Envíos en un solo ecosistema, y usa los datos transaccionales de cada compra para financiar crédito a vendedores.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Cómo se retroalimentan los pilares dentro del ecosistema de Mercado Libre?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">2 · E-commerce</span>
+              <span class="chip">4 · Fintech</span>
+              <span class="chip">5 · Datos e IA</span>
+            </div>
+            <p>Es el caso más completo: el comercio electrónico genera datos, los datos habilitan crédito fintech, y el crédito impulsa más ventas. Un ciclo que se retroalimenta, no pilares que funcionan por separado.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Bold</span>
+          <h3>El datáfono que se volvió infraestructura</h3>
+          <p>Bold empezó vendiendo datáfonos y links de pago a tenderos y pequeños negocios que no calificaban para la banca tradicional, y hoy procesa pagos, créditos y facturación para cientos de miles de comercios en Colombia.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Por qué un producto tan simple como un datáfono termina siendo, en el fondo, un problema de infraestructura y no solo de tecnología financiera?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">4 · Fintech</span>
+              <span class="chip">1 · Infraestructura</span>
+              <span class="chip">6 · Regulación</span>
+            </div>
+            <p>Bold resuelve un vacío de infraestructura financiera para comercios que antes dependían del efectivo: sin rieles de pago, terminales y cumplimiento normativo, la promesa fintech no llega al tendero de barrio. Es un buen caso para mostrar que la innovación digital muchas veces empieza resolviendo algo muy poco digital: la conectividad de un negocio pequeño con el sistema financiero.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Platzi</span>
+          <h3>La universidad que aprende de cada clic</h3>
+          <p>Platzi ofrece cursos en línea sobre tecnología, negocios y marketing para toda Latinoamérica, y usa el comportamiento de cada estudiante —qué pausa, qué repite, qué abandona— para ajustar rutas de aprendizaje y recomendar el siguiente curso.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Qué tendría que existir antes en un país para que una plataforma educativa 100% digital como Platzi pudiera crecer?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">1 · Infraestructura</span>
+              <span class="chip">5 · Datos e IA</span>
+              <span class="chip">3 · Plataformas</span>
+            </div>
+            <p>Sin conectividad estable y dispositivos accesibles, un modelo así ni siquiera despega. Una vez existe esa base, el pilar de datos e IA es el que sostiene la propuesta de valor —personalizar el aprendizaje— y la lógica de plataforma es la que conecta a miles de instructores con estudiantes en distintos países al mismo tiempo.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PANEL 2 -->
+  <section class="ex-panel" id="panel2">
+    <div class="debate-list">
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>Si un municipio colombiano no tiene banda ancha estable, ¿puede realmente participar de la economía digital aunque tenga acceso a apps de e-commerce y fintech por datos móviles?</h4>
+          <div class="pillars-tag"><span class="ptag">Infraestructura</span><span class="ptag">Regulación</span></div>
+          <div class="hint">La brecha digital no es solo de acceso a internet, sino de calidad y estabilidad de la conexión — eso limita qué pilares se pueden aprovechar realmente.</div>
+        </div>
+      </div>
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>¿La economía de plataformas (Rappi, Uber) crea más empleo del que destruye, o solo lo precariza bajo otro nombre?</h4>
+          <div class="pillars-tag"><span class="ptag">Plataformas</span><span class="ptag">Regulación</span></div>
+          <div class="hint">Flexibilidad y acceso al ingreso versus ausencia de prestaciones sociales y estabilidad — el debate regulatorio colombiano sobre el "piso de protección social" va justo por acá.</div>
+        </div>
+      </div>
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>Cada vez que usas Nequi o Mercado Pago, generas datos que esas empresas usan para decidir si te dan crédito. ¿Es esto inclusión financiera o vigilancia financiera?</h4>
+          <div class="pillars-tag"><span class="ptag">Fintech</span><span class="ptag">Datos e IA</span></div>
+          <div class="hint">El scoring alternativo con datos abre crédito a quien no tenía historial bancario, pero también crea nuevas formas de exclusión algorítmica.</div>
+        </div>
+      </div>
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>¿Debería el Estado regular más fuerte a las plataformas digitales, como propone el marco de CONPES/MinTIC, o la sobrerregulación frena la innovación que necesita el país?</h4>
+          <div class="pillars-tag"><span class="ptag">Regulación</span><span class="ptag">Plataformas</span></div>
+          <div class="hint">Vale comparar con la regulación europea (DSA/DMA) frente al enfoque históricamente más laxo en Latinoamérica.</div>
+        </div>
+      </div>
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>De los 6 pilares, ¿cuál es hoy el eslabón más débil de la economía digital colombiana, y qué pasaría si no se fortalece en los próximos 5 años?</h4>
+          <div class="pillars-tag"><span class="ptag">Todos los pilares</span></div>
+          <div class="hint">Buena pregunta para cerrar: que cada uno defienda un pilar distinto y veamos si el grupo llega a un consenso.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function showPanel(n){
+    document.querySelectorAll('.ex-panel').forEach((p,i)=> p.classList.toggle('active', i === n-1));
+    document.querySelectorAll('.ex-tab').forEach((t,i)=> t.classList.toggle('active', i === n-1));
+  }
+
+  function toggleCard(card){
+    card.classList.toggle('open');
+  }
+
+  function togglePillar(item){
+    item.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
