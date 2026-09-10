@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Stack Marketing Digital con IA — Módulo 1</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=switzer@400,500,600,700,800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ========================================================
+   FULL STACK MARKETING DIGITAL CON IA — MÓDULO 1
+   Sistema visual: tech retro-futurista claro (Apple keynote x Tesla config)
+   Optimizado para proyección en tablero / videobeam
+   ======================================================== */
+:root{
+  --bg:#F5F1E6;
+  --bg-soft:#FBF8F1;
+  --panel:#FFFFFF;
+  --panel-line:rgba(20,18,12,0.10);
+  --panel-line-strong:rgba(20,18,12,0.16);
+  --ink:#17140F;
+  --ink-dim:#5B564B;
+  --ink-faint:#948E7E;
+  --cyan:#0B7F73;
+  --cyan-dim:rgba(11,127,115,0.10);
+  --cyan-strong:#0A6E64;
+  --coral:#D8481F;
+  --coral-dim:rgba(216,72,31,0.10);
+  --coral-strong:#B93B18;
+  --violet:#6425C7;
+  --violet-dim:rgba(100,37,199,0.09);
+  --violet-strong:#54209E;
+  --amber:#B4790B;
+  --amber-dim:rgba(180,121,11,0.12);
+  --amber-strong:#8F5F08;
+  --grid-line:rgba(20,18,12,0.055);
+  --radius:20px;
+  --disp:'Clash Display', 'Switzer', sans-serif;
+  --body:'Switzer', -apple-system, sans-serif;
+  --mono:'IBM Plex Mono', monospace;
+  --shadow-sm:0 2px 10px rgba(30,25,10,.05);
+  --shadow-md:0 14px 34px rgba(30,25,10,.09), 0 2px 8px rgba(30,25,10,.05);
+  --shadow-lg:0 30px 70px rgba(30,25,10,.14), 0 6px 18px rgba(30,25,10,.06);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%; background:var(--bg); overflow:hidden;}
+body{
+  font-family:var(--body);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Background atmosphere ---------- */
+.bg-grid{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 40%, black 40%, transparent 90%);
+}
+.bg-noise{
+  position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.025; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.bg-glow{
+  position:fixed; z-index:0; pointer-events:none; border-radius:50%; filter:blur(130px); opacity:.30;
+}
+.bg-glow.c1{width:640px;height:640px; background:#8FE0D6; top:-220px; left:-160px;}
+.bg-glow.c2{width:560px;height:560px; background:#E7C3F5; bottom:-240px; right:-140px; opacity:.30;}
+
+/* ---------- Deck / slide shell ---------- */
+.deck{
+  position:relative; z-index:1;
+  width:100vw; height:100vh;
+  display:flex; align-items:center; justify-content:center;
+}
+.slide{
+  position:absolute;
+  width:min(94vw, 167vh);
+  height:min(94vh, 167vw* (9/16));
+  aspect-ratio:16/9;
+  max-height:94vh;
+  background:linear-gradient(175deg, var(--bg-soft), var(--bg) 65%);
+  border:1px solid var(--panel-line);
+  border-radius:24px;
+  box-shadow:var(--shadow-lg), 0 0 0 1px rgba(255,255,255,.6) inset;
+  opacity:0; visibility:hidden; transform:translateY(18px) scale(.985);
+  transition:opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1), visibility 0s linear .5s;
+  overflow:hidden;
+  padding:clamp(24px,3.6vh,52px) clamp(30px,4.4vw,76px);
+  display:flex; flex-direction:column;
+}
+.slide.active{
+  opacity:1; visibility:visible; transform:translateY(0) scale(1);
+  transition:opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1), visibility 0s;
+  z-index:2;
+}
+
+/* ---------- Chrome: header / footer ---------- */
+.slide-eyebrow{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:clamp(10px,1.05vw,13px); letter-spacing:.14em; text-transform:uppercase;
+  color:var(--cyan-strong); margin-bottom:clamp(10px,1.6vh,18px); flex:0 0 auto;
+}
+.slide-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan); box-shadow:0 0 0 4px var(--cyan-dim);}
+.slide-eyebrow .sep{color:var(--ink-faint);}
+.slide-eyebrow .tag-tema{color:var(--ink-dim);}
+
+.slide-footer{
+  flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
+  margin-top:clamp(10px,1.6vh,20px); padding-top:clamp(8px,1.2vh,14px);
+  border-top:1px solid var(--panel-line);
+  font-family:var(--mono); font-size:clamp(9px,.8vw,11px); color:var(--ink-faint); letter-spacing:.04em;
+}
+.slide-footer .class-badge{
+  display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:20px;
+  border:1px solid var(--panel-line); color:var(--ink-dim); font-weight:600;
+}
+.slide-footer .class-badge.c1{color:var(--cyan-strong); border-color:rgba(11,127,115,.28); background:var(--cyan-dim);}
+.slide-footer .class-badge.c2{color:var(--coral-strong); border-color:rgba(216,72,31,.28); background:var(--coral-dim);}
+
+/* ---------- Typography ---------- */
+h1,h2,h3{font-family:var(--disp); font-weight:600; letter-spacing:-.01em; line-height:1.04;}
+.slide-title{
+  font-size:clamp(24px,3.05vw,46px); font-weight:600; margin-bottom:clamp(8px,1.3vh,16px); flex:0 0 auto;
+  max-width:95%;
+}
+.slide-title .accent{color:var(--cyan);}
+.slide-title .accent2{color:var(--coral);}
+.slide-sub{
+  font-size:clamp(12.5px,1.15vw,16px); color:var(--ink-dim); font-weight:400; max-width:68ch; line-height:1.55;
+  margin-bottom:clamp(10px,1.8vh,22px); flex:0 0 auto;
+}
+.slide-body{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center;}
+p{line-height:1.58;}
+strong{font-weight:700; color:var(--ink);}
+.kicker{
+  font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint);
+}
+
+/* ---------- Cover / section divider ---------- */
+.cover .slide-body{justify-content:center; align-items:flex-start;}
+.cover .mega{font-size:clamp(34px,5.1vw,74px); font-weight:600; line-height:1.03; max-width:17ch;}
+.cover .mega em{font-style:normal; color:var(--cyan);}
+
+.divider{align-items:center; justify-content:center;}
+.divider .slide-body{align-items:center; justify-content:center; text-align:center;}
+.divider .num{font-family:var(--mono); font-size:clamp(56px,9vw,140px); color:transparent; -webkit-text-stroke:1.5px rgba(11,127,115,.4); line-height:1; margin-bottom:6px;}
+.divider h2{font-size:clamp(26px,4vw,58px); max-width:22ch;}
+.divider .slide-sub{margin:14px auto 0; text-align:center;}
+
+/* ---------- Grids & cards ---------- */
+.grid{display:grid; gap:clamp(11px,1.7vw,24px);}
+.g2{grid-template-columns:repeat(2,1fr);}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g5{grid-template-columns:repeat(5,1fr);}
+
+@keyframes cardIn{ from{opacity:0; transform:translateY(14px) scale(.97);} to{opacity:1; transform:translateY(0) scale(1);} }
+.slide.active .card, .slide.active .stat-card, .slide.active .tool-card, .slide.active .exercise-card{
+  animation:cardIn .55s cubic-bezier(.16,1,.3,1) both;
+}
+.grid .card:nth-child(1),.grid .stat-card:nth-child(1),.grid .tool-card:nth-child(1){animation-delay:.02s;}
+.grid .card:nth-child(2),.grid .stat-card:nth-child(2),.grid .tool-card:nth-child(2){animation-delay:.08s;}
+.grid .card:nth-child(3),.grid .stat-card:nth-child(3),.grid .tool-card:nth-child(3){animation-delay:.14s;}
+.grid .card:nth-child(4),.grid .stat-card:nth-child(4),.grid .tool-card:nth-child(4){animation-delay:.20s;}
+.grid .card:nth-child(5),.grid .stat-card:nth-child(5),.grid .tool-card:nth-child(5){animation-delay:.26s;}
+.grid .card:nth-child(6),.grid .stat-card:nth-child(6),.grid .tool-card:nth-child(6){animation-delay:.32s;}
+
+.card{
+  background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius);
+  padding:clamp(15px,1.7vw,24px);
+  position:relative; overflow:hidden; box-shadow:var(--shadow-sm);
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.card::before{
+  content:''; position:absolute; top:0; left:0; width:46px; height:4px; border-radius:0 0 4px 0;
+  background:linear-gradient(90deg, var(--cyan), var(--cyan-strong));
+}
+.card:nth-child(2n)::before{background:linear-gradient(90deg, var(--coral), var(--coral-strong));}
+.card:nth-child(3n)::before{background:linear-gradient(90deg, var(--violet), var(--violet-strong));}
+.card:nth-child(4n)::before{background:linear-gradient(90deg, var(--amber), var(--amber-strong));}
+.card h4{font-family:var(--disp); font-weight:600; font-size:clamp(13.5px,1.2vw,18px); margin-bottom:7px; letter-spacing:-.005em;}
+.card p{color:var(--ink-dim); font-size:clamp(11.5px,.98vw,13.8px); line-height:1.55;}
+.card .card-tag{display:inline-block; font-family:var(--mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:6px;}
+
+/* card variant: bold fill spotlight (cuadro de destaque) */
+.spot{
+  border-radius:var(--radius); padding:clamp(16px,1.9vw,26px); position:relative; overflow:hidden;
+  box-shadow:var(--shadow-md); color:#fff;
+}
+.spot::after{
+  content:''; position:absolute; right:-30px; bottom:-30px; width:130px; height:130px; border-radius:50%;
+  background:rgba(255,255,255,.10);
+}
+.spot h4{font-family:var(--disp); font-size:clamp(14px,1.3vw,19px); font-weight:600; margin-bottom:7px; color:#fff;}
+.spot p{color:rgba(255,255,255,.88); font-size:clamp(11.5px,1vw,14px); line-height:1.55;}
+.spot.cyan{background:linear-gradient(135deg, var(--cyan-strong), var(--cyan) 75%);}
+.spot.coral{background:linear-gradient(135deg, var(--coral-strong), var(--coral) 75%);}
+.spot.violet{background:linear-gradient(135deg, var(--violet-strong), var(--violet) 75%);}
+.spot.amber{background:linear-gradient(135deg, var(--amber-strong), var(--amber) 75%);}
+.spot.ink{background:linear-gradient(135deg, #262319, var(--ink) 75%);}
+.spot .spot-icon{width:clamp(40px,3.4vw,52px); height:clamp(40px,3.4vw,52px); border-radius:14px; background:rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; margin-bottom:12px;}
+.spot .spot-icon svg{width:58%; height:58%; stroke:#fff;}
+.spot .tag-float{position:absolute; top:14px; right:16px; font-family:var(--mono); font-size:9.5px; letter-spacing:.08em; background:rgba(255,255,255,.2); padding:3px 9px; border-radius:20px; color:#fff;}
+
+.stat-card{
+  background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius);
+  padding:clamp(16px,1.9vw,26px); display:flex; flex-direction:column; gap:7px; position:relative;
+  box-shadow:var(--shadow-sm); overflow:hidden;
+}
+.stat-card::after{content:''; position:absolute; top:-30%; right:-14%; width:90px; height:90px; border-radius:50%; background:var(--cyan-dim); z-index:0;}
+.stat-card.coral::after{background:var(--coral-dim);}
+.stat-card.violet::after{background:var(--violet-dim);}
+.stat-card.amber::after{background:var(--amber-dim);}
+.stat-card>*{position:relative; z-index:1;}
+.stat-card .num{font-family:var(--mono); font-size:clamp(30px,3.3vw,48px); font-weight:600; color:var(--cyan); letter-spacing:-.02em; line-height:1;}
+.stat-card.coral .num{color:var(--coral);}
+.stat-card.violet .num{color:var(--violet);}
+.stat-card.amber .num{color:var(--amber);}
+.stat-card .label{font-size:clamp(11.5px,.95vw,13.5px); color:var(--ink-dim); line-height:1.45; font-weight:500;}
+.stat-card .src{font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); margin-top:auto; padding-top:6px; border-top:1px dashed var(--panel-line);}
+.stat-card .bar-track{height:5px; background:var(--panel-line); border-radius:4px; overflow:hidden; margin-top:2px;}
+.stat-card .bar-fill{height:100%; border-radius:4px; background:var(--cyan);}
+.stat-card.coral .bar-fill{background:var(--coral);}
+.stat-card.violet .bar-fill{background:var(--violet);}
+.stat-card.amber .bar-fill{background:var(--amber);}
+
+/* icon badges — bigger + more expressive */
+.icon-badge{
+  width:clamp(50px,4.6vw,68px); height:clamp(50px,4.6vw,68px); border-radius:16px;
+  display:flex; align-items:center; justify-content:center; margin-bottom:12px;
+  background:var(--cyan-dim); border:1px solid rgba(11,127,115,.22); box-shadow:var(--shadow-sm);
+}
+.icon-badge.coral{background:var(--coral-dim); border-color:rgba(216,72,31,.22);}
+.icon-badge.violet{background:var(--violet-dim); border-color:rgba(100,37,199,.22);}
+.icon-badge.amber{background:var(--amber-dim); border-color:rgba(180,121,11,.22);}
+.icon-badge.xl{width:clamp(64px,5.6vw,84px); height:clamp(64px,5.6vw,84px); border-radius:20px;}
+.icon-badge svg{width:56%; height:56%;}
+.icon-badge.rot{transform:rotate(-4deg);}
+.icon-badge.rot2{transform:rotate(4deg);}
+
+.icon-line{fill:none; stroke:var(--cyan); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;}
+.icon-line.coral{stroke:var(--coral);}
+.icon-line.violet{stroke:var(--violet);}
+.icon-line.amber{stroke:var(--amber);}
+
+/* animated retro icon behaviors */
+@keyframes draw{ from{ stroke-dashoffset:var(--len,200);} to{ stroke-dashoffset:0;} }
+@keyframes pulseGlow{ 0%,100%{ filter:drop-shadow(0 0 0px currentColor);} 50%{ filter:drop-shadow(0 0 7px currentColor);} }
+@keyframes floaty{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-5px);} }
+@keyframes spin-slow{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+@keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+@keyframes dashFlow{ to{ stroke-dashoffset:-40; } }
+.anim-draw path, .anim-draw circle, .anim-draw rect, .anim-draw polyline{
+  stroke-dasharray:var(--len,200); animation:draw 1.6s ease forwards;
+}
+.anim-float{animation:floaty 3.2s ease-in-out infinite;}
+.anim-pulse{animation:pulseGlow 2.4s ease-in-out infinite; color:var(--cyan);}
+.anim-spin{animation:spin-slow 8s linear infinite; transform-origin:center;}
+.anim-blink{animation:blink 1.6s ease-in-out infinite;}
+
+/* ---------- Timeline ---------- */
+.timeline{display:flex; align-items:flex-start; gap:0; position:relative; padding-top:10px;}
+.timeline::before{content:''; position:absolute; top:26px; left:0; right:0; height:2px; background:repeating-linear-gradient(90deg, var(--panel-line-strong) 0 6px, transparent 6px 11px);}
+.tl-item{flex:1; position:relative; padding:0 10px; text-align:left;}
+.tl-item .tl-dot{width:13px;height:13px;border-radius:50%; background:var(--bg-soft); border:2.5px solid var(--cyan); margin-bottom:14px; position:relative; z-index:1; box-shadow:0 0 0 4px var(--bg-soft);}
+.tl-item h5{font-family:var(--disp); font-size:clamp(12.5px,1.05vw,15px); font-weight:600; margin:4px 0 6px;}
+.tl-item .tl-year{font-family:var(--mono); font-size:11px; color:var(--cyan-strong); letter-spacing:.06em; font-weight:600;}
+.tl-item p{font-size:clamp(10.5px,.85vw,12.5px); color:var(--ink-dim); line-height:1.5;}
+
+/* ---------- Visual "table" replacements ---------- */
+.rank-row{
+  display:flex; align-items:center; gap:16px; padding:12px 16px; background:var(--panel); border:1px solid var(--panel-line);
+  border-radius:14px; margin-bottom:9px; box-shadow:var(--shadow-sm);
+}
+.rank-row .rr-flag{flex:0 0 auto; width:38px; height:38px; border-radius:10px; background:var(--cyan-dim); display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700; color:var(--cyan-strong); font-size:13px;}
+.rank-row .rr-name{flex:0 0 auto; width:clamp(90px,10vw,150px); font-weight:600; font-size:clamp(11.5px,1vw,14px);}
+.rank-row .rr-bar-wrap{flex:1 1 auto; height:20px; background:var(--panel-line); border-radius:10px; overflow:hidden; position:relative;}
+.rank-row .rr-bar{height:100%; border-radius:10px; background:linear-gradient(90deg, var(--cyan), var(--cyan-strong)); display:flex; align-items:center; justify-content:flex-end; padding-right:10px;}
+.rank-row .rr-bar span{font-family:var(--mono); font-size:10px; color:#fff; font-weight:600;}
+.rank-row .rr-meta{flex:0 0 auto; font-family:var(--mono); font-size:10px; color:var(--ink-faint); width:clamp(80px,8vw,120px); text-align:right;}
+
+.cmp-cards{display:grid; gap:12px;}
+.cmp-card{
+  background:var(--panel); border:1px solid var(--panel-line); border-radius:16px; padding:14px 16px;
+  box-shadow:var(--shadow-sm); position:relative;
+}
+.cmp-card .cc-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
+.cmp-card .cc-name{font-family:var(--disp); font-weight:600; font-size:clamp(12.5px,1.1vw,15px);}
+.cmp-card .cc-pill{font-family:var(--mono); font-size:9.5px; padding:3px 9px; border-radius:20px; background:var(--cyan-dim); color:var(--cyan-strong); font-weight:600;}
+.cmp-card .cc-rows{display:flex; flex-direction:column; gap:4px;}
+.cmp-card .cc-row{display:flex; justify-content:space-between; font-size:clamp(10.5px,.9vw,12.5px); color:var(--ink-dim); padding:3px 0; border-bottom:1px dashed var(--panel-line);}
+.cmp-card .cc-row:last-child{border-bottom:none;}
+.cmp-card .cc-row b{color:var(--ink); font-weight:600;}
+
+/* legacy table (fallback use) */
+table.cmp{width:100%; border-collapse:collapse; font-size:clamp(10.5px,.92vw,13px);}
+table.cmp th, table.cmp td{padding:9px 12px; border-bottom:1px solid var(--panel-line); text-align:left; vertical-align:top;}
+table.cmp th{font-family:var(--mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-dim); font-weight:600;}
+table.cmp td{color:var(--ink);}
+table.cmp tr:first-child th{border-top:none;}
+table.cmp td.hl{color:var(--cyan-strong); font-weight:700;}
+
+/* ---------- Video / resource cards ---------- */
+.video-card{
+  background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius); overflow:hidden;
+  display:flex; flex-direction:column; text-decoration:none; color:inherit; transition:transform .25s ease, box-shadow .25s ease;
+  box-shadow:var(--shadow-sm);
+}
+.video-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-md);}
+.video-thumb{
+  aspect-ratio:16/9; background:linear-gradient(135deg, #EAE4D3, #DCD4BC);
+  display:flex; align-items:center; justify-content:center; position:relative; flex:0 0 auto;
+}
+.video-thumb .play{
+  width:52px;height:52px;border-radius:50%; background:var(--panel); border:2px solid var(--cyan);
+  display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-sm);
+}
+.video-thumb .play::after{content:''; border-left:13px solid var(--cyan); border-top:8px solid transparent; border-bottom:8px solid transparent; margin-left:4px;}
+.video-card .vinfo{padding:13px 15px;}
+.video-card .vinfo .vtitle{font-family:var(--disp); font-weight:600; font-size:clamp(11.5px,1vw,14px); margin-bottom:3px;}
+.video-card .vinfo .vmeta{font-family:var(--mono); font-size:9.5px; color:var(--ink-faint);}
+
+.res-link{
+  display:flex; align-items:center; gap:12px; padding:13px 15px; border:1px solid var(--panel-line); border-radius:14px;
+  text-decoration:none; color:inherit; background:var(--panel); transition:transform .2s ease, box-shadow .2s ease; box-shadow:var(--shadow-sm);
+}
+.res-link:hover{transform:translateY(-2px); box-shadow:var(--shadow-md);}
+.res-link .ricon{width:36px;height:36px;flex:0 0 auto; border-radius:10px; background:var(--cyan-dim); display:flex; align-items:center; justify-content:center;}
+.res-link .rtext .rtitle{font-size:clamp(11.5px,.95vw,13.5px); font-weight:600;}
+.res-link .rtext .rurl{font-family:var(--mono); font-size:9.5px; color:var(--ink-faint);}
+
+/* ---------- Badges / pills ---------- */
+.pill{display:inline-flex; align-items:center; gap:6px; padding:5px 13px; border-radius:20px; border:1px solid var(--panel-line); font-family:var(--mono); font-size:10.5px; color:var(--ink-dim); font-weight:600; background:var(--panel);}
+.pill.cyan{color:var(--cyan-strong); border-color:rgba(11,127,115,.25); background:var(--cyan-dim);}
+.pill.coral{color:var(--coral-strong); border-color:rgba(216,72,31,.25); background:var(--coral-dim);}
+
+/* quote / case */
+.case-box{
+  display:flex; gap:clamp(14px,2vw,28px); align-items:center;
+  background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius); padding:clamp(16px,2vw,28px);
+  box-shadow:var(--shadow-sm);
+}
+.case-box .logo-ph{
+  flex:0 0 auto; width:clamp(64px,7vw,96px); height:clamp(64px,7vw,96px); border-radius:18px;
+  background:linear-gradient(135deg, var(--cyan-strong), var(--cyan)); display:flex; align-items:center; justify-content:center;
+  font-family:var(--disp); font-weight:700; font-size:clamp(20px,2.2vw,30px); color:#fff; box-shadow:var(--shadow-md);
+}
+
+/* checklist */
+.checklist{list-style:none; display:flex; flex-direction:column; gap:11px;}
+.checklist li{display:flex; align-items:flex-start; gap:11px; font-size:clamp(11.5px,1vw,14px);}
+.checklist li .ck{flex:0 0 auto; width:20px;height:20px;border-radius:6px; background:var(--cyan); display:flex; align-items:center; justify-content:center; margin-top:1px; box-shadow:var(--shadow-sm);}
+.checklist li .ck::after{content:''; width:8px;height:5px; border-left:2px solid #fff; border-bottom:2px solid #fff; transform:rotate(-45deg) translateY(-1px);}
+
+/* prompt box */
+.prompt-box{
+  background:#1D1A14; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px 20px;
+  font-family:var(--mono); font-size:clamp(10.5px,.92vw,13px); line-height:1.65; color:#C9C4B5; position:relative;
+  box-shadow:var(--shadow-md);
+}
+.prompt-box.bad{box-shadow:var(--shadow-md), 0 0 0 1px rgba(216,72,31,.35) inset;}
+.prompt-box.good{box-shadow:var(--shadow-md), 0 0 0 1px rgba(76,235,222,.35) inset;}
+.prompt-box .tag{position:absolute; top:-11px; left:16px; font-family:var(--mono); font-size:9.5px; padding:3px 10px; border-radius:6px; letter-spacing:.08em; font-weight:700;}
+.prompt-box.bad .tag{background:var(--coral); color:#fff;}
+.prompt-box.good .tag{background:#4CEBDE; color:#0A0A0D;}
+.prompt-box .hl{color:#fff;}
+
+/* dark-background components: force readable strong/b text */
+.exercise-card strong, .exercise-card b,
+.spot strong, .spot b,
+.prompt-box strong, .prompt-box b,
+.eco-center strong, .eco-center b,
+.case-box .logo-ph strong{
+  color:#fff;
+}
+
+/* ---------- exercise cards (15 min) ---------- */
+.exercise-card{
+  background:linear-gradient(135deg, #1D1A14, #302A1E); border-radius:var(--radius); padding:clamp(18px,2.1vw,28px);
+  box-shadow:var(--shadow-lg); color:#fff; position:relative; overflow:hidden;
+}
+.exercise-card::before{content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px); background-size:16px 16px; opacity:.5;}
+.exercise-card>*{position:relative; z-index:1;}
+.exercise-badge{display:inline-flex; align-items:center; gap:8px; background:var(--amber); color:#241a05; font-family:var(--mono); font-weight:700; font-size:11px; letter-spacing:.06em; padding:6px 14px; border-radius:20px; margin-bottom:14px;}
+.exercise-card h4{font-family:var(--disp); font-size:clamp(16px,1.6vw,24px); font-weight:600; margin-bottom:10px; color:#fff;}
+.exercise-card p{color:rgba(255,255,255,.82); font-size:clamp(11.5px,1vw,14px); line-height:1.6;}
+.exercise-steps{list-style:none; counter-reset:ex; display:flex; flex-direction:column; gap:9px; margin-top:12px;}
+.exercise-steps li{counter-increment:ex; display:flex; gap:10px; font-size:clamp(11px,.95vw,13.5px); color:rgba(255,255,255,.9); align-items:flex-start;}
+.exercise-steps li::before{content:counter(ex); flex:0 0 auto; width:22px; height:22px; border-radius:7px; background:rgba(255,255,255,.16); display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:11px; font-weight:700; margin-top:1px;}
+.exercise-deliverable{margin-top:14px; padding:12px 14px; background:rgba(255,255,255,.08); border-radius:12px; border:1px dashed rgba(255,255,255,.25); font-size:clamp(10.5px,.92vw,13px); color:#fff;}
+.exercise-deliverable b{color:var(--amber);}
+
+/* ---------- Ecosystem / radial diagram (pure SVG — scales via viewBox, no flex/aspect-ratio fragility) ---------- */
+.eco-wrap{width:100%; display:flex; align-items:center; justify-content:center;}
+.eco-svg{width:100%; max-width:460px; height:auto; display:block; overflow:visible;}
+.eco-svg .eco-line{fill:none; stroke:var(--panel-line-strong); stroke-width:2.5; stroke-dasharray:7 9; animation:dashFlow 2s linear infinite;}
+.eco-svg .center-bg{fill:url(#centerGrad);}
+.eco-svg .center-label{font-family:var(--disp); font-weight:600; font-size:21px; fill:#fff;}
+.eco-svg .node-bg{fill:var(--panel); stroke:var(--panel-line); stroke-width:1.5;}
+.eco-svg .node-title{font-family:var(--disp); font-weight:600; font-size:17px; fill:var(--ink);}
+.eco-svg .node-sub{font-family:var(--mono); font-size:10.5px; fill:var(--ink-faint); letter-spacing:.02em;}
+@keyframes nodeIn{ from{opacity:0; transform:scale(.82) translateY(8px);} to{opacity:1; transform:scale(1) translateY(0);} }
+.slide.active .eco-svg .eco-node-g{
+  animation:nodeIn .55s cubic-bezier(.16,1,.3,1) both;
+  transform-box:fill-box; transform-origin:center;
+}
+.slide.active .eco-svg .eco-center-g{
+  animation:nodeIn .5s cubic-bezier(.16,1,.3,1) both;
+  transform-box:fill-box; transform-origin:center;
+}
+
+/* ---------- tool / brand cards with monogram ---------- */
+.tool-card{
+  background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius); padding:clamp(15px,1.8vw,24px);
+  box-shadow:var(--shadow-sm); position:relative; display:flex; flex-direction:column; gap:8px;
+}
+.tool-head{display:flex; align-items:center; gap:12px;}
+.tool-mono{flex:0 0 auto; width:clamp(38px,3.6vw,50px); height:clamp(38px,3.6vw,50px); border-radius:13px; display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700; font-size:clamp(15px,1.5vw,20px); color:#fff; box-shadow:var(--shadow-sm);}
+.tool-name{font-family:var(--disp); font-weight:600; font-size:clamp(13.5px,1.2vw,18px);}
+.tool-maker{font-family:var(--mono); font-size:9.5px; color:var(--ink-faint); letter-spacing:.04em;}
+.tool-card p{color:var(--ink-dim); font-size:clamp(11px,.94vw,13.5px); line-height:1.5;}
+.tool-tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:2px;}
+.tool-tags span{font-family:var(--mono); font-size:9px; padding:3px 8px; border-radius:20px; background:var(--bg); border:1px solid var(--panel-line); color:var(--ink-dim);}
+
+/* ---------- progress ui ---------- */
+.ui-progress{
+  position:fixed; bottom:18px; left:50%; transform:translateX(-50%); z-index:10;
+  display:flex; align-items:center; gap:14px;
+  background:rgba(255,255,255,.85); backdrop-filter:blur(14px);
+  border:1px solid var(--panel-line); border-radius:30px; padding:8px 10px 8px 16px; box-shadow:var(--shadow-md);
+}
+.ui-progress .nav-btn{
+  width:32px;height:32px;border-radius:50%; border:1px solid var(--panel-line); background:var(--panel); color:var(--ink);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s ease;
+}
+.ui-progress .nav-btn:hover{border-color:var(--cyan); color:var(--cyan-strong);}
+.ui-progress .nav-btn:disabled{opacity:.25; cursor:default;}
+.ui-progress .counter{font-family:var(--mono); font-size:11px; color:var(--ink-dim); min-width:64px; text-align:center;}
+.ui-progress .dots{display:flex; gap:4px; max-width:38vw; overflow:hidden;}
+.ui-progress .dots .d{width:5px;height:5px;border-radius:50%; background:var(--panel-line-strong); flex:0 0 auto; transition:all .2s ease;}
+.ui-progress .dots .d.active{background:var(--cyan); width:14px; border-radius:3px;}
+.ui-progress .dots .d.t2{background:#E4DCC6;}
+.ui-progress .dots .d.t2.active{background:var(--coral); width:14px; border-radius:3px;}
+.ui-progress .dots .d.t3{background:#E4DCC6;}
+.ui-progress .dots .d.t3.active{background:var(--violet); width:14px; border-radius:3px;}
+
+.ui-menu-btn{
+  position:fixed; top:18px; right:18px; z-index:10;
+  background:rgba(255,255,255,.85); backdrop-filter:blur(14px); border:1px solid var(--panel-line); border-radius:30px;
+  padding:8px 16px; font-family:var(--mono); font-size:10.5px; color:var(--ink-dim); cursor:pointer; letter-spacing:.05em;
+  display:flex; align-items:center; gap:8px; box-shadow:var(--shadow-md);
+}
+.ui-menu-btn:hover{color:var(--cyan-strong); border-color:rgba(11,127,115,.3);}
+
+.topic-nav{
+  position:fixed; top:70px; right:18px; z-index:10; width:280px;
+  background:rgba(255,255,255,.98); backdrop-filter:blur(16px); border:1px solid var(--panel-line); border-radius:16px;
+  padding:14px; display:none; max-height:76vh; overflow-y:auto; box-shadow:var(--shadow-lg);
+}
+.topic-nav.open{display:block;}
+.topic-nav .tn-head{font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint); padding:4px 8px 10px;}
+.topic-nav .tn-item{
+  display:flex; align-items:center; gap:10px; padding:8px 8px; border-radius:8px; cursor:pointer; font-size:12.5px; color:var(--ink-dim);
+}
+.topic-nav .tn-item:hover{background:var(--bg);}
+.topic-nav .tn-item.current{color:var(--ink); background:var(--bg);}
+.topic-nav .tn-item .tn-dot{width:7px;height:7px;border-radius:50%; flex:0 0 auto;}
+
+@media (max-width:820px){
+  .g2,.g3,.g4,.g5{grid-template-columns:1fr 1fr;}
+  .timeline{flex-direction:column; gap:16px;}
+  .timeline::before{display:none;}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="i-brain" viewBox="0 0 24 24"><path class="icon-line" d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 5 1.5V4.5A3 3 0 0 0 9 4Z"/><path class="icon-line" d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-5 1.5V4.5A3 3 0 0 1 15 4Z"/><path class="icon-line" d="M9 9h1.5M9 13h1.5M13.5 9H15M13.5 13H15"/></symbol>
+<symbol id="i-chip" viewBox="0 0 24 24"><rect class="icon-line" x="7" y="7" width="10" height="10" rx="1.5"/><path class="icon-line" d="M12 3v3M9 3v3M15 3v3M12 18v3M9 18v3M15 18v3M3 12h3M3 9h3M3 15h3M18 12h3M18 9h3M18 15h3"/><circle class="icon-line" cx="12" cy="12" r="2"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle class="icon-line" cx="12" cy="12" r="8.5"/><circle class="icon-line" cx="12" cy="12" r="5"/><circle class="icon-line" cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle class="icon-line" cx="12" cy="12" r="8.5"/><path class="icon-line" d="M3.5 12h17M12 3.5c2.6 2.4 4 5.3 4 8.5s-1.4 6.1-4 8.5c-2.6-2.4-4-5.3-4-8.5s1.4-6.1 4-8.5Z"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path class="icon-line" d="M4 5.5h16v11H9.5L5 20v-3.5H4v-11Z"/><path class="icon-line" d="M8 10h8M8 13h5"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect class="icon-line" x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path class="icon-line" d="m4 6.5 8 6.5 8-6.5"/></symbol>
+<symbol id="i-video" viewBox="0 0 24 24"><rect class="icon-line" x="3.5" y="6" width="13" height="12" rx="1.5"/><path class="icon-line" d="m20.5 9-4 2.4v1.2l4 2.4V9Z"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><rect class="icon-line" x="9.5" y="3.5" width="5" height="10" rx="2.5"/><path class="icon-line" d="M6 11a6 6 0 0 0 12 0M12 17v3.5M9 20.5h6"/></symbol>
+<symbol id="i-robot" viewBox="0 0 24 24"><rect class="icon-line" x="5" y="8" width="14" height="10" rx="2.5"/><path class="icon-line" d="M12 8V5M9.5 5h5"/><circle class="icon-line" cx="9.3" cy="13" r="1.1" fill="currentColor"/><circle class="icon-line" cx="14.7" cy="13" r="1.1" fill="currentColor"/><path class="icon-line" d="M9 16.5h6M2.5 11v4M21.5 11v4"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path class="icon-line" d="M12 3.5 19 6v6c0 4.5-3 7.5-7 8.5-4-1-7-4-7-8.5V6l7-2.5Z"/><path class="icon-line" d="M9.3 12.2l1.8 1.8 3.6-3.8"/></symbol>
+<symbol id="i-bulb" viewBox="0 0 24 24"><path class="icon-line" d="M9 17h6M9.5 20h5M8 14a4.5 4.5 0 1 1 8 0c-.9 1-1.5 1.7-1.5 3h-5c0-1.3-.6-2-1.5-3Z"/><path class="icon-line" d="M12 2v2M4 5l1.5 1.5M20 5l-1.5 1.5M2.5 12h2M19.5 12h2"/></symbol>
+<symbol id="i-rocket" viewBox="0 0 24 24"><path class="icon-line" d="M12 2.5c2.5 1.7 4 5 4 9 0 2-.6 4-1.4 5.5H9.4C8.6 15.5 8 13.5 8 11.5c0-4 1.5-7.3 4-9Z"/><circle class="icon-line" cx="12" cy="10" r="1.6"/><path class="icon-line" d="M8.5 15 5 18.5 6 21l3-2M15.5 15l3.5 3.5L18 21l-3-2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle class="icon-line" cx="12" cy="12" r="9"/><path class="icon-line" d="m8 12.5 2.5 2.5 5.5-6"/></symbol>
+<symbol id="i-compass" viewBox="0 0 24 24"><circle class="icon-line" cx="12" cy="12" r="9"/><path class="icon-line" d="m15 9-2 6-4-2 2-6 4 2Z"/></symbol>
+<symbol id="i-network" viewBox="0 0 24 24"><circle class="icon-line" cx="12" cy="5" r="2"/><circle class="icon-line" cx="5" cy="18" r="2"/><circle class="icon-line" cx="19" cy="18" r="2"/><path class="icon-line" d="M12 7v4M12 11 6.3 16.3M12 11l5.7 5.3"/></symbol>
+<symbol id="i-mobile" viewBox="0 0 24 24"><rect class="icon-line" x="7" y="2.5" width="10" height="19" rx="2.5"/><path class="icon-line" d="M11 19h2"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle class="icon-line" cx="10.5" cy="10.5" r="6.5"/><path class="icon-line" d="m20 20-4.8-4.8"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><circle class="icon-line" cx="12" cy="12" r="3.2"/><path class="icon-line" d="M12 3v2.4M12 18.6V21M21 12h-2.4M5.4 12H3M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7M18.4 18.4l-1.7-1.7M7.3 7.3 5.6 5.6"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path class="icon-line" d="M4 4.5h7A2.5 2.5 0 0 1 13.5 7v13A2.5 2.5 0 0 0 11 18H4V4.5Z"/><path class="icon-line" d="M20 4.5h-7A2.5 2.5 0 0 0 10.5 7v13A2.5 2.5 0 0 1 13 18h7V4.5Z"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path class="icon-line" d="M10 14 20 4M13 4h7v7"/><path class="icon-line" d="M20 13v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 19V6.5A1.5 1.5 0 0 1 5 5h6"/></symbol>
+<symbol id="i-funnel" viewBox="0 0 24 24"><path class="icon-line" d="M4 5h16l-6 7.5V19l-4 2v-8.5L4 5Z"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><circle class="icon-line" cx="10" cy="20" r="1.3"/><circle class="icon-line" cx="17" cy="20" r="1.3"/><path class="icon-line" d="M2.5 3.5h2.5L8 15h10l3-8H6"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path class="icon-line" d="M6 3h9l4 4v14H6V3Z"/><path class="icon-line" d="M14.5 3v4.5H19M9 12h7M9 15.5h7M9 8.5h3"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path class="icon-line" d="m12 3 9 5-9 5-9-5 9-5Z"/><path class="icon-line" d="m3 13 9 5 9-5M3 8v5M21 8v5"/></symbol>
+<symbol id="i-wave" viewBox="0 0 24 24"><path class="icon-line" d="M2.5 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path class="icon-line" d="M12 3 22 20H2L12 3Z"/><path class="icon-line" d="M12 10v4.5"/><circle cx="12" cy="17.3" r="1" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle class="icon-line" cx="12" cy="12" r="9"/><path class="icon-line" d="M12 7v5l3.5 2"/></symbol>
+<symbol id="i-dashboard" viewBox="0 0 24 24"><rect class="icon-line" x="3" y="3.5" width="8" height="8" rx="1.5"/><rect class="icon-line" x="13" y="3.5" width="8" height="5" rx="1.5"/><rect class="icon-line" x="13" y="10.5" width="8" height="10" rx="1.5"/><rect class="icon-line" x="3" y="13.5" width="8" height="7" rx="1.5"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path class="icon-line" d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle class="icon-line" cx="12" cy="13.5" r="3.4"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path class="icon-line" d="M5 3v18"/><path class="icon-line" d="M5 4.5c3-1.6 5 1.6 8 0s5-1.6 5-1.6v9.6s-2 1.6-5 1.6-5-3.2-8-1.6Z"/></symbol>
+<symbol id="i-presentation" viewBox="0 0 24 24"><rect class="icon-line" x="3" y="4" width="18" height="12" rx="1.5"/><path class="icon-line" d="M8 20l4-4 4 4M12 16v0"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle class="icon-line" cx="8.5" cy="8" r="3"/><path class="icon-line" d="M2.5 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle class="icon-line" cx="17" cy="8.5" r="2.3"/><path class="icon-line" d="M16 13.7c2.6.3 4.5 2.2 4.5 5"/></symbol>
+<symbol id="i-trophy" viewBox="0 0 24 24"><path class="icon-line" d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path class="icon-line" d="M7 6H4.5A2.5 2.5 0 0 0 6 10.5M17 6h2.5A2.5 2.5 0 0 1 18 10.5M9.5 19h5M12 15v4"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24"><path class="icon-line" d="M12 3v18M8 21h8"/><path class="icon-line" d="M6 6h12M6 6l-3 6a3 3 0 0 0 6 0L6 6ZM18 6l-3 6a3 3 0 0 0 6 0L18 6Z"/></symbol>
+</defs>
+</svg>
+
+<div class="bg-grid"></div>
+<div class="bg-noise"></div>
+<div class="bg-glow c1"></div>
+<div class="bg-glow c2"></div>
+
+<div class="deck" id="deck">
+<!-- ============ PORTADA GENERAL ============ -->
+<section class="slide cover" data-topic="0">
+  <div class="slide-eyebrow"><span class="dot"></span> DIPLOMADO FULL STACK MARKETING DIGITAL CON IA <span class="sep">/</span> <span class="tag-tema">Módulo 1</span></div>
+  <div class="slide-body">
+    <div class="pill cyan" style="margin-bottom:22px;">80 horas · 8 módulos · Educación Continua UAO</div>
+    <h1 class="mega">Ecosistema del <em>Marketing Digital</em> e <em>Inteligencia Artificial</em></h1>
+    <p class="slide-sub" style="font-size:clamp(13px,1.25vw,17px); max-width:56ch; margin-top:18px;">Módulo 1 · Dos clases de 3 horas. De la publicidad masiva a la precisión algorítmica: cómo la IA reconfigura la manera en que las marcas piensan, deciden y se conectan con las personas.</p>
+    <div style="display:flex; gap:28px; margin-top:auto; padding-top:30px;">
+      <div><div class="kicker">Tema 1</div><div style="font-family:var(--disp); font-weight:600; font-size:clamp(12px,1vw,15px); margin-top:4px;">Panorama actual del marketing digital</div></div>
+      <div><div class="kicker">Tema 2</div><div style="font-family:var(--disp); font-weight:600; font-size:clamp(12px,1vw,15px); margin-top:4px;">Fundamentos de IA para marketing</div></div>
+      <div><div class="kicker">Tema 3</div><div style="font-family:var(--disp); font-weight:600; font-size:clamp(12px,1vw,15px); margin-top:4px;">Taller práctico: primeros pasos con IA</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Educación para la Vida · UAO</span><span>2026</span></div>
+</section>
+
+<!-- ============ DIVIDER TEMA 1 ============ -->
+<section class="slide divider" data-topic="1">
+  <div class="slide-eyebrow" style="justify-content:center; width:100%;"><span class="dot"></span> TEMA 1 DE 3</div>
+  <div class="slide-body">
+    <div class="num">01</div>
+    <h2>Panorama actual del <span class="accent">marketing digital</span></h2>
+    <p class="slide-sub">Cómo pasamos de hablarle a millones a hablarle a una sola persona — y qué canales dominan la atención en 2026.</p>
+  </div>
+  <div class="slide-footer" style="justify-content:center;"><span class="class-badge c1">● Clase 1</span></div>
+</section>
+
+<!-- T1S1 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">01 Evolución del marketing</span></div>
+  <h1 class="slide-title">Del <span class="accent2">mass media</span> al <span class="accent">marketing de precisión</span></h1>
+  <p class="slide-sub">Durante seis décadas el marketing se construyó sobre un supuesto: que hablarle fuerte a la mayor cantidad de gente posible generaba ventas. La IA rompe ese supuesto por completo.</p>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="spot coral">
+        <span class="tag-float">1950–1995</span>
+        <div class="spot-icon"><svg><use href="#i-wave"/></svg></div>
+        <h4>Era del mass media</h4>
+        <p>Un mismo mensaje, un mismo canal (TV, radio, prensa), para millones de personas indistintas. El éxito se medía en alcance e impacto, nunca en relevancia individual. Una marca grande podía "comprar" atención sin importar si el mensaje conectaba con cada persona.</p>
+      </div>
+      <div class="spot cyan">
+        <span class="tag-float">2023–hoy</span>
+        <div class="spot-icon"><svg><use href="#i-target"/></svg></div>
+        <h4>Era de la precisión con IA</h4>
+        <p>Cada persona recibe una versión distinta del mensaje, en el canal donde está más receptiva, en el momento exacto en que decide. La IA predice comportamiento, segmenta en microgrupos y adapta creatividad y oferta en tiempo real, sin intervención manual.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:clamp(12px,1.8vh,18px); display:flex; align-items:center; gap:16px;">
+      <div class="icon-badge anim-float" style="flex:0 0 auto; margin:0;"><svg class="icon-line"><use href="#i-bulb"/></svg></div>
+      <p style="max-width:82ch; margin:0;"><strong>El punto de quiebre no fue un solo evento:</strong> fue la convergencia de tres fuerzas — datos de comportamiento a gran escala, poder de cómputo accesible y modelos de lenguaje capaces de generar contenido, decisiones y predicciones en segundos.</p>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S2 timeline -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Línea de tiempo</span></div>
+  <h1 class="slide-title">Seis décadas de marketing en <span class="accent">una línea</span></h1>
+  <p class="slide-sub">Cada salto tecnológico redefinió qué significaba "conocer al cliente".</p>
+  <div class="slide-body">
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1950s–70s</div><h5>Mass Media</h5><p>TV, radio y prensa. Segmentación casi nula. El alcance lo era todo.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1990s</div><h5>Marketing directo</h5><p>Bases de datos, correo directo, primeros CRM. Nace la segmentación por perfil.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2000s</div><h5>Marketing digital</h5><p>Google Ads, SEO, e-mail marketing. La atención se mide y se compra por clic.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2010s</div><h5>Social & Data</h5><p>Redes sociales, pixeles, remarketing. El comportamiento se convierte en dato.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2020–23</div><h5>Automatización</h5><p>Machine learning en pauta, personalización básica, chatbots reactivos.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2024–26</div><h5>IA generativa & agentes</h5><p>Contenido, decisiones y optimización de campañas ejecutadas por IA de forma autónoma.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S3 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">02 Mapa de canales</span></div>
+  <h1 class="slide-title">El nuevo <span class="accent">mapa de canales</span> digitales</h1>
+  <p class="slide-sub">Ya no hay un canal "principal". Hay un ecosistema de seis frentes que la IA conecta y sincroniza entre sí, en tiempo real.</p>
+  <div class="slide-body" style="flex-direction:row; align-items:center; gap:clamp(16px,2.4vw,32px);">
+    <div style="flex:0 0 30%; min-width:0; display:flex; flex-direction:column; gap:12px;">
+      <div class="spot cyan">
+        <div class="spot-icon"><svg><use href="#i-network"/></svg></div>
+        <h4>Un solo cliente, seis puertas de entrada</h4>
+        <p>Lo que alguien ve en redes lo busca en Google, lo confirma por WhatsApp y lo termina comprando sin salir del chat. El recorrido ya no es lineal.</p>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <p style="margin:0;"><strong>La IA es el tejido conector:</strong> ajusta contenido, responde conversaciones y optimiza pauta en los seis frentes al mismo tiempo.</p>
+      </div>
+    </div>
+    <div class="eco-wrap" style="flex:1 1 auto; min-width:0;">
+      <svg class="eco-svg" viewBox="0 0 600 600">
+        <defs>
+          <linearGradient id="centerGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0A6E64"/>
+            <stop offset="100%" stop-color="#0B7F73"/>
+          </linearGradient>
+          <filter id="ecoShadow" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#1a1608" flood-opacity="0.16"/>
+          </filter>
+        </defs>
+
+        <!-- connecting lines (drawn first so nodes sit on top) -->
+        <line class="eco-line" x1="300" y1="300" x2="300" y2="90"/>
+        <line class="eco-line" x1="300" y1="300" x2="482" y2="195"/>
+        <line class="eco-line" x1="300" y1="300" x2="482" y2="405"/>
+        <line class="eco-line" x1="300" y1="300" x2="300" y2="510"/>
+        <line class="eco-line" x1="300" y1="300" x2="118" y2="405"/>
+        <line class="eco-line" x1="300" y1="300" x2="118" y2="195"/>
+
+        <!-- center: tu marca -->
+        <g class="eco-center-g">
+          <circle class="center-bg" cx="300" cy="300" r="74" filter="url(#ecoShadow)"/>
+          <use href="#i-target" x="278" y="264" width="44" height="44" class="icon-line" style="stroke:#fff;"/>
+          <text class="center-label" x="300" y="338" text-anchor="middle">Tu marca</text>
+        </g>
+
+        <!-- Búsqueda (top) -->
+        <g class="eco-node-g" style="animation-delay:.05s;">
+          <rect class="node-bg" x="225" y="35" width="150" height="110" rx="22" filter="url(#ecoShadow)"/>
+          <use href="#i-search" x="278" y="49" width="44" height="44" class="icon-line"/>
+          <text class="node-title" x="300" y="107" text-anchor="middle">Búsqueda</text>
+          <text class="node-sub" x="300" y="125" text-anchor="middle">SEO + GEO</text>
+        </g>
+
+        <!-- Social (upper right) -->
+        <g class="eco-node-g" style="animation-delay:.15s;">
+          <rect class="node-bg" x="407" y="140" width="150" height="110" rx="22" filter="url(#ecoShadow)"/>
+          <use href="#i-network" x="460" y="154" width="44" height="44" class="icon-line coral"/>
+          <text class="node-title" x="482" y="212" text-anchor="middle">Social</text>
+          <text class="node-sub" x="482" y="230" text-anchor="middle">IG · TikTok · LI</text>
+        </g>
+
+        <!-- Conversacional (lower right) -->
+        <g class="eco-node-g" style="animation-delay:.25s;">
+          <rect class="node-bg" x="407" y="350" width="150" height="110" rx="22" filter="url(#ecoShadow)"/>
+          <use href="#i-chat" x="460" y="364" width="44" height="44" class="icon-line violet"/>
+          <text class="node-title" x="482" y="422" text-anchor="middle">Conversac.</text>
+          <text class="node-sub" x="482" y="440" text-anchor="middle">WhatsApp · IA</text>
+        </g>
+
+        <!-- E-mail (bottom) -->
+        <g class="eco-node-g" style="animation-delay:.35s;">
+          <rect class="node-bg" x="225" y="455" width="150" height="110" rx="22" filter="url(#ecoShadow)"/>
+          <use href="#i-mail" x="278" y="469" width="44" height="44" class="icon-line amber"/>
+          <text class="node-title" x="300" y="527" text-anchor="middle">E-mail</text>
+          <text class="node-sub" x="300" y="545" text-anchor="middle">Personalizado</text>
+        </g>
+
+        <!-- Video (lower left) -->
+        <g class="eco-node-g" style="animation-delay:.45s;">
+          <rect class="node-bg" x="43" y="350" width="150" height="110" rx="22" filter="url(#ecoShadow)"/>
+          <use href="#i-video" x="96" y="364" width="44" height="44" class="icon-line"/>
+          <text class="node-title" x="118" y="422" text-anchor="middle">Video</text>
+          <text class="node-sub" x="118" y="440" text-anchor="middle">YouTube · Reels</text>
+        </g>
+
+        <!-- Audio (upper left) -->
+        <g class="eco-node-g" style="animation-delay:.55s;">
+          <rect class="node-bg" x="43" y="140" width="150" height="110" rx="22" filter="url(#ecoShadow)"/>
+          <use href="#i-mic" x="96" y="154" width="44" height="44" class="icon-line coral"/>
+          <text class="node-title" x="118" y="212" text-anchor="middle">Audio</text>
+          <text class="node-sub" x="118" y="230" text-anchor="middle">Podcasts · Voz</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S4 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Canal: Búsqueda</span></div>
+  <h1 class="slide-title">Búsqueda: de <span class="accent2">SEO</span> a <span class="accent">GEO</span></h1>
+  <p class="slide-sub">La gente ya no solo busca en Google: le pregunta directamente a una IA. Eso obliga a un nuevo tipo de optimización.</p>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="card"><h4>SEO / SEM tradicional</h4><p>Posicionar una página para aparecer entre los primeros resultados de un buscador y competir por clics con pauta paga.</p></div>
+      <div class="card"><h4>GEO / AEO (Generative / Answer Engine Optimization)</h4><p>Estructurar el contenido para que una IA (ChatGPT, Gemini, Perplexity) lo use como fuente y cite tu marca dentro de su respuesta.</p></div>
+    </div>
+    <div class="grid g2" style="margin-top:14px;">
+      <div class="stat-card"><div class="num">25.7%</div><div class="label">más recientes en promedio son las citas de ChatGPT frente a los resultados orgánicos de Google — la frescura editorial ya es un factor de visibilidad en IA.</div><div class="src">Fuente: Vydera, análisis de visibilidad en IA, 2026</div></div>
+      <div class="stat-card coral"><div class="num">5</div><div class="label">motores de descubrimiento conviven hoy: Google Search, Bing (Copilot), RAG nativo de Perplexity, búsqueda web de Claude y grounding de Gemini.</div><div class="src">Fuente: Vydera, 2026</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S5 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Canal: Social, conversacional y audiovisual</span></div>
+  <h1 class="slide-title">Social, <span class="accent">conversacional</span> y video/audio</h1>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="card">
+        <div class="icon-badge coral"><svg class="icon-line coral"><use href="#i-network"/></svg></div>
+        <h4>Social</h4>
+        <p>El contenido nativo de plataforma supera al contenido "publicitario". Colaboraciones con creadores a mediano plazo reemplazan las campañas puntuales.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge violet"><svg class="icon-line violet"><use href="#i-chat"/></svg></div>
+        <h4>Conversacional</h4>
+        <p>El comercio conversacional crece: catálogos, cotizaciones y postventa dentro de WhatsApp, apoyados por agentes de IA siempre disponibles.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge"><svg class="icon-line"><use href="#i-video"/></svg></div>
+        <h4>Video & Audio</h4>
+        <p>El video largo en YouTube gana consumo pausado; el corto domina el descubrimiento. La IA dobla contenido a más de 10 idiomas de forma automática.</p>
+      </div>
+    </div>
+    <div class="grid g2" style="margin-top:16px;">
+      <div class="stat-card violet"><div class="num">75%</div><div class="label">de los videos publicitarios estarán generados o asistidos por IA para 2026.</div><div class="src">Fuente: Cyberclick, Tendencias de Video Marketing 2026</div></div>
+      <div class="stat-card"><div class="num">78% / 70%</div><div class="label">de Millennials y Gen Z, respectivamente, consideran el contenido generado por usuarios (UGC) vital en su decisión de compra.</div><div class="src">Fuente: Cyberclick, 2026</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- EX1 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Ejercicio rápido</span></div>
+  <h1 class="slide-title">Práctica: <span class="accent">audita tus canales</span></h1>
+  <div class="slide-body">
+    <div class="exercise-card">
+      <span class="exercise-badge"><svg class="icon-line" style="stroke:#241a05; width:14px; height:14px;"><use href="#i-clock"/></svg> 15 MINUTOS</span>
+      <h4>¿Cuáles de los seis canales estás usando bien — y cuáles ignorando?</h4>
+      <p>Trabaja sobre tu propia empresa, marca personal o proyecto de grado. El objetivo es salir con un mapa honesto, no perfecto.</p>
+      <ol class="exercise-steps">
+        <li>Dibuja los 6 canales (búsqueda, social, conversacional, e-mail, video, audio) en una hoja o nota digital.</li>
+        <li>Frente a cada uno, escribe: activo / débil / inexistente.</li>
+        <li>Marca con una estrella el canal que más oportunidad tiene según lo visto hoy en clase.</li>
+        <li>En pareja, comparte tu mapa en 2 minutos y recibe una sugerencia del compañero.</li>
+      </ol>
+      <div class="exercise-deliverable"><b>Entregas:</b> una foto o captura de tu mapa de 6 canales en el chat del grupo de la clase.</div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S6 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">03 Consumidor digital LatAm</span></div>
+  <h1 class="slide-title">Latinoamérica, <span class="accent">conectada y móvil</span></h1>
+  <p class="slide-sub">La región prioriza el celular sobre cualquier otro dispositivo — y eso define cómo debe diseñarse cualquier estrategia.</p>
+  <div class="slide-body">
+    <div class="grid g4">
+      <div class="stat-card"><div class="num">456M</div><div class="label">suscriptores móviles únicos en 2024 (70% de la población); se proyectan 531M para 2030.</div><div class="src">Fuente: DataReportal / Affinco, 2026</div></div>
+      <div class="stat-card coral"><div class="num">81% → 93%</div><div class="label">penetración de smartphones: 81% en 2024, proyectado a 93% para 2030.</div><div class="src">Fuente: Affinco, Estadísticas LatAm 2026</div></div>
+      <div class="stat-card violet"><div class="num">84%</div><div class="label">de todas las compras de e-commerce en la región se realizan desde un smartphone.</div><div class="src">Fuente: Affinco, 2026</div></div>
+      <div class="stat-card amber"><div class="num">US$7,000M+</div><div class="label">invertidos en publicidad en redes sociales en LatAm en 2024 — la categoría publicitaria de mayor crecimiento.</div><div class="src">Fuente: DataReportal / Affinco, 2026</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S7 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Consumidor digital · Colombia</span></div>
+  <h1 class="slide-title">Colombia en cifras: <span class="accent">Digital 2026</span></h1>
+  <p class="slide-sub">El punto de partida para diseñar cualquier campaña dirigida al mercado colombiano.</p>
+  <div class="slide-body">
+    <div class="grid g4">
+      <div class="stat-card"><div class="num">41.7M</div><div class="label">personas usan internet en Colombia — 77.8% de penetración sobre la población total.</div><div class="src">Fuente: DataReportal, Digital 2026 Colombia</div></div>
+      <div class="stat-card coral"><div class="num">37.7M</div><div class="label">identidades activas en redes sociales — equivalen al 70.4% de la población.</div><div class="src">Fuente: DataReportal, Digital 2026 Colombia</div></div>
+      <div class="stat-card violet"><div class="num">83.0M</div><div class="label">conexiones móviles celulares activas — 155% de la población total del país.</div><div class="src">Fuente: DataReportal, Digital 2026 Colombia</div></div>
+      <div class="stat-card amber"><div class="num">90.5%</div><div class="label">de los usuarios de internet, sin importar la edad, usó al menos una red social.</div><div class="src">Fuente: Branch Agencia, sobre datos DataReportal 2026</div></div>
+    </div>
+    <p style="margin-top:16px; color:var(--ink-dim); font-size:clamp(11px,.95vw,13.5px);">Aun con esta madurez digital, cerca de <strong>11.9 millones de colombianos (22.2%)</strong> permanecen sin conexión — una brecha que toda estrategia de segmentación debe considerar.</p>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S8 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Consumidor digital · Región</span></div>
+  <h1 class="slide-title">Cómo se compara Colombia con la <span class="accent">región</span></h1>
+  <p class="slide-sub">Penetración de internet sobre población total — de mayor a menor. La barra representa el porcentaje conectado.</p>
+  <div class="slide-body">
+    <div>
+      <div class="rank-row"><div class="rr-flag">ES</div><div class="rr-name">España <span style="font-weight:400; color:var(--ink-faint);">(ref.)</span></div><div class="rr-bar-wrap"><div class="rr-bar" style="width:96.4%; background:linear-gradient(90deg,var(--violet),var(--violet-strong));"><span>96.4%</span></div></div><div class="rr-meta">Mayor penetración global</div></div>
+      <div class="rank-row"><div class="rr-flag">CL</div><div class="rr-name">Chile</div><div class="rr-bar-wrap"><div class="rr-bar" style="width:94.5%;"><span>94.5%</span></div></div><div class="rr-meta">Líder regional LatAm</div></div>
+      <div class="rank-row"><div class="rr-flag">AR</div><div class="rr-name">Argentina</div><div class="rr-bar-wrap"><div class="rr-bar" style="width:90.6%; background:linear-gradient(90deg,var(--amber),var(--amber-strong));"><span>90.6%</span></div></div><div class="rr-meta">41.6M usuarios</div></div>
+      <div class="rank-row"><div class="rr-flag">MX</div><div class="rr-name">México</div><div class="rr-bar-wrap"><div class="rr-bar" style="width:83.5%; background:linear-gradient(90deg,var(--coral),var(--coral-strong));"><span>83.5%</span></div></div><div class="rr-meta">110.0M usuarios</div></div>
+      <div class="rank-row" style="box-shadow:0 0 0 2px var(--cyan), var(--shadow-sm);"><div class="rr-flag" style="background:var(--cyan); color:#fff;">CO</div><div class="rr-name">Colombia</div><div class="rr-bar-wrap"><div class="rr-bar" style="width:77.8%;"><span>77.8%</span></div></div><div class="rr-meta">41.7M usuarios</div></div>
+    </div>
+    <p style="margin-top:14px; color:var(--ink-dim); font-size:clamp(11px,.95vw,13.5px);">Chile y España lideran la penetración; México concentra la mayor base absoluta de usuarios en LatAm. Colombia se ubica en un punto intermedio, con margen de crecimiento claro en zonas rurales.</p>
+    <div class="pill" style="margin-top:10px;">Fuente: DataReportal · Digital 2026 Local Country Headlines</div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S9 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Tendencias de consumo</span></div>
+  <h1 class="slide-title">Tres cambios de comportamiento que <span class="accent2">no puedes ignorar</span></h1>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="card">
+        <div class="icon-badge anim-float"><svg class="icon-line"><use href="#i-mobile"/></svg></div>
+        <h4>Mobile-first, sin excepción</h4>
+        <p>Con el 84% de las compras online hechas desde el celular, cualquier experiencia que no esté pensada primero para pantalla móvil pierde conversión.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge coral anim-float" style="animation-delay:.2s"><svg class="icon-line coral"><use href="#i-cart"/></svg></div>
+        <h4>Comercio conversacional</h4>
+        <p>La compra se cierra dentro del chat: WhatsApp, Instagram DM o un agente de IA, sin redirigir a un sitio web externo.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge violet anim-float" style="animation-delay:.4s"><svg class="icon-line violet"><use href="#i-search"/></svg></div>
+        <h4>La IA como primer punto de búsqueda</h4>
+        <p>Cada vez más consumidores preguntan directamente a un asistente de IA antes de llegar a un buscador tradicional o a una tienda.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- EX2 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Ejercicio rápido</span></div>
+  <h1 class="slide-title">Práctica: <span class="accent2">interpreta los datos</span> de tu categoría</h1>
+  <div class="slide-body">
+    <div class="exercise-card">
+      <span class="exercise-badge"><svg class="icon-line" style="stroke:#241a05; width:14px; height:14px;"><use href="#i-clock"/></svg> 15 MINUTOS</span>
+      <h4>Los datos de Colombia y LatAm que vimos solo sirven si los aterrizas a tu negocio</h4>
+      <p>Usa ChatGPT, Claude o Perplexity con acceso a búsqueda web para investigar tu categoría específica.</p>
+      <ol class="exercise-steps">
+        <li>Elige tu categoría (ej. moda, comida saludable, educación, fintech) y tu ciudad o región.</li>
+        <li>Pide a una IA con búsqueda activa: "¿qué porcentaje de compradores de [categoría] en [ciudad/país] compra desde el celular?"</li>
+        <li>Compara esa cifra con el dato regional del 84% visto en clase — ¿tu categoría está por encima o por debajo?</li>
+        <li>Escribe una conclusión de una línea: "Mi categoría es más / menos móvil que el promedio LatAm porque…"</li>
+      </ol>
+      <div class="exercise-deliverable"><b>Entregas:</b> tu conclusión de una línea, leída en voz alta si el facilitador lo pide.</div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S10 caso -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Caso real</span></div>
+  <h1 class="slide-title">Caso: <span class="accent">Nequi</span> y el marketing 100% conversacional</h1>
+  <div class="slide-body">
+    <div class="case-box">
+      <div class="logo-ph">N</div>
+      <div>
+        <p style="color:var(--ink); font-size:clamp(12.5px,1.05vw,15px); line-height:1.6;">Nequi construyó su crecimiento en Colombia sobre una app sin sucursales físicas, con una comunicación 100% digital y conversacional: notificaciones personalizadas, campañas dentro de la app y un tono de marca cercano que reemplaza al vendedor tradicional. Su estrategia ejemplifica el salto de "pautar en todas partes" a "estar exactamente donde el usuario decide algo".</p>
+        <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+          <span class="pill cyan">Fintech</span><span class="pill">In-app marketing</span><span class="pill">Personalización</span>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:18px; color:var(--ink-dim); font-size:clamp(11px,.95vw,13.5px); max-width:80ch;">La lección para el diplomado: el canal más rentable no siempre es el más visible desde afuera — es el que está integrado en el momento exacto de decisión del usuario.</p>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S11 caso 2 -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Caso real</span></div>
+  <h1 class="slide-title">Caso: <span class="accent2">Rappi y Dropi</span>, el canal es la logística</h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="card">
+        <div class="icon-badge coral"><svg class="icon-line coral"><use href="#i-cart"/></svg></div>
+        <h4>Rappi</h4>
+        <p>Superapp que convirtió la última milla en un canal de marketing: recomendaciones dentro del feed, promociones geolocalizadas y publicidad de marcas dentro del propio flujo de compra.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge"><svg class="icon-line"><use href="#i-network"/></svg></div>
+        <h4>Dropi</h4>
+        <p>Plataforma de dropshipping que dio a miles de emprendedores colombianos acceso a catálogo, logística y pauta digital sin necesidad de inventario propio, acelerando el comercio social.</p>
+      </div>
+    </div>
+    <p style="margin-top:16px; color:var(--ink-dim); font-size:clamp(11px,.95vw,13.5px);">Ambos casos muestran cómo la infraestructura (logística, pagos, catálogo) se volvió parte del canal de marketing mismo, no solo un soporte operativo.</p>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S12 video -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Video de referencia</span></div>
+  <h1 class="slide-title">Para ver en clase</h1>
+  <p class="slide-sub">Contexto audiovisual sobre hacia dónde va el marketing en la región.</p>
+  <div class="slide-body">
+    <div class="grid g2">
+      <a class="video-card" href="https://www.youtube.com/watch?v=YA8qNNN9fow" target="_blank" rel="noopener">
+        <div class="video-thumb"><div class="play"></div></div>
+        <div class="vinfo"><div class="vtitle">Tendencias del marketing 2026: visión de IAB Conecta</div><div class="vmeta">IAB México · YouTube · Transformación digital, IA y nuevos formatos</div></div>
+      </a>
+      <a class="video-card" href="https://business.google.com/es-all/think/consumer-insights/tendencias-marketing-digital-latinoamerica-2026/" target="_blank" rel="noopener">
+        <div class="video-thumb"><div class="play"></div></div>
+        <div class="vinfo"><div class="vtitle">4 tendencias de marketing hacia 2026</div><div class="vmeta">Think with Google · Datos de comportamiento del consumidor LatAm</div></div>
+      </a>
+    </div>
+    <p style="margin-top:16px; color:var(--ink-dim); font-size:clamp(11px,.95vw,13px);">Sugerencia de facilitación: proyectar el primer video (12–15 min) y abrir una discusión de 10 minutos sobre qué canal está subestimando cada estudiante en su empresa o proyecto.</p>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S13 resources -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Recursos adicionales</span></div>
+  <h1 class="slide-title">Para consultar después de clase</h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <a class="res-link" href="https://datareportal.com/reports/digital-2026-colombia" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-doc"/></svg></div><div class="rtext"><div class="rtitle">Digital 2026: Colombia</div><div class="rurl">datareportal.com</div></div></a>
+      <a class="res-link" href="https://datareportal.com/digital-in-mexico" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-doc"/></svg></div><div class="rtext"><div class="rtitle">Digital in Mexico — reportes por año</div><div class="rurl">datareportal.com</div></div></a>
+      <a class="res-link" href="https://blog.hubspot.es/marketing/adopcion-ia-latam" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-link"/></svg></div><div class="rtext"><div class="rtitle">Velocidad de adopción de IA en marketing LATAM 2026</div><div class="rurl">blog.hubspot.es</div></div></a>
+      <a class="res-link" href="https://www.retargeting.cl/blog/tendencias-marketing-digital-en-latam-2026-guia-hacia-la-orquestacion-estrategica" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-link"/></svg></div><div class="rtext"><div class="rtitle">Tendencias marketing digital LATAM 2026</div><div class="rurl">retargeting.cl</div></div></a>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S14 cierre -->
+<section class="slide" data-topic="1">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 1 · PANORAMA ACTUAL <span class="sep">/</span> <span class="tag-tema">Síntesis</span></div>
+  <h1 class="slide-title">Lo que debes llevarte del <span class="accent">Tema 1</span></h1>
+  <div class="slide-body">
+    <ul class="checklist" style="font-size:clamp(12.5px,1.05vw,15px);">
+      <li><span class="ck"></span> El marketing pasó de hablarle a millones a hablarle a una persona a la vez — y la IA hace esto posible a escala.</li>
+      <li><span class="ck"></span> El mapa de canales ya no tiene un ganador único: búsqueda, social, conversacional, e-mail, video y audio se complementan.</li>
+      <li><span class="ck"></span> LatAm es una región mobile-first: el 84% del e-commerce se cierra desde un celular.</li>
+      <li><span class="ck"></span> Colombia tiene 41.7 millones de usuarios de internet (77.8%) y 37.7 millones de identidades en redes sociales.</li>
+      <li><span class="ck"></span> La búsqueda se está dividiendo entre motores tradicionales (SEO) y motores de IA (GEO/AEO).</li>
+    </ul>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T1S15 puente -->
+<section class="slide divider" data-topic="1">
+  <div class="slide-eyebrow" style="justify-content:center; width:100%;"><span class="dot"></span> SIGUIENTE</div>
+  <div class="slide-body">
+    <h2 style="font-size:clamp(22px,3.4vw,44px);">Ya vimos <span class="accent2">dónde</span> ocurre el marketing hoy.<br>Ahora entendamos <span class="accent">qué es</span> la tecnología que lo está moviendo.</h2>
+    <p class="slide-sub">Continúa en el Tema 2 — Fundamentos de Inteligencia Artificial para marketing.</p>
+  </div>
+  <div class="slide-footer" style="justify-content:center;"><span class="class-badge c1">Clase 1</span></div>
+</section>
+
+<!-- ============ DIVIDER TEMA 2 ============ -->
+<section class="slide divider" data-topic="2">
+  <div class="slide-eyebrow" style="justify-content:center; width:100%;"><span class="dot"></span> TEMA 2 DE 3</div>
+  <div class="slide-body">
+    <div class="num">02</div>
+    <h2>Fundamentos de <span class="accent">Inteligencia Artificial</span> para marketing</h2>
+    <p class="slide-sub">Qué es la IA, cómo funciona, qué herramientas dominan hoy y por qué los agentes autónomos son la frontera de 2026.</p>
+  </div>
+  <div class="slide-footer" style="justify-content:center;"><span class="class-badge c1">● Clase 1</span></div>
+</section>
+
+<!-- T2S1 -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">01 Qué es la IA</span></div>
+  <h1 class="slide-title">¿Qué es, en realidad, la <span class="accent">Inteligencia Artificial</span>?</h1>
+  <p class="slide-sub">Sin tecnicismos: es software entrenado con enormes cantidades de datos para reconocer patrones y generar respuestas, en vez de seguir reglas escritas a mano por un programador.</p>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="card"><div class="icon-badge xl anim-float"><svg class="icon-line"><use href="#i-brain"/></svg></div><h4>IA tradicional</h4><p>Sistemas de reglas y modelos predictivos entrenados para una sola tarea: motores de recomendación de e-commerce, scoring de crédito, detección de fraude. Existen desde hace más de una década y no "conversan".</p></div>
+      <div class="card"><div class="icon-badge coral xl anim-float" style="animation-delay:.2s"><svg class="icon-line coral"><use href="#i-chat"/></svg></div><h4>IA generativa</h4><p>Crea contenido nuevo — texto, imagen, audio, video, código — a partir de una instrucción en lenguaje natural. Es la categoría de ChatGPT, Claude, Gemini: responde, pero no actúa por sí sola.</p></div>
+      <div class="card"><div class="icon-badge violet xl anim-float" style="animation-delay:.4s"><svg class="icon-line violet"><use href="#i-gear"/></svg></div><h4>IA agéntica</h4><p>No solo genera: planifica, decide y ejecuta tareas de varios pasos con mínima supervisión humana, usando herramientas externas (buscar, escribir, enviar) para lograr un objetivo.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S2 -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Cómo funciona</span></div>
+  <h1 class="slide-title">¿Cómo "piensa" una <span class="accent">IA generativa</span>?</h1>
+  <p class="slide-sub">No entiende el mundo como tú: predice, palabra por palabra, cuál es la continuación más probable de un texto. Tres pasos explican todo el proceso.</p>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="spot cyan">
+        <span class="tag-float">Paso 1</span>
+        <div class="spot-icon"><svg><use href="#i-book"/></svg></div>
+        <h4>Entrenamiento masivo</h4>
+        <p>El modelo "lee" billones de palabras — libros, artículos, código, conversaciones públicas — y ajusta miles de millones de parámetros internos que capturan cómo se relacionan las ideas entre sí. Este proceso toma meses y consume enormes recursos de cómputo.</p>
+      </div>
+      <div class="spot coral">
+        <span class="tag-float">Paso 2</span>
+        <div class="spot-icon"><svg><use href="#i-brain"/></svg></div>
+        <h4>Patrones, no memoria</h4>
+        <p>No guarda hechos como una base de datos ni "recuerda" una conversación anterior salvo que se lo digas. Aprende <strong style="color:#fff;">relaciones estadísticas</strong>: qué palabra suele seguir a otra dado un contexto — por eso puede alucinar datos que suenan plausibles pero son falsos.</p>
+      </div>
+      <div class="spot violet">
+        <span class="tag-float">Paso 3</span>
+        <div class="spot-icon"><svg><use href="#i-gear"/></svg></div>
+        <h4>Predicción guiada por tu prompt</h4>
+        <p>Ante tu instrucción, genera la respuesta más probable y coherente, token por token (fragmentos de palabra), ajustando cada elección a lo que ya escribió antes. Tu prompt es literalmente el timón de ese proceso.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px; display:flex; align-items:center; gap:18px;">
+      <div class="icon-badge xl anim-float" style="flex:0 0 auto;"><svg class="icon-line"><use href="#i-bulb"/></svg></div>
+      <div>
+        <h4 style="margin-bottom:4px;">Por qué esto importa para marketing</h4>
+        <p style="max-width:88ch;">Como el modelo predice patrones, un prompt vago ("dame ideas de marketing") produce una respuesta genérica que le serviría a cualquier marca. Un prompt con <strong>contexto, rol y formato claro</strong> produce una respuesta específica y accionable para tu negocio. La calidad del resultado depende directamente de la calidad de la instrucción — el corazón del prompt engineering que practicaremos en el Tema 3.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S3 -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Por qué transformó el marketing</span></div>
+  <h1 class="slide-title">El punto de inflexión ya <span class="accent2">ocurrió</span></h1>
+  <p class="slide-sub">La adopción de IA generativa en Latinoamérica dejó de ser experimental. Los datos de 2026 lo confirman.</p>
+  <div class="slide-body">
+    <div class="grid g4">
+      <div class="stat-card"><div class="num">95%</div><div class="label">de las empresas en Sudamérica ya adoptó IA generativa.</div><div class="src">Fuente: Bain & Company, 2026</div></div>
+      <div class="stat-card coral"><div class="num">47%</div><div class="label">de empresas en LatAm usa IA — por encima del promedio global (45%).</div><div class="src">Fuente: SAP / El Ecosistema Startup, 2026</div></div>
+      <div class="stat-card violet"><div class="num">64%</div><div class="label">de profesionales de marketing ya usa herramientas de IA generativa (35% en 2023).</div><div class="src">Fuente: HubSpot, State of Marketing</div></div>
+      <div class="stat-card amber"><div class="num">24.5%</div><div class="label">de adopción personal de IA generativa en Colombia — supera la media global (17.8%).</div><div class="src">Fuente: Inversor Latam, 2026</div></div>
+    </div>
+    <p style="margin-top:14px; color:var(--ink-dim); font-size:clamp(11px,.95vw,13px); max-width:82ch;">El reto ya no es "si" adoptar IA, sino cerrar la brecha entre adopción superficial y uso estratégico: solo el 60% de las empresas reporta mejoras medibles y menos del 25% lleva sus iniciativas a producción de forma sistemática.</p>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S4 mapa herramientas -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">02 Mapa de herramientas</span></div>
+  <h1 class="slide-title">Cinco asistentes, cinco <span class="accent">personalidades</span></h1>
+  <p class="slide-sub">En 2026 no hay un ganador absoluto: cada asistente domina un terreno distinto. Conócelos por nombre, casa matriz y superpoder.</p>
+  <div class="slide-body">
+    <div class="grid g5">
+      <div class="tool-card">
+        <div class="tool-head"><div class="tool-mono" style="background:linear-gradient(135deg,#10A37F,#0B7F63);">GPT</div><div><div class="tool-name">ChatGPT</div><div class="tool-maker">OpenAI</div></div></div>
+        <p>El más versátil para arrancar de cero: brainstorming veloz, variaciones de copy y flujos de marketing generales, con una interfaz muy pulida para no técnicos.</p>
+        <div class="tool-tags"><span>Creatividad</span><span>Brainstorming</span></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-head"><div class="tool-mono" style="background:linear-gradient(135deg,#CC785C,#A85E45);">C</div><div><div class="tool-name">Claude</div><div class="tool-maker">Anthropic</div></div></div>
+        <p>Redacción extensa y razonamiento cuidadoso, con ventana de contexto amplia. Es la opción más sólida cuando el resultado es un documento largo y necesita coherencia de principio a fin.</p>
+        <div class="tool-tags"><span>Documentos largos</span><span>Precisión</span></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-head"><div class="tool-mono" style="background:linear-gradient(135deg,#4285F4,#9B72CB);">G</div><div><div class="tool-name">Gemini</div><div class="tool-maker">Google</div></div></div>
+        <p>Integración nativa con Gmail, Docs, Drive y el buscador de Google. Fuerte en generación multimedia (imagen y video) y en equipos que ya viven en Google Workspace.</p>
+        <div class="tool-tags"><span>Google Workspace</span><span>Multimedia</span></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-head"><div class="tool-mono" style="background:linear-gradient(135deg,#0078D4,#00A4EF);">CP</div><div><div class="tool-name">Copilot</div><div class="tool-maker">Microsoft</div></div></div>
+        <p>Vive dentro de Word, Excel, PowerPoint, Outlook y Teams. Ideal si tu día a día ya ocurre en Microsoft 365 y necesitas que la IA trabaje sobre tus propios archivos.</p>
+        <div class="tool-tags"><span>Microsoft 365</span><span>Oficina</span></div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-head"><div class="tool-mono" style="background:linear-gradient(135deg,#20808D,#156670);">P</div><div><div class="tool-name">Perplexity</div><div class="tool-maker">Perplexity AI</div></div></div>
+        <p>Un buscador con IA: cada respuesta llega acompañada de sus fuentes, verificables con un clic. El más confiable cuando necesitas un dato reciente y citable.</p>
+        <div class="tool-tags"><span>Research</span><span>Fuentes citables</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S5 comparativa tabla -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Comparativa 2026</span></div>
+  <h1 class="slide-title">Comparativa <span class="accent">rápida</span> por capacidad</h1>
+  <p class="slide-sub">La misma información de la tabla anterior, leída como fortalezas relativas — más fácil de recordar en un vistazo.</p>
+  <div class="slide-body">
+    <div class="cmp-cards g5" style="display:grid;">
+      <div class="cmp-card"><div class="cc-head"><span class="cc-name">ChatGPT</span><span class="cc-pill">Sí, web</span></div><div class="cc-rows">
+        <div class="cc-row"><span>Fortaleza</span><b>Creatividad</b></div>
+        <div class="cc-row"><span>Ideal para</span><b>Copy & campañas</b></div>
+      </div></div>
+      <div class="cmp-card"><div class="cc-head"><span class="cc-name">Claude</span><span class="cc-pill">Sí, web</span></div><div class="cc-rows">
+        <div class="cc-row"><span>Fortaleza</span><b>Redacción larga</b></div>
+        <div class="cc-row"><span>Ideal para</span><b>Análisis y documentos</b></div>
+      </div></div>
+      <div class="cmp-card"><div class="cc-head"><span class="cc-name">Gemini</span><span class="cc-pill">Sí, web</span></div><div class="cc-rows">
+        <div class="cc-row"><span>Fortaleza</span><b>Ecosistema Google</b></div>
+        <div class="cc-row"><span>Ideal para</span><b>Workspace, multimedia</b></div>
+      </div></div>
+      <div class="cmp-card"><div class="cc-head"><span class="cc-name">Copilot</span><span class="cc-pill">Sí, Bing</span></div><div class="cc-rows">
+        <div class="cc-row"><span>Fortaleza</span><b>Integración MS 365</b></div>
+        <div class="cc-row"><span>Ideal para</span><b>Office diario</b></div>
+      </div></div>
+      <div class="cmp-card"><div class="cc-head"><span class="cc-name">Perplexity</span><span class="cc-pill">Sí, nativo</span></div><div class="cc-rows">
+        <div class="cc-row"><span>Fortaleza</span><b>Fuentes citables</b></div>
+        <div class="cc-row"><span>Ideal para</span><b>Research y verificación</b></div>
+      </div></div>
+    </div>
+    <div class="pill" style="margin-top:16px;">Fuente: Gmelius, Tecnocim Innova y m8d — comparativas de asistentes de IA, 2026</div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S6 matriz uso -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Cuál usar para qué</span></div>
+  <h1 class="slide-title">Elige por <span class="accent2">tarea</span>, no por moda</h1>
+  <p class="slide-sub">Sigue el flujo: identifica tu necesidad del momento y aterriza directo en la herramienta correcta.</p>
+  <div class="slide-body">
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div class="card" style="display:flex; align-items:center; gap:18px; padding:14px 20px;">
+        <div class="icon-badge anim-float" style="margin:0; flex:0 0 auto;"><svg class="icon-line"><use href="#i-bulb"/></svg></div>
+        <div style="flex:1;"><h4 style="margin-bottom:2px;">"Necesito ideas de campaña, rápido"</h4><p>Brainstorming estructurado, variaciones creativas y ángulos distintos para un mismo brief.</p></div>
+        <div class="pill cyan" style="flex:0 0 auto;">→ ChatGPT o Claude</div>
+      </div>
+      <div class="card" style="display:flex; align-items:center; gap:18px; padding:14px 20px;">
+        <div class="icon-badge coral anim-float" style="margin:0; flex:0 0 auto; animation-delay:.15s;"><svg class="icon-line coral"><use href="#i-doc"/></svg></div>
+        <div style="flex:1;"><h4 style="margin-bottom:2px;">"Necesito redactar un documento largo"</h4><p>Coherencia de principio a fin en textos de varias páginas: propuestas, informes, guiones.</p></div>
+        <div class="pill coral" style="flex:0 0 auto;">→ Claude</div>
+      </div>
+      <div class="card" style="display:flex; align-items:center; gap:18px; padding:14px 20px;">
+        <div class="icon-badge violet anim-float" style="margin:0; flex:0 0 auto; animation-delay:.3s;"><svg class="icon-line violet"><use href="#i-search"/></svg></div>
+        <div style="flex:1;"><h4 style="margin-bottom:2px;">"Necesito verificar un dato con fuente"</h4><p>Cifras de mercado, tendencias recientes o datos de competencia que debes poder citar.</p></div>
+        <div class="pill" style="flex:0 0 auto; color:var(--violet-strong); background:var(--violet-dim); border-color:rgba(100,37,199,.25);">→ Perplexity</div>
+      </div>
+      <div class="card" style="display:flex; align-items:center; gap:18px; padding:14px 20px;">
+        <div class="icon-badge amber anim-float" style="margin:0; flex:0 0 auto; animation-delay:.45s;"><svg class="icon-line amber"><use href="#i-layers"/></svg></div>
+        <div style="flex:1;"><h4 style="margin-bottom:2px;">"Trabajo todo el día en Office o Google"</h4><p>Necesitas que la IA opere directamente sobre tus propios archivos y correo.</p></div>
+        <div class="pill" style="flex:0 0 auto; color:var(--amber-strong); background:var(--amber-dim); border-color:rgba(180,121,11,.25);">→ Copilot o Gemini</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- EX3 -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Ejercicio rápido</span></div>
+  <h1 class="slide-title">Práctica: <span class="accent">duelo de herramientas</span></h1>
+  <div class="slide-body">
+    <div class="exercise-card">
+      <span class="exercise-badge"><svg class="icon-line" style="stroke:#241a05; width:14px; height:14px;"><use href="#i-clock"/></svg> 15 MINUTOS</span>
+      <h4>El mismo prompt, dos asistentes — ¿de verdad se nota la diferencia?</h4>
+      <p>Trabaja en parejas: cada persona abre un asistente distinto (por ejemplo ChatGPT y Claude, o Gemini y Perplexity).</p>
+      <ol class="exercise-steps">
+        <li>Escriban juntos un mismo prompt: "Dame 3 ideas de campaña de lanzamiento para [tu marca/proyecto], en formato tabla."</li>
+        <li>Cada quien lo pega en su herramienta, sin cambiar una palabra.</li>
+        <li>Comparen: ¿cuál dio ideas más específicas? ¿cuál respetó mejor el formato tabla?</li>
+        <li>Decidan en pareja cuál usarían para esta tarea puntual y por qué.</li>
+      </ol>
+      <div class="exercise-deliverable"><b>Entregas:</b> una conclusión de pareja — "para esta tarea, [herramienta] ganó porque…" — compartida con el grupo.</div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S7 diferencias -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">03 Chatbot vs generativa vs agente</span></div>
+  <h1 class="slide-title">Tres niveles de <span class="accent">autonomía</span></h1>
+  <p class="slide-sub">La confusión más común del módulo: no todo lo que "conversa" es lo mismo.</p>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="card">
+        <div class="icon-badge"><svg class="icon-line"><use href="#i-chat"/></svg></div>
+        <h4>Chatbot tradicional</h4>
+        <p>Responde con guiones predefinidos o árboles de decisión. Si la pregunta no está prevista, no sabe qué hacer. Reactivo, sin comprensión real del lenguaje.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge coral"><svg class="icon-line coral"><use href="#i-robot"/></svg></div>
+        <h4>IA generativa</h4>
+        <p>Entiende lenguaje natural y genera una respuesta nueva cada vez. Sigue siendo reactiva: espera que tú le preguntes o le des una instrucción.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge violet"><svg class="icon-line violet"><use href="#i-gear"/></svg></div>
+        <h4>Agente de IA</h4>
+        <p>Percibe su entorno, planifica pasos, ejecuta acciones (usar herramientas, navegar, escribir código) y corrige sus propios errores — sin esperar cada instrucción. Es proactivo, no reactivo.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px; display:flex; align-items:center; gap:18px;">
+      <div style="flex:0 0 auto;"><svg class="icon-line anim-spin" style="width:34px; height:34px;"><use href="#i-scale"/></svg></div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;"><span class="kicker" style="width:90px;">Autonomía</span><div class="bar-track" style="flex:1; height:8px; background:linear-gradient(90deg,var(--panel-line),var(--cyan-dim),var(--coral-dim),var(--violet-dim));"><div class="bar-fill" style="width:100%; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--ink-faint),var(--coral),var(--violet-strong));"></div></div></div>
+        <p style="margin:0; max-width:82ch;"><strong>Diferencia clave:</strong> un chatbot responde, una IA generativa crea, un agente actúa. El salto de 2026 está exactamente en ese tercer nivel.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S8 agentica definicion -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">04 IA Agéntica</span></div>
+  <h1 class="slide-title">¿Qué es un <span class="accent">agente de IA</span>?</h1>
+  <p class="slide-sub">Piénsalo como la diferencia entre un empleado que solo ejecuta instrucciones y uno que entiende el objetivo y toma iniciativa para lograrlo.</p>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="card"><div class="icon-badge anim-float"><svg class="icon-line"><use href="#i-search"/></svg></div><h4>1. Percibe</h4><p>Recoge información de su entorno: datos de campaña, correos, tickets, resultados de una búsqueda.</p></div>
+      <div class="card"><div class="icon-badge coral anim-float" style="animation-delay:.2s"><svg class="icon-line coral"><use href="#i-compass"/></svg></div><h4>2. Decide</h4><p>Descompone un objetivo general en subtareas y elige qué herramienta o acción usar para cada una.</p></div>
+      <div class="card"><div class="icon-badge violet anim-float" style="animation-delay:.4s"><svg class="icon-line violet"><use href="#i-rocket"/></svg></div><h4>3. Actúa</h4><p>Ejecuta la acción (enviar, ajustar puja, generar contenido, escalar a un humano) y evalúa el resultado.</p></div>
+    </div>
+    <p style="margin-top:16px; color:var(--ink-dim); font-size:clamp(11.5px,1vw,13.5px); max-width:82ch;">La autonomía no es sinónimo de "sin control": los equipos de marketing definen límites claros — presupuestos máximos, tono de marca, cuándo escalar a una persona — antes de dejar operar a un agente.</p>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S9 ejemplos -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Agentes en marketing</span></div>
+  <h1 class="slide-title">Agentes que ya trabajan en <span class="accent2">marketing</span></h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="card"><h4>Campañas siempre activas</h4><p>En lugar de campañas puntuales que se lanzan y revisan cada semana, agentes que ajustan puja, creatividad y segmentación de forma continua, 24/7.</p></div>
+      <div class="card"><h4>Optimización predictiva</h4><p>Sistemas que anticipan cambios en el comportamiento de la audiencia y ajustan la estrategia antes de que ocurra la caída de resultados, no después.</p></div>
+      <div class="card"><h4>Atención y postventa</h4><p>Agentes que resuelven consultas, devoluciones o cotizaciones dentro de límites definidos, y escalan a un humano solo cuando es necesario.</p></div>
+      <div class="card"><h4>Sistemas multiagente</h4><p>Varios agentes especializados —contenido, segmentación, analítica— orquestados para cubrir todo el ciclo de vida de una campaña.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S10 datos mercado agentes -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">El mercado de agentes</span></div>
+  <h1 class="slide-title">La tendencia <span class="accent">número uno</span> de 2026</h1>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="stat-card"><div class="num">US$45,000M</div><div class="label">proyección del mercado de IA agéntica para 2030.</div><div class="src">Fuente: Gartner, vía Javadex, 2026</div></div>
+      <div class="stat-card coral"><div class="num">74%</div><div class="label">de las empresas planea desplegar agentes de IA en los próximos dos años.</div><div class="src">Fuente: Gartner, 2026</div></div>
+      <div class="stat-card violet"><div class="num">40%</div><div class="label">de las aplicaciones empresariales incluirá agentes con planificación y ejecución autónoma para 2026.</div><div class="src">Fuente: Storyboard18, vía Amazon Ads, 2026</div></div>
+    </div>
+    <div class="card" style="margin-top:14px;"><p style="max-width:84ch;"><strong>Mirada crítica:</strong> no todo lo que se vende como "agente" lo es. Gran parte de los productos de 2026 son flujos con pasos fijos donde un modelo elige entre pocas opciones — la clave está en si la lógica de control vive en el modelo o está programada de antemano.</p></div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- EX4 -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Ejercicio rápido</span></div>
+  <h1 class="slide-title">Práctica: <span class="accent">diseña tu primer agente</span> (en papel)</h1>
+  <div class="slide-body">
+    <div class="exercise-card">
+      <span class="exercise-badge"><svg class="icon-line" style="stroke:#241a05; width:14px; height:14px;"><use href="#i-clock"/></svg> 15 MINUTOS</span>
+      <h4>No necesitas código para diseñar la lógica de un agente — solo claridad</h4>
+      <p>Aplica el marco percibe → decide → actúa a una tarea real y repetitiva de tu marketing.</p>
+      <ol class="exercise-steps">
+        <li>Elige una tarea repetitiva de tu negocio (responder preguntas frecuentes, calificar leads, resumir comentarios).</li>
+        <li><strong>Percibe:</strong> ¿qué información necesitaría leer el agente para actuar (mensajes, formulario, ficha del cliente)?</li>
+        <li><strong>Decide:</strong> ¿qué reglas o límites debería respetar (tono, presupuesto, nunca prometer X)?</li>
+        <li><strong>Actúa:</strong> ¿qué acción ejecuta al final y cuándo debe escalar a una persona?</li>
+      </ol>
+      <div class="exercise-deliverable"><b>Entregas:</b> tus 3 respuestas (percibe / decide / actúa) escritas en 3 líneas, listas para socializar.</div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S11 mitos -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">05 Mitos, ética y privacidad</span></div>
+  <h1 class="slide-title">Cinco <span class="accent2">mitos</span> que hay que soltar</h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="card"><h4>"La IA sabe todo y siempre acierta"</h4><p>Puede generar respuestas incorrectas con total seguridad (alucinaciones). Siempre hay que verificar datos críticos.</p></div>
+      <div class="card"><h4>"Un agente de IA reemplaza al equipo"</h4><p>La mayoría de casos reales de 2026 siguen requiriendo un humano en el bucle para decisiones de alto riesgo o alto costo.</p></div>
+      <div class="card"><h4>"Con IA ya no necesito estrategia"</h4><p>La IA ejecuta y optimiza más rápido, pero no reemplaza definir a quién le hablas ni por qué debería importarle.</p></div>
+      <div class="card"><h4>"Todas las IA hacen lo mismo"</h4><p>Cada asistente tiene fortalezas distintas — usar el correcto para cada tarea marca la diferencia en calidad del resultado.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S12 etica -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Ética y privacidad</span></div>
+  <h1 class="slide-title">Ética y <span class="accent">privacidad de datos</span> en IA</h1>
+  <p class="slide-sub">Usar IA en marketing implica manejar datos de personas reales — la responsabilidad no desaparece por delegarla a un modelo.</p>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="card"><div class="icon-badge anim-float"><svg class="icon-line"><use href="#i-shield"/></svg></div><h4>Datos personales</h4><p>Nunca cargar información sensible o identificable de clientes en herramientas sin verificar sus políticas de privacidad y retención.</p></div>
+      <div class="card"><div class="icon-badge coral anim-float" style="animation-delay:.2s"><svg class="icon-line coral"><use href="#i-alert"/></svg></div><h4>Transparencia</h4><p>Ser claro con la audiencia cuando un contenido o una conversación está generada o asistida por IA.</p></div>
+      <div class="card"><div class="icon-badge violet anim-float" style="animation-delay:.4s"><svg class="icon-line violet"><use href="#i-check"/></svg></div><h4>Sesgo y representación</h4><p>Revisar que el contenido generado no reproduzca estereotipos ni excluya a segmentos de tu audiencia.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S13 buenas practicas -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Buenas prácticas</span></div>
+  <h1 class="slide-title">Checklist de uso <span class="accent">responsable</span></h1>
+  <div class="slide-body">
+    <ul class="checklist" style="font-size:clamp(12.5px,1.05vw,15px); max-width:70ch;">
+      <li><span class="ck"></span> Verifica cifras, nombres y citas antes de publicar contenido generado por IA.</li>
+      <li><span class="ck"></span> No ingreses datos personales identificables de clientes en herramientas sin control corporativo.</li>
+      <li><span class="ck"></span> Define límites claros de autonomía antes de activar cualquier agente (presupuesto, tono, escalamiento).</li>
+      <li><span class="ck"></span> Revisa el resultado con criterio humano: la IA acelera, no reemplaza el juicio estratégico.</li>
+      <li><span class="ck"></span> Declara cuándo el contenido o la atención al cliente está asistida por IA.</li>
+    </ul>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S14 video -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Video de referencia</span></div>
+  <h1 class="slide-title">Para ver en clase</h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <a class="video-card" href="https://www.youtube.com/watch?v=O4v9EWC47Go" target="_blank" rel="noopener">
+        <div class="video-thumb"><div class="play"></div></div>
+        <div class="vinfo"><div class="vtitle">Curso gratis: Agentes de IA para todos, desde cero</div><div class="vmeta">YouTube · Introducción práctica a agentes autónomos</div></div>
+      </a>
+      <a class="video-card" href="https://www.youtube.com/watch?v=B7RGbTHzMRo" target="_blank" rel="noopener">
+        <div class="video-thumb"><div class="play"></div></div>
+        <div class="vinfo"><div class="vtitle">¿No sabes qué es un Agente IA? Te enseño a crearlo desde cero</div><div class="vmeta">YouTube · Diferencia entre chatbot y agente</div></div>
+      </a>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S15 recursos -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Recursos adicionales</span></div>
+  <h1 class="slide-title">Para consultar después de clase</h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <a class="res-link" href="https://www.javadex.es/blog/que-es-ia-agentica-agentes-autonomos-guia-completa-2026" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-doc"/></svg></div><div class="rtext"><div class="rtitle">Qué es la IA Agéntica: guía completa 2026</div><div class="rurl">javadex.es</div></div></a>
+      <a class="res-link" href="https://advertising.amazon.com/es-es/library/guides/agentic-ai" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-link"/></svg></div><div class="rtext"><div class="rtitle">Qué es la IA con agentes y cómo cambia el marketing</div><div class="rurl">advertising.amazon.com</div></div></a>
+      <a class="res-link" href="https://ecosistemastartup.com/ia-empresarial-2026-95-de-empresas-la-adoptan/" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-doc"/></svg></div><div class="rtext"><div class="rtitle">IA empresarial 2026: adopción en LatAm</div><div class="rurl">ecosistemastartup.com</div></div></a>
+      <a class="res-link" href="https://www.cubix.co/blog/chatgpt-vs-gemini-vs-claude-vs-perplexity-vs-copilot/" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-link"/></svg></div><div class="rtext"><div class="rtitle">ChatGPT vs Gemini vs Claude vs Perplexity vs Copilot</div><div class="rurl">cubix.co</div></div></a>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S16 cierre -->
+<section class="slide" data-topic="2">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 2 · FUNDAMENTOS DE IA <span class="sep">/</span> <span class="tag-tema">Síntesis</span></div>
+  <h1 class="slide-title">Lo que debes llevarte del <span class="accent">Tema 2</span></h1>
+  <div class="slide-body">
+    <ul class="checklist" style="font-size:clamp(12.5px,1.05vw,15px);">
+      <li><span class="ck"></span> La IA predice patrones a partir de datos; no "sabe" ni "recuerda" como una persona.</li>
+      <li><span class="ck"></span> ChatGPT, Claude, Gemini, Copilot y Perplexity tienen fortalezas distintas — elige por tarea.</li>
+      <li><span class="ck"></span> Chatbot, IA generativa y agente son tres niveles de autonomía distintos, no sinónimos.</li>
+      <li><span class="ck"></span> Un agente percibe, decide y actúa — con límites definidos por el equipo humano.</li>
+      <li><span class="ck"></span> El 74% de las empresas planea desplegar agentes en los próximos dos años: es el momento de aprender a usarlos con criterio.</li>
+    </ul>
+  </div>
+  <div class="slide-footer"><span class="class-badge c1">Clase 1</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T2S17 puente -->
+<section class="slide divider" data-topic="2">
+  <div class="slide-eyebrow" style="justify-content:center; width:100%;"><span class="dot"></span> SIGUIENTE — CLASE 2</div>
+  <div class="slide-body">
+    <h2 style="font-size:clamp(22px,3.4vw,44px);">Teoría suficiente.<br>Es momento de <span class="accent">abrir la herramienta</span> y practicar.</h2>
+    <p class="slide-sub">Continúa en el Tema 3 — Taller práctico: primeros pasos con IA.</p>
+  </div>
+  <div class="slide-footer" style="justify-content:center;"><span class="class-badge c2">● Clase 2</span></div>
+</section>
+
+<!-- ============ DIVIDER TEMA 3 ============ -->
+<section class="slide divider" data-topic="3">
+  <div class="slide-eyebrow" style="justify-content:center; width:100%;"><span class="dot"></span> TEMA 3 DE 3</div>
+  <div class="slide-body">
+    <div class="num">03</div>
+    <h2>Taller práctico: <span class="accent">primeros pasos</span> con IA</h2>
+    <p class="slide-sub">Configuración estratégica de herramientas, fundamentos de prompt engineering y construcción del entregable del módulo.</p>
+  </div>
+  <div class="slide-footer" style="justify-content:center;"><span class="class-badge c2">● Clase 2</span></div>
+</section>
+
+<!-- T3S1 objetivo -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Objetivo de la sesión</span></div>
+  <h1 class="slide-title">Qué vas a lograr <span class="accent">hoy</span></h1>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="card"><div class="icon-badge anim-float"><svg class="icon-line"><use href="#i-gear"/></svg></div><h4>Configurar tu herramienta</h4><p>Dejar ChatGPT o Claude listos para trabajar en tu contexto de marketing específico.</p></div>
+      <div class="card"><div class="icon-badge coral anim-float" style="animation-delay:.2s"><svg class="icon-line coral"><use href="#i-bulb"/></svg></div><h4>Dominar el prompt básico</h4><p>Escribir instrucciones que produzcan resultados específicos, no genéricos.</p></div>
+      <div class="card"><div class="icon-badge violet anim-float" style="animation-delay:.4s"><svg class="icon-line violet"><use href="#i-doc"/></svg></div><h4>Construir tu entregable</h4><p>Salir con un documento real de oportunidades de IA para tu empresa o proyecto.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S2 configuracion -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">01 Configuración estratégica</span></div>
+  <h1 class="slide-title">Deja tu herramienta lista <span class="accent2">antes</span> de escribir el primer prompt</h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="card"><h4>Personaliza las instrucciones del sistema</h4><p>En ChatGPT y Claude puedes definir instrucciones personalizadas: tu rol, tu industria, el tono de marca y el tipo de respuesta que esperas por defecto.</p></div>
+      <div class="card"><h4>Organiza por proyectos o carpetas</h4><p>Agrupa las conversaciones por cliente, campaña o marca — así cada nueva conversación arranca con el contexto correcto.</p></div>
+      <div class="card"><h4>Activa la búsqueda web cuando la necesites</h4><p>Para datos actuales (precios, tendencias, competencia) usa el modo de búsqueda en vivo en lugar de confiar solo en el conocimiento entrenado del modelo.</p></div>
+      <div class="card"><h4>Define qué información nunca vas a compartir</h4><p>Antes de empezar, decide qué datos de clientes o de la empresa jamás se ingresan en la herramienta.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S3 elige herramienta -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Elige tu herramienta</span></div>
+  <h1 class="slide-title">Para el taller de hoy: <span class="accent">ChatGPT o Claude</span></h1>
+  <p class="slide-sub">Trabajaremos con cualquiera de las dos — ambas tienen plan gratuito funcional y son suficientes para los ejercicios de este módulo.</p>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="card"><h4>ChatGPT</h4><p>Interfaz familiar, fuerte en generación creativa de copy y variaciones de campaña. Ideal si tu perfil es más generalista.</p></div>
+      <div class="card"><h4>Claude</h4><p>Mejor para documentos largos y análisis estructurado — perfecto para el entregable final del módulo, que es un documento extenso.</p></div>
+    </div>
+    <p style="margin-top:16px; color:var(--ink-dim); font-size:clamp(11px,.95vw,13px);">Sugerencia de facilitación: pedir a cada estudiante que abra su herramienta antes de avanzar a la siguiente diapositiva.</p>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S4 prompt engineering def -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">02 Prompt Engineering</span></div>
+  <h1 class="slide-title">¿Qué es el <span class="accent">prompt engineering</span>?</h1>
+  <p class="slide-sub">Es la habilidad de darle instrucciones precisas a una IA para obtener, de forma consistente, el resultado que necesitas — sin repetir el intento cinco veces.</p>
+  <div class="slide-body">
+    <div class="card"><p style="max-width:84ch; font-size:clamp(12.5px,1.05vw,15px);">No es un truco de una sola frase mágica: es una habilidad transversal que aplica sin importar tu profesión. La calidad de lo que obtienes de una IA depende menos del modelo y más de cómo escribes la instrucción.</p></div>
+    <div class="grid g3" style="margin-top:16px;">
+      <div class="stat-card"><div class="num">4</div><div class="label">elementos mínimos de un buen prompt: contexto, tarea, formato y restricciones.</div></div>
+      <div class="stat-card coral"><div class="num">1</div><div class="label">habilidad que sirve igual para liderar un equipo que para dirigir una IA: dar instrucciones claras.</div></div>
+      <div class="stat-card violet"><div class="num">0</div><div class="label">necesidad de saber programar — el prompt engineering se escribe en lenguaje natural.</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S5 anatomia -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Anatomía de un buen prompt</span></div>
+  <h1 class="slide-title">Las cuatro partes de un <span class="accent">prompt efectivo</span></h1>
+  <div class="slide-body">
+    <div class="grid g4">
+      <div class="card"><div class="icon-badge anim-float"><svg class="icon-line"><use href="#i-layers"/></svg></div><h4>Contexto</h4><p>Quién eres, en qué industria y para qué marca o proyecto es la respuesta.</p></div>
+      <div class="card"><div class="icon-badge coral anim-float" style="animation-delay:.15s"><svg class="icon-line coral"><use href="#i-target"/></svg></div><h4>Tarea</h4><p>Qué exactamente quieres que haga: analizar, redactar, comparar, resumir.</p></div>
+      <div class="card"><div class="icon-badge violet anim-float" style="animation-delay:.3s"><svg class="icon-line violet"><use href="#i-doc"/></svg></div><h4>Formato</h4><p>Cómo debe entregarse: tabla, lista, documento, número de palabras.</p></div>
+      <div class="card"><div class="icon-badge amber anim-float" style="animation-delay:.45s"><svg class="icon-line amber"><use href="#i-shield"/></svg></div><h4>Restricciones</h4><p>Qué evitar: tono, longitud máxima, datos que no debe inventar.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S6 malo vs bueno 1 -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Ejemplo 1: análisis de marca</span></div>
+  <h1 class="slide-title">Prompt genérico vs prompt <span class="accent">con estructura</span></h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="prompt-box bad"><span class="tag">GENÉRICO</span>"Dame ideas de marketing para mi marca de ropa."</div>
+      <div class="prompt-box good"><span class="tag">CON ESTRUCTURA</span>"Eres <span class="hl">consultor de marketing digital</span>. Tengo una marca de ropa deportiva en Cali dirigida a mujeres de 25–35 años. <span class="hl">Analiza</span> 3 oportunidades de canal digital que no estoy usando hoy (Instagram y WhatsApp actuales). Entrega en <span class="hl">tabla</span> con canal, por qué aplica y primer paso. Máximo 200 palabras, sin inventar cifras de mercado."</div>
+    </div>
+    <p style="margin-top:16px; color:var(--ink-dim); font-size:clamp(11px,.95vw,13px);">El segundo prompt aplica los cuatro elementos: contexto (rol + marca + audiencia), tarea (analizar oportunidades), formato (tabla) y restricciones (extensión, no inventar datos).</p>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S7 malo vs bueno 2 -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Ejemplo 2: segmentación</span></div>
+  <h1 class="slide-title">Aplicado a <span class="accent2">segmentación de audiencia</span></h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="prompt-box bad"><span class="tag">GENÉRICO</span>"¿Cómo segmento a mis clientes?"</div>
+      <div class="prompt-box good"><span class="tag">CON ESTRUCTURA</span>"Actúa como <span class="hl">analista de datos de marketing</span>. Tengo un negocio de comida saludable en Medellín con 3 tipos de clientes: estudiantes, oficinistas y deportistas. <span class="hl">Propón</span> 3 segmentos con criterios de comportamiento (frecuencia de compra, canal preferido, momento del día). Formato: <span class="hl">lista con viñetas</span>, una por segmento, máximo 3 líneas cada una."</div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S8 ejercicio guiado 1 -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Ejercicio guiado 1</span></div>
+  <h1 class="slide-title">Práctica: <span class="accent">tu primer prompt</span></h1>
+  <p class="slide-sub">Abre tu herramienta y construye un prompt real sobre tu propia empresa o proyecto, aplicando los cuatro elementos.</p>
+  <div class="slide-body">
+    <div class="exercise-card">
+      <span class="exercise-badge"><svg class="icon-line" style="stroke:#241a05; width:14px; height:14px;"><use href="#i-clock"/></svg> 10 MINUTOS · INDIVIDUAL</span>
+      <h4>Diagnóstico exprés de tu presencia digital</h4>
+      <ol class="exercise-steps">
+        <li>Escribe el <strong>contexto</strong>: tu rol y tu empresa/proyecto.</li>
+        <li>Define la <strong>tarea</strong>: pide un diagnóstico rápido de tu presencia digital actual.</li>
+        <li>Especifica el <strong>formato</strong>: tabla con 3 hallazgos y una recomendación cada uno.</li>
+        <li>Agrega una <strong>restricción</strong>: máximo 150 palabras, sin inventar cifras.</li>
+      </ol>
+      <div class="exercise-deliverable"><b>Entregas:</b> comparte con la persona de al lado qué tan específica fue la respuesta que obtuviste.</div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S9 ejercicio guiado 2 -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Ejercicio guiado 2</span></div>
+  <h1 class="slide-title">Práctica: <span class="accent2">itera</span> sobre la respuesta</h1>
+  <p class="slide-sub">El prompt engineering rara vez termina en el primer intento: se refina en conversación.</p>
+  <div class="slide-body">
+    <div class="exercise-card">
+      <span class="exercise-badge"><svg class="icon-line" style="stroke:#241a05; width:14px; height:14px;"><use href="#i-clock"/></svg> 10 MINUTOS · INDIVIDUAL</span>
+      <h4>De hallazgo genérico a paso accionable</h4>
+      <ol class="exercise-steps">
+        <li>Toma la respuesta del ejercicio anterior.</li>
+        <li>Pide a la IA que <strong>profundice</strong> en el hallazgo que más te interesa.</li>
+        <li>Pide que lo traduzca en <strong>un primer paso accionable</strong> para esta semana.</li>
+        <li>Evalúa: ¿la respuesta sigue siendo específica a tu negocio, o se volvió genérica otra vez?</li>
+      </ol>
+      <div class="exercise-deliverable"><b>Entregas:</b> la iteración es normal y deseable — cada vuelta debería acercar la respuesta a algo realmente accionable.</div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S10 errores comunes -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Errores comunes</span></div>
+  <h1 class="slide-title">Errores que <span class="accent2">bajan la calidad</span> de la respuesta</h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="card"><div class="icon-badge coral"><svg class="icon-line coral"><use href="#i-alert"/></svg></div><h4>Pedir todo en un solo prompt</h4><p>Mezclar estrategia, copy y presupuesto en una sola instrucción produce respuestas superficiales en las tres cosas.</p></div>
+      <div class="card"><div class="icon-badge coral"><svg class="icon-line coral"><use href="#i-alert"/></svg></div><h4>No dar ejemplos cuando el formato importa</h4><p>Si necesitas un estilo específico, muestra un ejemplo — la IA imita patrones mejor de lo que interpreta descripciones abstractas.</p></div>
+      <div class="card"><div class="icon-badge coral"><svg class="icon-line coral"><use href="#i-alert"/></svg></div><h4>Aceptar la primera respuesta sin revisar</h4><p>Los datos, cifras y afirmaciones generadas deben verificarse siempre antes de usarse en un documento real.</p></div>
+      <div class="card"><div class="icon-badge coral"><svg class="icon-line coral"><use href="#i-alert"/></svg></div><h4>Usar el mismo prompt para todo</h4><p>Cada tarea (análisis, copy, segmentación) necesita su propio contexto y formato — no un prompt universal.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S11 checklist calidad -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Checklist de calidad</span></div>
+  <h1 class="slide-title">Antes de usar una respuesta de IA, <span class="accent">revisa esto</span></h1>
+  <div class="slide-body">
+    <ul class="checklist" style="font-size:clamp(12.5px,1.05vw,15px); max-width:72ch;">
+      <li><span class="ck"></span> ¿Las cifras o datos mencionados son verificables, o los inventó el modelo?</li>
+      <li><span class="ck"></span> ¿El tono coincide con la voz de la marca?</li>
+      <li><span class="ck"></span> ¿La recomendación es específica a mi negocio o podría aplicarle a cualquiera?</li>
+      <li><span class="ck"></span> ¿Incluye algo que no debería compartirse (dato sensible, promesa no autorizada)?</li>
+      <li><span class="ck"></span> ¿Necesito una segunda vuelta de iteración antes de darla por buena?</li>
+    </ul>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S12 entregable -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">03 El reto final</span></div>
+  <h1 class="slide-title">El reto final: <span class="accent">documento + prueba de concepto</span></h1>
+  <p class="slide-sub">El cierre del Módulo 1 sube de nivel: no basta con escribir sobre las oportunidades de IA — hay que mostrar una.</p>
+  <div class="slide-body">
+    <div class="grid g2">
+      <div class="spot ink">
+        <div class="spot-icon"><svg><use href="#i-doc"/></svg></div>
+        <h4>Parte 1 · Documento de análisis</h4>
+        <p>Un análisis breve, construido con ayuda de IA, que identifica dónde tu proyecto o empresa puede aplicar inteligencia artificial en marketing en los próximos 3 a 6 meses.</p>
+      </div>
+      <div class="spot amber">
+        <span class="tag-float">Nuevo</span>
+        <div class="spot-icon"><svg><use href="#i-presentation"/></svg></div>
+        <h4>Parte 2 · Prueba de concepto</h4>
+        <p>Un formato adicional y tangible que demuestre <strong style="color:#fff;">una</strong> de tus oportunidades en acción — no solo descrita en texto.</p>
+      </div>
+    </div>
+    <p style="margin-top:14px; color:var(--ink-dim); font-size:clamp(11px,.95vw,13.5px); max-width:86ch;">La razón del cambio: cualquiera puede describir una oportunidad de IA; el reto real es construir algo — así sea pequeño — que la vuelva visible y creíble para quien toma la decisión en tu empresa.</p>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S13 estructura -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Estructura sugerida</span></div>
+  <h1 class="slide-title">Elige tu <span class="accent">prueba de concepto</span></h1>
+  <p class="slide-sub">Escoge uno de estos tres formatos para la Parte 2 — el que mejor se acomode a tus herramientas y a tu tiempo.</p>
+  <div class="slide-body">
+    <div class="grid g3">
+      <div class="card"><div class="icon-badge xl anim-float"><svg class="icon-line"><use href="#i-dashboard"/></svg></div><h4>Mockup de dashboard</h4><p>Una pantalla o tablero (en Canva, PowerPoint, Figma o incluso Excel) que muestre cómo se vería el resultado de tu oportunidad de IA: qué datos, qué métricas, qué decisión habilita.</p></div>
+      <div class="card"><div class="icon-badge coral xl anim-float" style="animation-delay:.15s"><svg class="icon-line coral"><use href="#i-camera"/></svg></div><h4>Video pitch de 2 minutos</h4><p>Grábate presentando tu oportunidad como si fueras a convencer a un gerente: problema, solución con IA, primer paso y resultado esperado. Celular basta.</p></div>
+      <div class="card"><div class="icon-badge violet xl anim-float" style="animation-delay:.3s"><svg class="icon-line violet"><use href="#i-robot"/></svg></div><h4>Demo de prompt / flujo</h4><p>Documenta un flujo real de 2–3 prompts encadenados que resuelvan la tarea de principio a fin, con capturas de las respuestas obtenidas.</p></div>
+    </div>
+    <div class="card" style="margin-top:14px;"><h4>El documento (Parte 1) sigue incluyendo:</h4><p style="max-width:88ch;"><strong>1. Contexto del negocio</strong> — qué hace, a quién le vende, qué canales usa hoy. <strong>2. Diagnóstico digital actual</strong>. <strong>3. Tres oportunidades de IA</strong> con herramienta, problema que resuelve y resultado esperado. <strong>4. Primer paso accionable</strong> para esta semana — y una nota de qué oportunidad elegiste para tu prueba de concepto.</p></div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S15 video -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Video de referencia</span></div>
+  <h1 class="slide-title">Para ver en clase</h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <a class="video-card" href="https://www.youtube.com/watch?v=8Wqgr7Ry3dk" target="_blank" rel="noopener">
+        <div class="video-thumb"><div class="play"></div></div>
+        <div class="vinfo"><div class="vtitle">Curso gratis de prompt engineering (2026)</div><div class="vmeta">YouTube · Fundamentos aplicables a cualquier profesión</div></div>
+      </a>
+      <a class="video-card" href="https://www.youtube.com/watch?v=PcTySSFATI8" target="_blank" rel="noopener">
+        <div class="video-thumb"><div class="play"></div></div>
+        <div class="vinfo"><div class="vtitle">Curso de Ingeniería de Prompts 2026: de zero a experto</div><div class="vmeta">YouTube · Guía completa aplicada</div></div>
+      </a>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S16 recursos -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Recursos adicionales</span></div>
+  <h1 class="slide-title">Para consultar después de clase</h1>
+  <div class="slide-body">
+    <div class="grid g2">
+      <a class="res-link" href="https://www.datacamp.com/es/blog/best-prompt-engineering-courses" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-doc"/></svg></div><div class="rtext"><div class="rtitle">Mejores cursos de prompt engineering 2026</div><div class="rurl">datacamp.com</div></div></a>
+      <a class="res-link" href="https://www.cyberclick.es/curso-prompt-engineering-en-marketing-digital-casos-de-uso-y-buenas-practicas" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-link"/></svg></div><div class="rtext"><div class="rtitle">Prompt engineering en marketing digital</div><div class="rurl">cyberclick.es</div></div></a>
+      <a class="res-link" href="https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-doc"/></svg></div><div class="rtext"><div class="rtitle">Guía oficial de prompt engineering de Anthropic</div><div class="rurl">docs.claude.com</div></div></a>
+      <a class="res-link" href="https://platzi.com/cursos/prompt-engineering/" target="_blank" rel="noopener"><div class="ricon"><svg class="icon-line" style="width:16px;height:16px;"><use href="#i-link"/></svg></div><div class="rtext"><div class="rtitle">Ruta de Prompt Engineering</div><div class="rurl">platzi.com</div></div></a>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- T3S17 sintesis -->
+<section class="slide" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> TEMA 3 · TALLER PRÁCTICO <span class="sep">/</span> <span class="tag-tema">Síntesis</span></div>
+  <h1 class="slide-title">Lo que debes llevarte del <span class="accent">Tema 3</span></h1>
+  <div class="slide-body">
+    <ul class="checklist" style="font-size:clamp(12.5px,1.05vw,15px);">
+      <li><span class="ck"></span> Un buen prompt tiene contexto, tarea, formato y restricciones.</li>
+      <li><span class="ck"></span> La IA rara vez acierta en el primer intento — iterar es parte del proceso, no un fracaso.</li>
+      <li><span class="ck"></span> Toda respuesta generada debe pasar por un filtro de verificación humana antes de usarse.</li>
+      <li><span class="ck"></span> El entregable del módulo es un documento accionable, no un ejercicio teórico.</li>
+    </ul>
+  </div>
+  <div class="slide-footer"><span class="class-badge c2">Clase 2</span><span class="auto-num"></span></div>
+</section>
+
+<!-- CIERRE MODULO -->
+<section class="slide cover" data-topic="3">
+  <div class="slide-eyebrow"><span class="dot"></span> CIERRE DEL MÓDULO 1</div>
+  <div class="slide-body">
+    <h1 class="mega" style="font-size:clamp(28px,4.4vw,58px);">De entender el <em>ecosistema</em> a construir tu primer <em>análisis con IA</em>.</h1>
+    <p class="slide-sub" style="margin-top:18px; max-width:60ch;">Con esto cierra el Módulo 1. El siguiente módulo del diplomado profundiza en <strong>Modelos de Negocios Digitales</strong>, usando la IA como eje transversal.</p>
+    <div class="grid g3" style="margin-top:28px; width:100%;">
+      <div class="stat-card"><div class="num">01</div><div class="label">Panorama del marketing digital y comportamiento del consumidor en LatAm.</div></div>
+      <div class="stat-card coral"><div class="num">02</div><div class="label">Fundamentos de IA, herramientas y agentes autónomos.</div></div>
+      <div class="stat-card violet"><div class="num">03</div><div class="label">Prompt engineering aplicado y tu primer entregable con IA.</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Full Stack Marketing Digital con IA · UAO</span><span class="auto-num"></span></div>
+</section>
+
+</div>
+
+<div class="ui-menu-btn" id="menuBtn">☰ &nbsp;TEMAS</div>
+<div class="topic-nav" id="topicNav"></div>
+
+<div class="ui-progress">
+  <button class="nav-btn" id="prevBtn" aria-label="Anterior">‹</button>
+  <div class="dots" id="dotsWrap"></div>
+  <div class="counter" id="counter">1 / 1</div>
+  <button class="nav-btn" id="nextBtn" aria-label="Siguiente">›</button>
+</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  const dotsWrap = document.getElementById('dotsWrap');
+  const counter = document.getElementById('counter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const menuBtn = document.getElementById('menuBtn');
+  const topicNav = document.getElementById('topicNav');
+  let idx = 0;
+
+  const topicMeta = {
+    '0':{label:'Portada', color:'var(--ink-dim)'},
+    '1':{label:'Tema 1 · Panorama actual', color:'var(--cyan)'},
+    '2':{label:'Tema 2 · Fundamentos de IA', color:'var(--coral)'},
+    '3':{label:'Tema 3 · Taller práctico', color:'var(--violet)'}
+  };
+
+  // auto-number footers
+  const autoNums = document.querySelectorAll('.auto-num');
+  let n = 0;
+  slides.forEach((s)=>{
+    const el = s.querySelector('.auto-num');
+    n++;
+    if(el){ el.textContent = n + ' / ' + total; }
+  });
+
+  // build dots
+  slides.forEach((s,i)=>{
+    const d = document.createElement('div');
+    const t = s.getAttribute('data-topic');
+    d.className = 'd' + (t==='2'?' t2':(t==='3'?' t3':''));
+    d.dataset.idx = i;
+    d.addEventListener('click', ()=>go(i));
+    dotsWrap.appendChild(d);
+  });
+  const dotEls = Array.from(dotsWrap.children);
+
+  // build topic nav (jump list) grouped by topic
+  const groups = {};
+  slides.forEach((s,i)=>{
+    const t = s.getAttribute('data-topic');
+    if(!groups[t]) groups[t]=[];
+    groups[t].push(i);
+  });
+  let navHtml = '<div class="tn-head">Ir a…</div>';
+  Object.keys(groups).sort().forEach(t=>{
+    if(t==='0') return;
+    const meta = topicMeta[t];
+    navHtml += `<div class="tn-item" data-jump="${groups[t][0]}"><span class="tn-dot" style="background:${meta.color}"></span>${meta.label}</div>`;
+  });
+  navHtml += `<div class="tn-item" data-jump="0" style="margin-top:6px; border-top:1px solid var(--panel-line); padding-top:10px;"><span class="tn-dot" style="background:var(--ink-faint)"></span>Volver a portada</div>`;
+  topicNav.innerHTML = navHtml;
+  topicNav.querySelectorAll('.tn-item').forEach(item=>{
+    item.addEventListener('click', ()=>{ go(parseInt(item.dataset.jump)); topicNav.classList.remove('open'); });
+  });
+  menuBtn.addEventListener('click', ()=> topicNav.classList.toggle('open'));
+
+  function render(){
+    slides.forEach((s,i)=> s.classList.toggle('active', i===idx));
+    dotEls.forEach((d,i)=> d.classList.toggle('active', i===idx));
+    counter.textContent = (idx+1) + ' / ' + total;
+    prevBtn.disabled = idx===0;
+    nextBtn.disabled = idx===total-1;
+    // center active dot
+    const activeDot = dotEls[idx];
+    if(activeDot) activeDot.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+  }
+  function go(i){
+    idx = Math.max(0, Math.min(total-1, i));
+    render();
+  }
+
+  prevBtn.addEventListener('click', ()=> go(idx-1));
+  nextBtn.addEventListener('click', ()=> go(idx+1));
+  document.addEventListener('keydown', (e)=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); go(idx+1); }
+    if(['ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); go(idx-1); }
+    if(e.key==='Home') go(0);
+    if(e.key==='End') go(total-1);
+    if(e.key==='Escape') topicNav.classList.remove('open');
+  });
+
+  // swipe for touch
+  let touchX=null;
+  document.addEventListener('touchstart', e=> touchX = e.touches[0].clientX);
+  document.addEventListener('touchend', e=>{
+    if(touchX===null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if(dx>50) go(idx-1);
+    if(dx<-50) go(idx+1);
+    touchX=null;
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
