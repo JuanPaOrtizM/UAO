@@ -1,0 +1,2968 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow de Medios — UAO Sept–Dic 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  :root{
+    --bg:#F3F4FA;
+    --surface:#FFFFFF;
+    --surface-alt:#EEF0FA;
+    --ink:#12131A;
+    --ink-soft:#6B7280;
+    --ink-faint:#9CA3AF;
+    --line:#E6E8F0;
+    --indigo:#4F46E5;
+    --indigo-deep:#3730A3;
+    --violet:#7C3AED;
+    --cyan:#06B6D4;
+    --amber:#F59E0B;
+    --rose:#F43F5E;
+    --slate:#64748B;
+    --good:#10B981;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.font-display{font-family:'Manrope', 'Inter', sans-serif;}
+  ::selection{background:#DDD6FE; color:var(--indigo-deep);}
+  .wrap{max-width:1360px; margin:0 auto; padding:0 28px 90px;}
+
+  /* ---------------- Hero ---------------- */
+  .hero{
+    background:linear-gradient(120deg, #3730A3 0%, #5B21B6 52%, #7C3AED 100%);
+    color:#fff; padding:56px 28px 70px; position:relative; overflow:hidden;
+  }
+  .hero::before{
+    content:""; position:absolute; width:520px; height:520px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.14), transparent 70%);
+    top:-220px; right:-140px;
+  }
+  .hero::after{
+    content:""; position:absolute; width:360px; height:360px; border-radius:50%;
+    background:radial-gradient(circle, rgba(6,182,212,.25), transparent 70%);
+    bottom:-180px; left:-100px;
+  }
+  .hero-inner{max-width:1360px; margin:0 auto; position:relative;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:700; letter-spacing:.3px; color:#E4DBFF;
+    background:rgba(255,255,255,.12); padding:6px 14px; border-radius:20px;
+    margin:0 0 18px; opacity:0; animation:riseIn .6s ease forwards;
+  }
+  .hero h1{
+    font-size:clamp(32px,4.2vw,50px); font-weight:800; line-height:1.08;
+    margin:0 0 14px; letter-spacing:-0.8px;
+    opacity:0; animation:riseIn .7s ease forwards; animation-delay:.1s;
+  }
+  .hero h1 em{font-style:normal; color:#C4B5FD;}
+  .hero p.lead{
+    font-size:16.5px; color:#DCD3FF; max-width:600px; margin:0; line-height:1.55;
+    opacity:0; animation:riseIn .7s ease forwards; animation-delay:.18s;
+  }
+  @keyframes riseIn{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---------------- KPI strip ---------------- */
+  .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:-42px; position:relative; z-index:2;}
+  .kpi-card{
+    background:var(--surface); border-radius:16px; padding:22px 20px;
+    box-shadow:0 14px 34px rgba(55,48,163,.14);
+    opacity:0; transform:translateY(16px);
+    animation:cardIn .55s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  .kpi-card:nth-child(1){animation-delay:.12s;}
+  .kpi-card:nth-child(2){animation-delay:.2s;}
+  .kpi-card:nth-child(3){animation-delay:.28s;}
+  .kpi-card:nth-child(4){animation-delay:.36s;}
+  @keyframes cardIn{ to{opacity:1; transform:translateY(0);} }
+  .kpi-label{font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink-soft); font-weight:700; margin:0 0 8px;}
+  .kpi-value{font-family:'Manrope',sans-serif; font-size:29px; font-weight:800; color:var(--indigo-deep); margin:0; font-variant-numeric:tabular-nums;}
+  .kpi-sub{font-size:12.5px; color:var(--ink-soft); margin-top:5px;}
+
+  /* ---------------- Sections ---------------- */
+  section{margin-top:58px;}
+  .sec-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:22px; flex-wrap:wrap;}
+  .sec-head h2{font-size:22px; margin:0 0 5px; font-weight:800; color:var(--ink);}
+  .sec-head p{margin:0; font-size:13.8px; color:var(--ink-soft); max-width:600px; line-height:1.5;}
+  .panel{background:var(--surface); border-radius:var(--radius); padding:22px 22px 20px; box-shadow:0 2px 14px rgba(17,17,26,.05);}
+
+  /* ---------------- Budget row: bar + 2 donuts ---------------- */
+  .budget-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px; align-items:stretch;}
+  .budget-grid .panel{min-width:0;}
+  .chart-box{position:relative; height:300px; min-width:0;}
+  .chart-box canvas{max-width:100%;}
+  .panel h3{margin:0 0 14px; font-size:14px; font-weight:700; color:var(--ink);}
+  .panel h3 small{display:block; font-weight:500; color:var(--ink-faint); font-size:11.5px; margin-top:2px;}
+  .legend{display:flex; flex-wrap:wrap; gap:9px 16px; margin-top:16px;}
+  .legend-item{display:flex; align-items:center; gap:7px; font-size:12px; color:var(--ink-soft); font-weight:600;}
+  .dot{width:9px; height:9px; border-radius:3px; display:inline-block;}
+
+  .status-chip{
+    display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:700;
+    padding:3px 9px; border-radius:20px; letter-spacing:.2px; white-space:nowrap;
+  }
+  .status-confirmado{background:#DCFCE7; color:#15803D;}
+  .status-bonificado{background:#FEF3C7; color:#92400E;}
+  .status-provisionar{background:#FFE4E6; color:#BE123C;}
+  .status-propio{background:#E0E7FF; color:#4338CA;}
+  .status-sin_valor{background:#F1F5F9; color:#475569;}
+
+  /* ---------------- Media cards grid ---------------- */
+  .canal-section{margin-bottom:26px;}
+  .canal-section:last-child{margin-bottom:0;}
+  .canal-heading{
+    display:flex; align-items:center; gap:10px; margin-bottom:12px;
+  }
+  .canal-heading .chip{
+    font-size:11px; font-weight:800; letter-spacing:.3px; color:#fff;
+    padding:5px 12px; border-radius:8px;
+  }
+  .canal-heading .meta{font-size:12.5px; color:var(--ink-soft); font-weight:600;}
+  .media-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:12px;}
+  .media-card{
+    border:1px solid var(--line); border-radius:14px; padding:15px 16px;
+    background:var(--surface); position:relative; transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .media-card:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(17,17,26,.09);}
+  .media-card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:6px;}
+  .media-name{font-weight:800; font-size:14.5px; color:var(--ink); font-family:'Manrope',sans-serif;}
+  .media-programa{font-size:11.5px; color:var(--ink-soft); margin-bottom:12px; line-height:1.4;}
+  .media-track{height:6px; border-radius:4px; background:var(--surface-alt); position:relative; overflow:hidden; margin-bottom:10px;}
+  .media-track-fill{
+    position:absolute; top:0; bottom:0; border-radius:4px;
+    transform:scaleX(0); transform-origin:left; animation:fillTrack .6s ease forwards;
+  }
+  @keyframes fillTrack{ to{transform:scaleX(1);} }
+  .media-bottom{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .media-days{font-size:11px; color:var(--ink-faint); font-weight:600;}
+  .media-budget{font-size:14px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--ink);}
+
+  /* ---------------- Month selector ---------------- */
+  .month-tabs{display:flex; gap:8px; flex-wrap:wrap;}
+  .month-tab{
+    border:none; background:var(--surface-alt); color:var(--indigo-deep);
+    padding:10px 20px; border-radius:24px; font-weight:800; font-size:13.5px;
+    cursor:pointer; transition:background .25s ease, color .25s ease, transform .15s ease;
+    font-family:'Inter',sans-serif;
+  }
+  .month-tab:hover{transform:translateY(-1px);}
+  .month-tab.active{background:linear-gradient(120deg,var(--indigo),var(--violet)); color:#fff;}
+
+  .month-panel{display:grid; grid-template-columns:210px 240px 1fr; gap:16px; margin-top:20px;}
+  .month-mini{background:var(--surface-alt); border-radius:14px; padding:16px 18px;}
+  .month-mini .kpi-value{font-size:23px;}
+  .month-media-scroll{background:var(--surface-alt); border-radius:14px; padding:14px 16px; max-height:230px; overflow-y:auto;}
+  .month-media-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px dashed #D9DCEC; font-size:12.5px;}
+  .month-media-row:last-child{border-bottom:none;}
+  .month-media-name{display:flex; align-items:center; gap:8px; font-weight:700;}
+  .fade-swap{animation:fadeSwap .4s ease;}
+  @keyframes fadeSwap{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---------------- Gantt ---------------- */
+  .gantt-wrap{background:var(--surface); border-radius:var(--radius); padding:20px 0 18px; box-shadow:0 2px 14px rgba(17,17,26,.05); overflow:hidden;}
+  .gantt-scroll{overflow-x:auto; padding-bottom:8px;}
+  .gantt-inner{display:flex; min-width:max-content;}
+  .gantt-label-col{position:sticky; left:0; background:var(--surface); z-index:4; border-right:1px solid var(--line); flex:none; width:250px;}
+  .gantt-label-head{height:58px; display:flex; align-items:flex-end; padding:0 16px 10px; font-size:10.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--ink-faint); font-weight:800;}
+  .gantt-label-row{height:34px; display:flex; align-items:center; gap:9px; padding:0 16px; font-size:12.3px; white-space:nowrap;}
+  .gantt-label-row .lbl-dot{width:8px;height:8px;border-radius:3px;flex:none;}
+  .gantt-label-row .lbl-txt{overflow:hidden; text-overflow:ellipsis;}
+  .gantt-label-row .lbl-medio{font-weight:700;}
+  .gantt-label-row .lbl-prog{color:var(--ink-faint); font-size:10px; display:block;}
+
+  .gantt-track-wrap{position:relative; flex:none;}
+  .gantt-header{height:58px; position:relative;}
+  .gantt-month-row{display:flex; height:26px;}
+  .gantt-month-cell{display:flex; align-items:center; padding-left:8px; font-size:11px; font-weight:800; color:var(--indigo-deep); border-left:1px solid var(--line);}
+  .gantt-week-row{display:flex; height:20px; margin-top:10px;}
+  .gantt-week-tick{font-size:9.5px; color:var(--ink-faint); border-left:1px solid var(--line); padding-left:3px;}
+
+  .gantt-rows{position:relative;}
+  .gantt-row-bg{height:34px; border-bottom:1px solid #F1F2F8;}
+  .gantt-row-bg:nth-child(even){background:rgba(238,240,250,0.5);}
+  .gantt-month-highlight{
+    position:absolute; top:0; bottom:0; background:rgba(124,58,237,.08);
+    border-left:2px dashed rgba(124,58,237,.5); border-right:2px dashed rgba(124,58,237,.5);
+    transition:left .35s cubic-bezier(.3,.7,.3,1), width .35s cubic-bezier(.3,.7,.3,1);
+    pointer-events:none; z-index:1;
+  }
+  .gantt-today{
+    position:absolute; top:0; bottom:0; width:0; border-left:2px dashed var(--rose); z-index:2; pointer-events:none;
+  }
+  .gantt-today-label{
+    position:absolute; top:-18px; left:4px; font-size:9.5px; font-weight:800; color:var(--rose);
+    white-space:nowrap;
+  }
+  .gantt-bar{
+    position:absolute; border-radius:999px; z-index:3; cursor:pointer;
+    transform:scaleX(0); transform-origin:left; animation:barGrow .5s cubic-bezier(.2,.8,.3,1) forwards;
+    box-shadow:0 2px 6px rgba(17,17,26,.18);
+  }
+  @keyframes barGrow{ to{transform:scaleX(1);} }
+  .gantt-dot{
+    position:absolute; border-radius:50%; z-index:3; cursor:pointer;
+    transform:scale(0); animation:dotPop .4s cubic-bezier(.34,1.56,.64,1) forwards;
+    box-shadow:0 2px 5px rgba(17,17,26,.22);
+  }
+  @keyframes dotPop{ to{transform:scale(1);} }
+  .gantt-tooltip{
+    position:fixed; pointer-events:none; background:var(--ink); color:#fff;
+    padding:8px 12px; border-radius:10px; font-size:12px; z-index:50;
+    opacity:0; transition:opacity .12s ease; box-shadow:0 8px 20px rgba(0,0,0,.25);
+  }
+  .gantt-tooltip.show{opacity:1;}
+  .gantt-tooltip b{display:block; font-size:12.5px; margin-bottom:2px;}
+
+  footer{margin-top:64px; padding-top:22px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-faint); text-align:center;}
+
+  @media (max-width:980px){
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .budget-grid{grid-template-columns:1fr;}
+    .month-panel{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">● UAO · MARKETING Y PUBLICIDAD</p>
+    <h1>Flow de <em>medios masivos</em><br>Sept — Dic 2026</h1>
+    <p class="lead">Vista consolidada del flow de pauta: inversión por canal, participación porcentual, calendario de emisión y estado de cada medio. El flow corre del 7 de septiembre al 23 de diciembre de 2026, con Meta, Google, TV y pantallas extendiéndose hasta enero de 2027.</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="kpis" id="kpiStrip"></div>
+
+  <section id="sec-budget">
+    <div class="sec-head">
+      <div>
+        <h2>Inversión y participación por canal y medio</h2>
+        <p>Presupuesto confirmado y en gestión, con la participación porcentual de cada canal y de cada medio dentro del total del flow.</p>
+      </div>
+    </div>
+    <div class="budget-grid">
+      <div class="panel">
+        <h3>Inversión por canal<small>Valor en pesos, IVA incluido</small></h3>
+        <div class="chart-box"><canvas id="chartCanal"></canvas></div>
+        <div class="legend" id="legendCanal"></div>
+      </div>
+      <div class="panel">
+        <h3>Participación % por canal<small>Sobre el total del flow</small></h3>
+        <div class="chart-box"><canvas id="chartCanalPct"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Participación % por medio<small>Cada medio, sobre el total del flow</small></h3>
+        <div class="chart-box"><canvas id="chartMedioPct"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sec-medios">
+    <div class="sec-head">
+      <div>
+        <h2>Medios del flow</h2>
+        <p>Agrupados por canal. La barra bajo cada medio ubica su ventana de emisión dentro del periodo completo (7 sep – 23 dic).</p>
+      </div>
+    </div>
+    <div id="mediaGridContainer"></div>
+  </section>
+
+  <section id="sec-month">
+    <div class="sec-head">
+      <div>
+        <h2>Vista mensual</h2>
+        <p>Selecciona un mes para ver qué medios están al aire y el presupuesto estimado (prorrateado por días activos) de ese mes.</p>
+      </div>
+      <div class="month-tabs" id="monthTabs"></div>
+    </div>
+    <div class="month-panel" id="monthPanel"></div>
+  </section>
+
+  <section id="sec-gantt">
+    <div class="sec-head">
+      <div>
+        <h2>Calendario de emisión</h2>
+        <p>Cada barra es una ventana continua de emisión; los puntos son apariciones puntuales (ej. cuñas bonificadas semanales). Meta, Google, TV y pantallas se extienden hasta el 31 de enero de 2027. El mes seleccionado arriba queda resaltado.</p>
+      </div>
+    </div>
+    <div class="gantt-wrap">
+      <div class="gantt-scroll" id="ganttScroll">
+        <div class="gantt-inner" id="ganttInner"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>Flow de medios masivos · UAO · generado a partir del archivo de flow entregado.</footer>
+</div>
+
+<div class="gantt-tooltip" id="ganttTooltip"></div>
+
+<script>
+const DATA = {
+  "rows": [
+    {
+      "canal": "DIGITAL",
+      "programa": "PREGRADO",
+      "medio": "META / GOOGLE",
+      "inversion_raw": 100000000,
+      "budget_value": 100000000,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31",
+        "2027-01-01",
+        "2027-01-02",
+        "2027-01-03",
+        "2027-01-04",
+        "2027-01-05",
+        "2027-01-06",
+        "2027-01-07",
+        "2027-01-08",
+        "2027-01-09",
+        "2027-01-10",
+        "2027-01-11",
+        "2027-01-12",
+        "2027-01-13",
+        "2027-01-14",
+        "2027-01-15",
+        "2027-01-16",
+        "2027-01-17",
+        "2027-01-18",
+        "2027-01-19",
+        "2027-01-20",
+        "2027-01-21",
+        "2027-01-22",
+        "2027-01-23",
+        "2027-01-24",
+        "2027-01-25",
+        "2027-01-26",
+        "2027-01-27",
+        "2027-01-28",
+        "2027-01-29",
+        "2027-01-30",
+        "2027-01-31"
+      ],
+      "active_days_count": 147,
+      "start": "2026-09-07",
+      "end": "2027-01-31",
+      "id": 0,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "DIGITAL",
+      "programa": "POSGRADOS",
+      "medio": "META",
+      "inversion_raw": 115000000,
+      "budget_value": 115000000,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31",
+        "2027-01-01",
+        "2027-01-02",
+        "2027-01-03",
+        "2027-01-04",
+        "2027-01-05",
+        "2027-01-06",
+        "2027-01-07",
+        "2027-01-08",
+        "2027-01-09",
+        "2027-01-10",
+        "2027-01-11",
+        "2027-01-12",
+        "2027-01-13",
+        "2027-01-14",
+        "2027-01-15",
+        "2027-01-16",
+        "2027-01-17",
+        "2027-01-18",
+        "2027-01-19",
+        "2027-01-20",
+        "2027-01-21",
+        "2027-01-22",
+        "2027-01-23",
+        "2027-01-24",
+        "2027-01-25",
+        "2027-01-26",
+        "2027-01-27",
+        "2027-01-28",
+        "2027-01-29",
+        "2027-01-30",
+        "2027-01-31"
+      ],
+      "active_days_count": 147,
+      "start": "2026-09-07",
+      "end": "2027-01-31",
+      "id": 1,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "DIGITAL",
+      "programa": "EDUVIDA",
+      "medio": "META",
+      "inversion_raw": 65000000,
+      "budget_value": 65000000,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31",
+        "2027-01-01",
+        "2027-01-02",
+        "2027-01-03",
+        "2027-01-04",
+        "2027-01-05",
+        "2027-01-06",
+        "2027-01-07",
+        "2027-01-08",
+        "2027-01-09",
+        "2027-01-10",
+        "2027-01-11",
+        "2027-01-12",
+        "2027-01-13",
+        "2027-01-14",
+        "2027-01-15",
+        "2027-01-16",
+        "2027-01-17",
+        "2027-01-18",
+        "2027-01-19",
+        "2027-01-20",
+        "2027-01-21",
+        "2027-01-22",
+        "2027-01-23",
+        "2027-01-24",
+        "2027-01-25",
+        "2027-01-26",
+        "2027-01-27",
+        "2027-01-28",
+        "2027-01-29",
+        "2027-01-30",
+        "2027-01-31"
+      ],
+      "active_days_count": 147,
+      "start": "2026-09-07",
+      "end": "2027-01-31",
+      "id": 2,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "TV",
+      "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+      "medio": "90 MINUTOS",
+      "inversion_raw": "BONIFICADO",
+      "budget_value": 0,
+      "budget_status": "bonificado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31",
+        "2027-01-01",
+        "2027-01-02",
+        "2027-01-03",
+        "2027-01-04",
+        "2027-01-05",
+        "2027-01-06",
+        "2027-01-07",
+        "2027-01-08",
+        "2027-01-09",
+        "2027-01-10",
+        "2027-01-11",
+        "2027-01-12",
+        "2027-01-13",
+        "2027-01-14",
+        "2027-01-15",
+        "2027-01-16",
+        "2027-01-17",
+        "2027-01-18",
+        "2027-01-19",
+        "2027-01-20",
+        "2027-01-21",
+        "2027-01-22",
+        "2027-01-23",
+        "2027-01-24",
+        "2027-01-25",
+        "2027-01-26",
+        "2027-01-27",
+        "2027-01-28",
+        "2027-01-29",
+        "2027-01-30",
+        "2027-01-31"
+      ],
+      "active_days_count": 147,
+      "start": "2026-09-07",
+      "end": "2027-01-31",
+      "id": 3,
+      "display_status": "bonificado",
+      "display_label": "Bonificado"
+    },
+    {
+      "canal": "MEDIOS UAO",
+      "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+      "medio": "PANTALLAS",
+      "inversion_raw": "BONIFICADO",
+      "budget_value": 0,
+      "budget_status": "bonificado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31",
+        "2027-01-01",
+        "2027-01-02",
+        "2027-01-03",
+        "2027-01-04",
+        "2027-01-05",
+        "2027-01-06",
+        "2027-01-07",
+        "2027-01-08",
+        "2027-01-09",
+        "2027-01-10",
+        "2027-01-11",
+        "2027-01-12",
+        "2027-01-13",
+        "2027-01-14",
+        "2027-01-15",
+        "2027-01-16",
+        "2027-01-17",
+        "2027-01-18",
+        "2027-01-19",
+        "2027-01-20",
+        "2027-01-21",
+        "2027-01-22",
+        "2027-01-23",
+        "2027-01-24",
+        "2027-01-25",
+        "2027-01-26",
+        "2027-01-27",
+        "2027-01-28",
+        "2027-01-29",
+        "2027-01-30",
+        "2027-01-31"
+      ],
+      "active_days_count": 147,
+      "start": "2026-09-07",
+      "end": "2027-01-31",
+      "id": 4,
+      "display_status": "bonificado",
+      "display_label": "Bonificado"
+    },
+    {
+      "canal": "MEDIOS UAO",
+      "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+      "medio": "PANTALLAS",
+      "inversion_raw": "BONIFICADO",
+      "budget_value": 0,
+      "budget_status": "bonificado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15",
+        "2026-12-16",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-25",
+        "2026-12-26",
+        "2026-12-27",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31",
+        "2027-01-01",
+        "2027-01-02",
+        "2027-01-03",
+        "2027-01-04",
+        "2027-01-05",
+        "2027-01-06",
+        "2027-01-07",
+        "2027-01-08",
+        "2027-01-09",
+        "2027-01-10",
+        "2027-01-11",
+        "2027-01-12",
+        "2027-01-13",
+        "2027-01-14",
+        "2027-01-15",
+        "2027-01-16",
+        "2027-01-17",
+        "2027-01-18",
+        "2027-01-19",
+        "2027-01-20",
+        "2027-01-21",
+        "2027-01-22",
+        "2027-01-23",
+        "2027-01-24",
+        "2027-01-25",
+        "2027-01-26",
+        "2027-01-27",
+        "2027-01-28",
+        "2027-01-29",
+        "2027-01-30",
+        "2027-01-31"
+      ],
+      "active_days_count": 147,
+      "start": "2026-09-07",
+      "end": "2027-01-31",
+      "id": 5,
+      "display_status": "bonificado",
+      "display_label": "Bonificado"
+    },
+    {
+      "canal": "DIGITAL",
+      "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+      "medio": "MAIL",
+      "inversion_raw": "MEDIO PROPIO",
+      "budget_value": 0,
+      "budget_status": "propio",
+      "budget_note": null,
+      "active_dates": [],
+      "active_days_count": 0,
+      "start": null,
+      "end": null,
+      "id": 6,
+      "display_status": "propio",
+      "display_label": "Medio propio"
+    },
+    {
+      "canal": "RADIO DIGITAL",
+      "programa": "POSGRADOS",
+      "medio": "BOOM F.M.",
+      "inversion_raw": "BONIFICADO",
+      "budget_value": 0,
+      "budget_status": "bonificado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-09",
+        "2026-09-16",
+        "2026-09-23",
+        "2026-09-29",
+        "2026-10-07",
+        "2026-10-15",
+        "2026-10-20",
+        "2026-10-27"
+      ],
+      "active_days_count": 8,
+      "start": "2026-09-09",
+      "end": "2026-10-27",
+      "id": 7,
+      "display_status": "bonificado",
+      "display_label": "Bonificado"
+    },
+    {
+      "canal": "RADIO DIGITAL",
+      "programa": "PREGRADOS",
+      "medio": "LA MÁXIMA",
+      "inversion_raw": "BONIFICADO",
+      "budget_value": 0,
+      "budget_status": "bonificado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-08",
+        "2026-09-16",
+        "2026-09-23",
+        "2026-09-29",
+        "2026-10-07",
+        "2026-10-15",
+        "2026-10-20",
+        "2026-10-27"
+      ],
+      "active_days_count": 8,
+      "start": "2026-09-08",
+      "end": "2026-10-27",
+      "id": 8,
+      "display_status": "bonificado",
+      "display_label": "Bonificado"
+    },
+    {
+      "canal": "RADIO DIGITAL",
+      "programa": "PREGRADOS",
+      "medio": "EL SOL (RCN RADIO)",
+      "inversion_raw": 751842,
+      "budget_value": 751842,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-21",
+        "2026-10-09",
+        "2026-11-18"
+      ],
+      "active_days_count": 3,
+      "start": "2026-09-21",
+      "end": "2026-11-18",
+      "id": 9,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "RADIO",
+      "programa": "PREGRADOS - POSGRADOS",
+      "medio": "BOOM F.M.",
+      "inversion_raw": 4682760,
+      "budget_value": 4682760,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31"
+      ],
+      "active_days_count": 55,
+      "start": "2026-09-07",
+      "end": "2026-10-31",
+      "id": 10,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "RADIO",
+      "programa": "PREGRADOS",
+      "medio": "LA MÁXIMA",
+      "inversion_raw": 2523120,
+      "budget_value": 2523120,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31"
+      ],
+      "active_days_count": 55,
+      "start": "2026-09-07",
+      "end": "2026-10-31",
+      "id": 11,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "RADIO",
+      "programa": "PREGRADOS",
+      "medio": "EL SOL (RCN RADIO)",
+      "inversion_raw": 4867695,
+      "budget_value": 4867695,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30",
+        "2026-12-01",
+        "2026-12-02",
+        "2026-12-03",
+        "2026-12-04",
+        "2026-12-05",
+        "2026-12-06",
+        "2026-12-07",
+        "2026-12-08",
+        "2026-12-09",
+        "2026-12-10",
+        "2026-12-11",
+        "2026-12-12",
+        "2026-12-13",
+        "2026-12-14",
+        "2026-12-15"
+      ],
+      "active_days_count": 62,
+      "start": "2026-09-15",
+      "end": "2026-12-15",
+      "id": 12,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "RADIO",
+      "programa": "PREGRADOS",
+      "medio": "MIX",
+      "inversion_raw": 5546535,
+      "budget_value": 5546535,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30"
+      ],
+      "active_days_count": 54,
+      "start": "2026-09-07",
+      "end": "2026-11-30",
+      "id": 13,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "RADIO",
+      "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+      "medio": "RADIO TIEMPO",
+      "inversion_raw": null,
+      "budget_value": 0,
+      "budget_status": "sin_valor",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-07",
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10",
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-09-27",
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30"
+      ],
+      "active_days_count": 54,
+      "start": "2026-09-07",
+      "end": "2026-11-30",
+      "id": 14,
+      "display_status": "sin_valor",
+      "display_label": "Valor pendiente"
+    },
+    {
+      "canal": "RADIO",
+      "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+      "medio": "OLÍMPICA",
+      "inversion_raw": "PROVISIONAR VALOR\n$5.000.000 SIN IVA",
+      "budget_value": 5000000,
+      "budget_status": "provisionar",
+      "budget_note": "PROVISIONAR VALOR $5.000.000 SIN IVA",
+      "active_dates": [],
+      "active_days_count": 0,
+      "start": null,
+      "end": null,
+      "id": 15,
+      "display_status": "provisionar",
+      "display_label": "Por provisionar"
+    },
+    {
+      "canal": "RADIO",
+      "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+      "medio": "BÉSAME F.M.",
+      "inversion_raw": 4641000,
+      "budget_value": 4641000,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30"
+      ],
+      "active_days_count": 61,
+      "start": "2026-10-01",
+      "end": "2026-11-30",
+      "id": 16,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "RADIO",
+      "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+      "medio": "JAVERIANA ESTÉREO",
+      "inversion_raw": 3000000,
+      "budget_value": 3000000,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-10-31",
+        "2026-11-01",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-07",
+        "2026-11-08",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13",
+        "2026-11-14",
+        "2026-11-15",
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-11-26",
+        "2026-11-27",
+        "2026-11-28",
+        "2026-11-29",
+        "2026-11-30"
+      ],
+      "active_days_count": 61,
+      "start": "2026-10-01",
+      "end": "2026-11-30",
+      "id": 17,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    },
+    {
+      "canal": "CINE",
+      "programa": "PREGRADO : DÍA Y NOCHE",
+      "medio": "ROYAL FILMS",
+      "inversion_raw": 11995200,
+      "budget_value": 11995200,
+      "budget_status": "confirmado",
+      "budget_note": null,
+      "active_dates": [
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21",
+        "2026-09-22",
+        "2026-09-23",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25",
+        "2026-12-17",
+        "2026-12-18",
+        "2026-12-19",
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23"
+      ],
+      "active_days_count": 28,
+      "start": "2026-09-17",
+      "end": "2026-12-23",
+      "id": 18,
+      "display_status": "confirmado",
+      "display_label": "Confirmado"
+    }
+  ],
+  "canal_order": [
+    "DIGITAL",
+    "TV",
+    "MEDIOS UAO",
+    "RADIO DIGITAL",
+    "RADIO",
+    "CINE"
+  ],
+  "canal_totals": {
+    "DIGITAL": 280000000,
+    "TV": 0,
+    "MEDIOS UAO": 0,
+    "RADIO DIGITAL": 751842,
+    "RADIO": 30261110,
+    "CINE": 11995200
+  },
+  "canal_counts": {
+    "DIGITAL": 4,
+    "TV": 1,
+    "MEDIOS UAO": 2,
+    "RADIO DIGITAL": 3,
+    "RADIO": 8,
+    "CINE": 1
+  },
+  "canal_pct": {
+    "DIGITAL": 86.68511870870677,
+    "TV": 0.0,
+    "MEDIOS UAO": 0.0,
+    "RADIO DIGITAL": 0.23276254650068398,
+    "RADIO": 9.368528259311548,
+    "CINE": 3.7135904854809976
+  },
+  "medio_totals": {
+    "META / GOOGLE": 100000000,
+    "META": 180000000,
+    "90 MINUTOS": 0,
+    "PANTALLAS": 0,
+    "MAIL": 0,
+    "BOOM F.M.": 4682760,
+    "LA MÁXIMA": 2523120,
+    "EL SOL (RCN RADIO)": 5619537,
+    "MIX": 5546535,
+    "RADIO TIEMPO": 0,
+    "OLÍMPICA": 5000000,
+    "BÉSAME F.M.": 4641000,
+    "JAVERIANA ESTÉREO": 3000000,
+    "ROYAL FILMS": 11995200
+  },
+  "medio_pct": {
+    "META / GOOGLE": 30.958970967395278,
+    "META": 55.72614774131149,
+    "BOOM F.M.": 1.449734308872799,
+    "LA MÁXIMA": 0.7811319882725437,
+    "EL SOL (RCN RADIO)": 1.7397508283320355,
+    "MIX": 1.7171501603464177,
+    "OLÍMPICA": 1.5479485483697637,
+    "BÉSAME F.M.": 1.4368058425968147,
+    "JAVERIANA ESTÉREO": 0.9287691290218583,
+    "ROYAL FILMS": 3.7135904854809976
+  },
+  "total_all": 323008152,
+  "month_summary": {
+    "SEPTIEMBRE": {
+      "items": [
+        {
+          "id": 0,
+          "canal": "DIGITAL",
+          "medio": "META / GOOGLE",
+          "programa": "PREGRADO",
+          "days_in_month": 24,
+          "est_budget": 16326531
+        },
+        {
+          "id": 1,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "POSGRADOS",
+          "days_in_month": 24,
+          "est_budget": 18775510
+        },
+        {
+          "id": 2,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "EDUVIDA",
+          "days_in_month": 24,
+          "est_budget": 10612245
+        },
+        {
+          "id": 3,
+          "canal": "TV",
+          "medio": "90 MINUTOS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 24,
+          "est_budget": 0
+        },
+        {
+          "id": 4,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 24,
+          "est_budget": 0
+        },
+        {
+          "id": 5,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 24,
+          "est_budget": 0
+        },
+        {
+          "id": 7,
+          "canal": "RADIO DIGITAL",
+          "medio": "BOOM F.M.",
+          "programa": "POSGRADOS",
+          "days_in_month": 4,
+          "est_budget": 0
+        },
+        {
+          "id": 8,
+          "canal": "RADIO DIGITAL",
+          "medio": "LA MÁXIMA",
+          "programa": "PREGRADOS",
+          "days_in_month": 4,
+          "est_budget": 0
+        },
+        {
+          "id": 9,
+          "canal": "RADIO DIGITAL",
+          "medio": "EL SOL (RCN RADIO)",
+          "programa": "PREGRADOS",
+          "days_in_month": 1,
+          "est_budget": 250614
+        },
+        {
+          "id": 10,
+          "canal": "RADIO",
+          "medio": "BOOM F.M.",
+          "programa": "PREGRADOS - POSGRADOS",
+          "days_in_month": 24,
+          "est_budget": 2043386
+        },
+        {
+          "id": 11,
+          "canal": "RADIO",
+          "medio": "LA MÁXIMA",
+          "programa": "PREGRADOS",
+          "days_in_month": 24,
+          "est_budget": 1100998
+        },
+        {
+          "id": 12,
+          "canal": "RADIO",
+          "medio": "EL SOL (RCN RADIO)",
+          "programa": "PREGRADOS",
+          "days_in_month": 16,
+          "est_budget": 1256179
+        },
+        {
+          "id": 13,
+          "canal": "RADIO",
+          "medio": "MIX",
+          "programa": "PREGRADOS",
+          "days_in_month": 24,
+          "est_budget": 2465127
+        },
+        {
+          "id": 14,
+          "canal": "RADIO",
+          "medio": "RADIO TIEMPO",
+          "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+          "days_in_month": 24,
+          "est_budget": 0
+        },
+        {
+          "id": 18,
+          "canal": "CINE",
+          "medio": "ROYAL FILMS",
+          "programa": "PREGRADO : DÍA Y NOCHE",
+          "days_in_month": 7,
+          "est_budget": 2998800
+        }
+      ],
+      "total_est": 55829390,
+      "n_medios": 15
+    },
+    "OCTUBRE": {
+      "items": [
+        {
+          "id": 0,
+          "canal": "DIGITAL",
+          "medio": "META / GOOGLE",
+          "programa": "PREGRADO",
+          "days_in_month": 31,
+          "est_budget": 21088435
+        },
+        {
+          "id": 1,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "POSGRADOS",
+          "days_in_month": 31,
+          "est_budget": 24251701
+        },
+        {
+          "id": 2,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 13707483
+        },
+        {
+          "id": 3,
+          "canal": "TV",
+          "medio": "90 MINUTOS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 0
+        },
+        {
+          "id": 4,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 0
+        },
+        {
+          "id": 5,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 0
+        },
+        {
+          "id": 7,
+          "canal": "RADIO DIGITAL",
+          "medio": "BOOM F.M.",
+          "programa": "POSGRADOS",
+          "days_in_month": 4,
+          "est_budget": 0
+        },
+        {
+          "id": 8,
+          "canal": "RADIO DIGITAL",
+          "medio": "LA MÁXIMA",
+          "programa": "PREGRADOS",
+          "days_in_month": 4,
+          "est_budget": 0
+        },
+        {
+          "id": 9,
+          "canal": "RADIO DIGITAL",
+          "medio": "EL SOL (RCN RADIO)",
+          "programa": "PREGRADOS",
+          "days_in_month": 1,
+          "est_budget": 250614
+        },
+        {
+          "id": 10,
+          "canal": "RADIO",
+          "medio": "BOOM F.M.",
+          "programa": "PREGRADOS - POSGRADOS",
+          "days_in_month": 31,
+          "est_budget": 2639374
+        },
+        {
+          "id": 11,
+          "canal": "RADIO",
+          "medio": "LA MÁXIMA",
+          "programa": "PREGRADOS",
+          "days_in_month": 31,
+          "est_budget": 1422122
+        },
+        {
+          "id": 12,
+          "canal": "RADIO",
+          "medio": "EL SOL (RCN RADIO)",
+          "programa": "PREGRADOS",
+          "days_in_month": 15,
+          "est_budget": 1177668
+        },
+        {
+          "id": 16,
+          "canal": "RADIO",
+          "medio": "BÉSAME F.M.",
+          "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 2358541
+        },
+        {
+          "id": 17,
+          "canal": "RADIO",
+          "medio": "JAVERIANA ESTÉREO",
+          "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 1524590
+        },
+        {
+          "id": 18,
+          "canal": "CINE",
+          "medio": "ROYAL FILMS",
+          "programa": "PREGRADO : DÍA Y NOCHE",
+          "days_in_month": 7,
+          "est_budget": 2998800
+        }
+      ],
+      "total_est": 71419328,
+      "n_medios": 15
+    },
+    "NOVIEMBRE": {
+      "items": [
+        {
+          "id": 0,
+          "canal": "DIGITAL",
+          "medio": "META / GOOGLE",
+          "programa": "PREGRADO",
+          "days_in_month": 30,
+          "est_budget": 20408163
+        },
+        {
+          "id": 1,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "POSGRADOS",
+          "days_in_month": 30,
+          "est_budget": 23469388
+        },
+        {
+          "id": 2,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "EDUVIDA",
+          "days_in_month": 30,
+          "est_budget": 13265306
+        },
+        {
+          "id": 3,
+          "canal": "TV",
+          "medio": "90 MINUTOS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 30,
+          "est_budget": 0
+        },
+        {
+          "id": 4,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 30,
+          "est_budget": 0
+        },
+        {
+          "id": 5,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 30,
+          "est_budget": 0
+        },
+        {
+          "id": 9,
+          "canal": "RADIO DIGITAL",
+          "medio": "EL SOL (RCN RADIO)",
+          "programa": "PREGRADOS",
+          "days_in_month": 1,
+          "est_budget": 250614
+        },
+        {
+          "id": 12,
+          "canal": "RADIO",
+          "medio": "EL SOL (RCN RADIO)",
+          "programa": "PREGRADOS",
+          "days_in_month": 16,
+          "est_budget": 1256179
+        },
+        {
+          "id": 13,
+          "canal": "RADIO",
+          "medio": "MIX",
+          "programa": "PREGRADOS",
+          "days_in_month": 30,
+          "est_budget": 3081408
+        },
+        {
+          "id": 14,
+          "canal": "RADIO",
+          "medio": "RADIO TIEMPO",
+          "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+          "days_in_month": 30,
+          "est_budget": 0
+        },
+        {
+          "id": 16,
+          "canal": "RADIO",
+          "medio": "BÉSAME F.M.",
+          "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+          "days_in_month": 30,
+          "est_budget": 2282459
+        },
+        {
+          "id": 17,
+          "canal": "RADIO",
+          "medio": "JAVERIANA ESTÉREO",
+          "programa": "PREGRADOS - POSGRADOS - EDUVIDA",
+          "days_in_month": 30,
+          "est_budget": 1475410
+        },
+        {
+          "id": 18,
+          "canal": "CINE",
+          "medio": "ROYAL FILMS",
+          "programa": "PREGRADO : DÍA Y NOCHE",
+          "days_in_month": 7,
+          "est_budget": 2998800
+        }
+      ],
+      "total_est": 68487727,
+      "n_medios": 13
+    },
+    "DICIEMBRE": {
+      "items": [
+        {
+          "id": 0,
+          "canal": "DIGITAL",
+          "medio": "META / GOOGLE",
+          "programa": "PREGRADO",
+          "days_in_month": 31,
+          "est_budget": 21088435
+        },
+        {
+          "id": 1,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "POSGRADOS",
+          "days_in_month": 31,
+          "est_budget": 24251701
+        },
+        {
+          "id": 2,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 13707483
+        },
+        {
+          "id": 3,
+          "canal": "TV",
+          "medio": "90 MINUTOS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 0
+        },
+        {
+          "id": 4,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 0
+        },
+        {
+          "id": 5,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 0
+        },
+        {
+          "id": 12,
+          "canal": "RADIO",
+          "medio": "EL SOL (RCN RADIO)",
+          "programa": "PREGRADOS",
+          "days_in_month": 15,
+          "est_budget": 1177668
+        },
+        {
+          "id": 18,
+          "canal": "CINE",
+          "medio": "ROYAL FILMS",
+          "programa": "PREGRADO : DÍA Y NOCHE",
+          "days_in_month": 7,
+          "est_budget": 2998800
+        }
+      ],
+      "total_est": 63224087,
+      "n_medios": 8
+    },
+    "ENERO": {
+      "items": [
+        {
+          "id": 0,
+          "canal": "DIGITAL",
+          "medio": "META / GOOGLE",
+          "programa": "PREGRADO",
+          "days_in_month": 31,
+          "est_budget": 21088435
+        },
+        {
+          "id": 1,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "POSGRADOS",
+          "days_in_month": 31,
+          "est_budget": 24251701
+        },
+        {
+          "id": 2,
+          "canal": "DIGITAL",
+          "medio": "META",
+          "programa": "EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 13707483
+        },
+        {
+          "id": 3,
+          "canal": "TV",
+          "medio": "90 MINUTOS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 0
+        },
+        {
+          "id": 4,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 0
+        },
+        {
+          "id": 5,
+          "canal": "MEDIOS UAO",
+          "medio": "PANTALLAS",
+          "programa": "PREGRADOS / POSGRADOS / EDUVIDA",
+          "days_in_month": 31,
+          "est_budget": 0
+        }
+      ],
+      "total_est": 59047619,
+      "n_medios": 6
+    }
+  },
+  "range": {
+    "start": "2026-09-07",
+    "end": "2026-12-23"
+  },
+  "gantt_range": {
+    "start": "2026-09-07",
+    "end": "2027-01-31"
+  }
+};
+if (window.ChartDataLabels) Chart.register(window.ChartDataLabels);
+
+const CANAL_COLORS = {
+  'DIGITAL': '#4F46E5',
+  'TV': '#06B6D4',
+  'MEDIOS UAO': '#64748B',
+  'RADIO DIGITAL': '#F59E0B',
+  'RADIO': '#F43F5E',
+  'CINE': '#7C3AED',
+};
+const STATUS_CLASS = {
+  confirmado:'status-confirmado', bonificado:'status-bonificado',
+  provisionar:'status-provisionar', propio:'status-propio', sin_valor:'status-sin_valor'
+};
+
+const fmtCOP = v => v ? '$' + Math.round(v).toLocaleString('es-CO') : '—';
+const fmtPct = v => v.toFixed(1).replace('.', ',') + '%';
+
+/* ================= KPIs ================= */
+function buildKPIs(){
+  const rows = DATA.rows;
+  const totalConfirmado = rows.reduce((s,r)=> s + (r.budget_status==='confirmado'?r.budget_value:0), 0);
+  const canales = new Set(rows.map(r=>r.canal)).size;
+  const mediosActivos = rows.filter(r=>r.active_days_count>0).length;
+  const start = new Date(DATA.range.start), end = new Date(DATA.range.end);
+  const days = Math.round((end-start)/86400000)+1;
+
+  const kpis = [
+    {label:'Inversión confirmada', value: totalConfirmado, isMoney:true, sub: rows.filter(r=>r.budget_status==='provisionar').length + ' medio(s) por provisionar'},
+    {label:'Canales en el flow', value: canales, sub: canales + ' líneas: digital, TV, medios propios, radio y cine'},
+    {label:'Medios con pauta activa', value: mediosActivos, sub: rows.length + ' líneas totales en el flow'},
+    {label:'Duración de campaña', value: days, sub: '7 sep — 23 dic 2026', suffix:' días'},
+  ];
+  const strip = document.getElementById('kpiStrip');
+  strip.innerHTML = kpis.map(k => `
+    <div class="kpi-card">
+      <p class="kpi-label">${k.label}</p>
+      <p class="kpi-value" data-target="${k.value}" data-money="${!!k.isMoney}" data-suffix="${k.suffix||''}">0</p>
+      <p class="kpi-sub">${k.sub}</p>
+    </div>`).join('');
+
+  document.querySelectorAll('.kpi-value').forEach(el=>{
+    const target = parseFloat(el.dataset.target);
+    const isMoney = el.dataset.money === 'true';
+    const suffix = el.dataset.suffix;
+    let startTime = null; const dur = 1100;
+    function step(ts){
+      if(!startTime) startTime = ts;
+      const p = Math.min(1, (ts-startTime)/dur);
+      const eased = 1 - Math.pow(1-p, 3);
+      const val = Math.round(target*eased);
+      el.textContent = isMoney ? fmtCOP(val) : (val + suffix);
+      if(p<1) requestAnimationFrame(step);
+    }
+    setTimeout(()=>requestAnimationFrame(step), 300);
+  });
+}
+
+/* ================= Canal bar (COP) ================= */
+function buildCanalLegend(){
+  const canales = DATA.canal_order.filter(c => (DATA.canal_counts[c]||0) > 0);
+  document.getElementById('legendCanal').innerHTML = canales.map(c=>{
+    const n = DATA.canal_counts[c]||0;
+    return `<span class="legend-item"><span class="dot" style="background:${CANAL_COLORS[c]}"></span>${c} · ${n} medio${n===1?'':'s'}</span>`;
+  }).join('');
+}
+
+function buildCanalChart(){
+  const canales = DATA.canal_order.filter(c => (DATA.canal_counts[c]||0) > 0);
+  const totals = canales.map(c => DATA.canal_totals[c] || 0);
+  new Chart(document.getElementById('chartCanal'), {
+    type:'bar',
+    data:{ labels:canales, datasets:[{ data:totals, backgroundColor:canales.map(c=>CANAL_COLORS[c]), borderRadius:8, maxBarThickness:38 }] },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      animation:{duration:900, easing:'easeOutQuart'},
+      plugins:{
+        legend:{display:false},
+        datalabels:{display:false},
+        tooltip:{callbacks:{label: ctx => ' ' + fmtCOP(ctx.raw)}}
+      },
+      scales:{
+        x:{ticks:{callback:v=>'$'+(v/1e6).toFixed(0)+'M', color:'#9CA3AF'}, grid:{color:'#EEF0FA'}},
+        y:{grid:{display:false}, ticks:{color:'#374151', font:{weight:700, size:11.5}}}
+      }
+    }
+  });
+}
+
+/* ================= Participation donuts ================= */
+function buildCanalPctChart(){
+  const canales = DATA.canal_order.filter(c => (DATA.canal_pct[c]||0) > 0);
+  const pcts = canales.map(c=>DATA.canal_pct[c]);
+  new Chart(document.getElementById('chartCanalPct'), {
+    type:'doughnut',
+    data:{ labels:canales, datasets:[{ data:pcts, backgroundColor:canales.map(c=>CANAL_COLORS[c]), borderColor:'#fff', borderWidth:3, hoverOffset:8 }] },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'58%',
+      animation:{animateRotate:true, duration:900},
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label: ctx => ' '+ctx.label+': '+fmtPct(ctx.raw)}},
+        datalabels:{
+          color:'#fff', font:{weight:800, size:11},
+          formatter:(v,ctx)=> v>=4 ? ctx.chart.data.labels[ctx.dataIndex]+'\n'+fmtPct(v) : '',
+          textAlign:'center',
+        }
+      }
+    }
+  });
+}
+
+function buildMedioPctChart(){
+  const rowsWithBudget = DATA.rows.filter(r=>r.budget_value>0);
+  // aggregate by unique medio name using medio_totals / medio_pct already computed server-side
+  const medios = Object.keys(DATA.medio_pct).sort((a,b)=>DATA.medio_pct[b]-DATA.medio_pct[a]);
+  const pcts = medios.map(m=>DATA.medio_pct[m]);
+  const colors = medios.map(m=>{
+    const row = DATA.rows.find(r=>r.medio===m && r.budget_value>0);
+    return row ? CANAL_COLORS[row.canal] : '#999';
+  });
+  new Chart(document.getElementById('chartMedioPct'), {
+    type:'doughnut',
+    data:{ labels:medios, datasets:[{ data:pcts, backgroundColor:colors, borderColor:'#fff', borderWidth:3, hoverOffset:8 }] },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'52%',
+      animation:{animateRotate:true, duration:900},
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label: ctx => ' '+ctx.label+': '+fmtPct(ctx.raw)}},
+        datalabels:{
+          color:'#fff', font:{weight:800, size:9.5},
+          formatter:(v,ctx)=> v>=3 ? ctx.chart.data.labels[ctx.dataIndex]+'\n'+fmtPct(v) : '',
+          textAlign:'center',
+        }
+      }
+    }
+  });
+}
+
+/* ================= Media cards grid ================= */
+function buildMediaGrid(){
+  const start = new Date(DATA.gantt_range.start), end = new Date(DATA.gantt_range.end);
+  const totalSpan = (end-start)/86400000 + 1;
+  const container = document.getElementById('mediaGridContainer');
+
+  const byCanal = {};
+  DATA.canal_order.forEach(c=>byCanal[c]=[]);
+  DATA.rows.forEach(r=>{ (byCanal[r.canal]=byCanal[r.canal]||[]).push(r); });
+
+  let html = '';
+  DATA.canal_order.forEach(canal=>{
+    const items = byCanal[canal];
+    if(!items || !items.length) return;
+    const canalTotal = DATA.canal_totals[canal]||0;
+    html += `<div class="canal-section">
+      <div class="canal-heading">
+        <span class="chip" style="background:${CANAL_COLORS[canal]}">${canal}</span>
+        <span class="meta">${items.length} medio${items.length===1?'':'s'} · ${fmtCOP(canalTotal)} · ${fmtPct(DATA.canal_pct[canal]||0)} del total</span>
+      </div>
+      <div class="media-grid">`;
+    items.forEach(r=>{
+      let barLeft=0, barWidth=0;
+      if(r.start && r.end){
+        const s = new Date(r.start), e = new Date(r.end);
+        barLeft = ((s-start)/86400000)/totalSpan*100;
+        barWidth = (((e-s)/86400000)+1)/totalSpan*100;
+      }
+      const durTxt = r.active_days_count ? `${r.active_days_count} días activos` : 'Sin programar';
+      html += `<div class="media-card">
+        <div class="media-card-top">
+          <span class="media-name">${r.medio}</span>
+          <span class="status-chip ${STATUS_CLASS[r.display_status]||''}">${r.display_label}</span>
+        </div>
+        <div class="media-programa">${r.programa}</div>
+        <div class="media-track">
+          ${barWidth>0 ? `<div class="media-track-fill" style="left:${barLeft}%; width:${barWidth}%; background:${CANAL_COLORS[canal]}"></div>` : ''}
+        </div>
+        <div class="media-bottom">
+          <span class="media-days">${durTxt}</span>
+          <span class="media-budget">${fmtCOP(r.budget_value)}</span>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  container.innerHTML = html;
+}
+
+/* ================= Month tabs + panel ================= */
+const MONTHS = ['SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE','ENERO'];
+let currentMonth = 'SEPTIEMBRE';
+
+function buildMonthTabs(){
+  const tabs = document.getElementById('monthTabs');
+  tabs.innerHTML = MONTHS.map(m=>`<button class="month-tab ${m===currentMonth?'active':''}" data-m="${m}">${m.charAt(0)+m.slice(1).toLowerCase()}</button>`).join('');
+  tabs.querySelectorAll('.month-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      currentMonth = btn.dataset.m;
+      tabs.querySelectorAll('.month-tab').forEach(b=>b.classList.toggle('active', b===btn));
+      renderMonthPanel();
+      positionMonthHighlight();
+    });
+  });
+}
+
+function renderMonthPanel(){
+  const ms = DATA.month_summary[currentMonth];
+  const panel = document.getElementById('monthPanel');
+  const items = [...ms.items].sort((a,b)=>b.days_in_month-a.days_in_month);
+  panel.innerHTML = `
+    <div class="month-mini fade-swap">
+      <p class="kpi-label">Medios activos</p>
+      <p class="kpi-value">${ms.n_medios}</p>
+      <p class="kpi-sub">de ${DATA.rows.length} en el flow total</p>
+    </div>
+    <div class="month-mini fade-swap">
+      <p class="kpi-label">Presupuesto estimado</p>
+      <p class="kpi-value" style="font-size:20px;">${fmtCOP(ms.total_est)}</p>
+      <p class="kpi-sub">prorrateado por días activos en el mes</p>
+    </div>
+    <div class="month-media-scroll fade-swap">
+      ${items.map(it=>`
+        <div class="month-media-row">
+          <span class="month-media-name"><span class="dot" style="background:${CANAL_COLORS[it.canal]||'#999'}"></span>${it.medio} <span style="font-weight:400;color:var(--ink-soft);">· ${it.programa}</span></span>
+          <span>${it.days_in_month}d · ${fmtCOP(it.est_budget)}</span>
+        </div>`).join('') || '<p style="color:var(--ink-soft);font-size:13px;">Sin medios activos este mes.</p>'}
+    </div>
+  `;
+}
+
+/* ================= Gantt ================= */
+const DAY_W = 11;
+let ganttStart = null;
+
+function computeRuns(activeDates){
+  if(!activeDates.length) return [];
+  const sorted = [...activeDates].sort();
+  const runs = [];
+  let runStart = sorted[0], prev = sorted[0];
+  for(let i=1;i<sorted.length;i++){
+    const d = sorted[i];
+    const diffDays = (new Date(d)-new Date(prev))/86400000;
+    if(diffDays > 1){
+      runs.push([runStart, prev]);
+      runStart = d;
+    }
+    prev = d;
+  }
+  runs.push([runStart, prev]);
+  return runs;
+}
+
+function dayOffset(iso){
+  return Math.round((new Date(iso)-ganttStart)/86400000);
+}
+
+const MONTH_NAMES_ES = {0:'ENE',1:'FEB',2:'MAR',3:'ABR',4:'MAY',5:'JUN',6:'JUL',7:'AGO',8:'SEP',9:'OCT',10:'NOV',11:'DIC'};
+
+function buildGantt(){
+  ganttStart = new Date(DATA.gantt_range.start);
+  const rangeEnd = new Date(DATA.gantt_range.end);
+  const totalDays = Math.round((rangeEnd-ganttStart)/86400000)+1;
+  const trackWidth = totalDays*DAY_W;
+
+  const inner = document.getElementById('ganttInner');
+
+  // ---- label column ----
+  let labelHTML = `<div class="gantt-label-head">Canal / Medio</div>`;
+  DATA.rows.forEach(r=>{
+    labelHTML += `<div class="gantt-label-row">
+      <span class="lbl-dot" style="background:${CANAL_COLORS[r.canal]||'#999'}"></span>
+      <span class="lbl-txt"><span class="lbl-medio">${r.medio}</span><span class="lbl-prog">${r.programa}</span></span>
+    </div>`;
+  });
+  const labelCol = document.createElement('div');
+  labelCol.className = 'gantt-label-col';
+  labelCol.innerHTML = labelHTML;
+
+  // ---- track wrap ----
+  const trackWrap = document.createElement('div');
+  trackWrap.className = 'gantt-track-wrap';
+  trackWrap.style.width = trackWidth+'px';
+
+  // header: months
+  const header = document.createElement('div');
+  header.className = 'gantt-header';
+  const monthRow = document.createElement('div');
+  monthRow.className = 'gantt-month-row';
+  let i=0;
+  const days = [];
+  for(let d=new Date(ganttStart); d<=rangeEnd; d.setDate(d.getDate()+1)){ days.push(new Date(d)); }
+  while(i<days.length){
+    const m = days[i].getMonth();
+    let count=0;
+    while(i+count<days.length && days[i+count].getMonth()===m) count++;
+    const cell = document.createElement('div');
+    cell.className='gantt-month-cell';
+    cell.style.width=(count*DAY_W)+'px';
+    cell.textContent = MONTH_NAMES_ES[m]+' '+days[i].getFullYear();
+    monthRow.appendChild(cell);
+    i+=count;
+  }
+  header.appendChild(monthRow);
+
+  const weekRow = document.createElement('div');
+  weekRow.className = 'gantt-week-row';
+  days.forEach((d,idx)=>{
+    const tick = document.createElement('div');
+    tick.style.width = DAY_W+'px';
+    if(d.getDay()===1){ // Monday
+      tick.className='gantt-week-tick';
+      tick.textContent = d.getDate();
+    }
+    weekRow.appendChild(tick);
+  });
+  header.appendChild(weekRow);
+  trackWrap.appendChild(header);
+
+  // rows container
+  const rowsWrap = document.createElement('div');
+  rowsWrap.className = 'gantt-rows';
+  rowsWrap.style.height = (DATA.rows.length*34)+'px';
+  rowsWrap.style.position='relative';
+
+  DATA.rows.forEach((r, idx)=>{
+    const bg = document.createElement('div');
+    bg.className = 'gantt-row-bg';
+    bg.style.width = trackWidth+'px';
+    rowsWrap.appendChild(bg);
+  });
+
+  // month highlight overlay
+  const highlight = document.createElement('div');
+  highlight.className = 'gantt-month-highlight';
+  highlight.id = 'monthHighlight';
+  rowsWrap.appendChild(highlight);
+
+  // today marker
+  const todayISO = new Date().toISOString().slice(0,10);
+  const todayDate = new Date(todayISO);
+  if(todayDate >= ganttStart && todayDate <= rangeEnd){
+    const todayLine = document.createElement('div');
+    todayLine.className = 'gantt-today';
+    todayLine.style.left = (dayOffset(todayISO)*DAY_W)+'px';
+    todayLine.innerHTML = '<span class="gantt-today-label">HOY</span>';
+    rowsWrap.appendChild(todayLine);
+  }
+
+  // bars / dots per row
+  DATA.rows.forEach((r, idx)=>{
+    const runs = computeRuns(r.active_dates);
+    const color = CANAL_COLORS[r.canal] || '#999';
+    runs.forEach(([s,e])=>{
+      const offset = dayOffset(s);
+      const lenDays = Math.round((new Date(e)-new Date(s))/86400000)+1;
+      if(lenDays === 1){
+        const dot = document.createElement('div');
+        dot.className = 'gantt-dot';
+        const size = 12;
+        dot.style.width = size+'px'; dot.style.height=size+'px';
+        dot.style.left = (offset*DAY_W + DAY_W/2 - size/2)+'px';
+        dot.style.top = (idx*34 + 17 - size/2)+'px';
+        dot.style.background = color;
+        dot.style.animationDelay = (idx*12)+'ms';
+        dot.dataset.tip = `${r.medio} · ${fmtDateEs(s)}`;
+        dot.addEventListener('mousemove', showTip);
+        dot.addEventListener('mouseleave', hideTip);
+        rowsWrap.appendChild(dot);
+      } else {
+        const bar = document.createElement('div');
+        bar.className = 'gantt-bar';
+        bar.style.left = (offset*DAY_W)+'px';
+        bar.style.width = (lenDays*DAY_W - 2)+'px';
+        bar.style.top = (idx*34 + 9)+'px';
+        bar.style.height = '16px';
+        bar.style.background = color;
+        bar.style.animationDelay = (idx*12)+'ms';
+        bar.dataset.tip = `${r.medio} · ${fmtDateEs(s)} → ${fmtDateEs(e)} (${lenDays}d)`;
+        bar.addEventListener('mousemove', showTip);
+        bar.addEventListener('mouseleave', hideTip);
+        rowsWrap.appendChild(bar);
+      }
+    });
+  });
+
+  trackWrap.appendChild(rowsWrap);
+  inner.appendChild(labelCol);
+  inner.appendChild(trackWrap);
+}
+
+function fmtDateEs(iso){
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-CO',{day:'2-digit',month:'short'});
+}
+
+const tipEl = document.getElementById('ganttTooltip');
+function showTip(e){
+  tipEl.innerHTML = e.currentTarget.dataset.tip;
+  tipEl.style.left = (e.clientX+14)+'px';
+  tipEl.style.top = (e.clientY+14)+'px';
+  tipEl.classList.add('show');
+}
+function hideTip(){ tipEl.classList.remove('show'); }
+
+const MONTH_IDX = {'SEPTIEMBRE':8,'OCTUBRE':9,'NOVIEMBRE':10,'DICIEMBRE':11,'ENERO':0};
+function positionMonthHighlight(){
+  const el = document.getElementById('monthHighlight');
+  if(!el) return;
+  const idx = MONTH_IDX[currentMonth];
+  const rangeEnd = new Date(DATA.gantt_range.end);
+  let first=null, last=null;
+  for(let d=new Date(ganttStart); d<=rangeEnd; d.setDate(d.getDate()+1)){
+    if(d.getMonth()===idx){
+      if(first===null) first = new Date(d);
+      last = new Date(d);
+    }
+  }
+  if(first===null) return;
+  const left = dayOffset(first.toISOString().slice(0,10))*DAY_W;
+  const width = (dayOffset(last.toISOString().slice(0,10)) - dayOffset(first.toISOString().slice(0,10)) + 1)*DAY_W;
+  el.style.left = left+'px';
+  el.style.width = width+'px';
+}
+
+/* ================= init ================= */
+function safe(fn, label){ try{ fn(); } catch(err){ console.error('Fallo en '+label+':', err); } }
+safe(buildKPIs,'buildKPIs');
+safe(buildCanalLegend,'buildCanalLegend');
+safe(buildCanalChart,'buildCanalChart');
+safe(buildCanalPctChart,'buildCanalPctChart');
+safe(buildMedioPctChart,'buildMedioPctChart');
+safe(buildMediaGrid,'buildMediaGrid');
+safe(buildMonthTabs,'buildMonthTabs');
+safe(renderMonthPanel,'renderMonthPanel');
+safe(buildGantt,'buildGantt');
+setTimeout(()=>safe(positionMonthHighlight,'positionMonthHighlight'), 60);
+</script>
+</body>
+</html>
