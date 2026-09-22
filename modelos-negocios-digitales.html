@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelos de Negocios Digitales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#070b18;
+    --navy-900:#0b1330;
+    --navy-800:#111c42;
+    --navy-700:#182a5c;
+    --blue-500:#3468ff;
+    --cyan-400:#3fe0e0;
+    --cyan-300:#7bf1ea;
+    --violet-500:#8b5cf6;
+    --violet-400:#a78bfa;
+    --ink-050:#f4f6ff;
+    --ink-200:#c7d0f2;
+    --ink-400:#8b96c4;
+    --line:rgba(199,208,242,0.14);
+    --glow: 0 0 0 1px rgba(63,224,224,0.18), 0 20px 60px -20px rgba(52,104,255,0.45);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 12% -10%, rgba(139,92,246,0.28), transparent 60%),
+      radial-gradient(ellipse 900px 600px at 100% 0%, rgba(63,224,224,0.16), transparent 55%),
+      radial-gradient(ellipse 1200px 800px at 50% 120%, rgba(52,104,255,0.22), transparent 60%),
+      var(--navy-950);
+    color:var(--ink-050);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+    padding-bottom:80px;
+    overflow-x:hidden;
+  }
+
+  body::before{
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(199,208,242,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(199,208,242,0.035) 1px, transparent 1px);
+    background-size:56px 56px;
+    pointer-events:none;
+    z-index:0;
+    mask-image: radial-gradient(ellipse 100% 60% at 50% 0%, black, transparent);
+  }
+
+  .wrap{max-width:1100px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+  /* HEADER */
+  header{padding:64px 0 40px; text-align:center;}
+
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--cyan-300);
+    background:rgba(63,224,224,0.08);
+    border:1px solid rgba(63,224,224,0.3);
+    padding:6px 14px; border-radius:999px;
+    animation:fadeUp .7s ease both;
+  }
+  .kicker::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--cyan-300); box-shadow:0 0 10px var(--cyan-300);}
+
+  h1{
+    font-family:'Instrument Serif', serif;
+    font-weight:400;
+    font-size:clamp(36px, 5.6vw, 62px);
+    line-height:1.05;
+    margin:20px 0 14px;
+    background:linear-gradient(100deg, #ffffff 10%, var(--cyan-300) 45%, var(--violet-400) 80%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    animation:fadeUp .8s .05s ease both;
+  }
+  h1 em{font-style:italic; color:var(--violet-400); -webkit-text-fill-color:var(--violet-400);}
+
+  .lede{
+    max-width:620px; margin:0 auto;
+    color:var(--ink-200); font-size:17px; line-height:1.6;
+    animation:fadeUp .8s .1s ease both;
+  }
+
+  @keyframes fadeUp{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+
+  /* GLOSSARY */
+  .legend{
+    margin:44px 0 8px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:linear-gradient(180deg, rgba(24,42,92,0.5), rgba(11,19,48,0.5));
+    backdrop-filter:blur(6px);
+    overflow:hidden;
+    animation:fadeUp .8s .15s ease both;
+  }
+  .legend-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 22px; cursor:pointer; user-select:none;
+  }
+  .legend-head h2{font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-200); font-weight:600;}
+  .legend-head .chevron{transition:transform .3s ease; color:var(--cyan-300); font-size:18px;}
+  .legend.open .chevron{transform:rotate(180deg);}
+  .legend-body{
+    max-height:0; overflow:hidden; transition:max-height .45s ease;
+  }
+  .legend.open .legend-body{max-height:1400px;}
+  .pillar-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+    gap:1px; background:var(--line);
+    border-top:1px solid var(--line);
+  }
+  .pillar-item{
+    background:var(--navy-900); padding:20px 22px;
+    display:flex; flex-direction:column; cursor:pointer;
+  }
+  .pillar-item-head{display:flex; gap:16px; align-items:center;}
+  .pillar-item .chev{
+    margin-left:auto; color:var(--ink-400); font-size:16px; transition:transform .3s ease;
+    flex-shrink:0;
+  }
+  .pillar-item.open .chev{transform:rotate(180deg); color:var(--cyan-300);}
+
+  .pillar-icon-wrap{
+    perspective:700px; width:52px; height:52px; flex-shrink:0;
+  }
+  .pillar-icon{
+    width:52px; height:52px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; transform-style:preserve-3d;
+    animation:floatSpin 7s ease-in-out infinite;
+  }
+  @keyframes floatSpin{
+    0%{transform:rotateY(0deg) rotateX(0deg) translateY(0px);}
+    25%{transform:rotateY(90deg) rotateX(8deg) translateY(-5px);}
+    50%{transform:rotateY(180deg) rotateX(0deg) translateY(0px);}
+    75%{transform:rotateY(270deg) rotateX(-8deg) translateY(-5px);}
+    100%{transform:rotateY(360deg) rotateX(0deg) translateY(0px);}
+  }
+  .p1 .pillar-icon{background:linear-gradient(150deg, var(--cyan-300), #1a8f8f); box-shadow:0 10px 20px -6px rgba(63,224,224,0.55), inset 0 -4px 8px rgba(0,0,0,0.25);}
+  .p2 .pillar-icon{background:linear-gradient(150deg, var(--blue-500), #1a2f8f); box-shadow:0 10px 20px -6px rgba(52,104,255,0.55), inset 0 -4px 8px rgba(0,0,0,0.25); animation-delay:.3s;}
+  .p3 .pillar-icon{background:linear-gradient(150deg, var(--violet-400), #4c2b8f); box-shadow:0 10px 20px -6px rgba(139,92,246,0.55), inset 0 -4px 8px rgba(0,0,0,0.25); animation-delay:.6s;}
+  .p4 .pillar-icon{background:linear-gradient(150deg, #4ade80, #157a45); box-shadow:0 10px 20px -6px rgba(74,222,128,0.5), inset 0 -4px 8px rgba(0,0,0,0.25); animation-delay:.9s;}
+
+  .pillar-num{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--cyan-300); margin-bottom:4px; display:block;
+  }
+  .pillar-text strong{display:block; font-size:15.5px; color:var(--ink-050);}
+  .pillar-desc{
+    max-height:0; overflow:hidden; transition:max-height .4s ease;
+  }
+  .pillar-item.open .pillar-desc{max-height:280px;}
+  .pillar-desc p{font-size:13px; color:var(--ink-400); line-height:1.6; padding-top:14px;}
+
+  /* SECTION NAV */
+  .ex-nav{
+    display:flex; gap:10px; margin:52px 0 0; border-bottom:1px solid var(--line);
+    animation:fadeUp .8s .2s ease both;
+  }
+  .ex-tab{
+    flex:1; text-align:left; background:none; border:none; cursor:pointer;
+    padding:18px 6px 16px; color:var(--ink-400); position:relative;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  .ex-tab .name{display:block; font-size:19px; font-weight:600; color:var(--ink-200);}
+  .ex-tab.active{color:var(--cyan-300);}
+  .ex-tab.active .name{color:#fff;}
+  .ex-tab.active::after{
+    content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px;
+    background:linear-gradient(90deg, var(--cyan-400), var(--violet-500));
+    border-radius:2px;
+  }
+
+  .ex-panel{display:none; animation:fadeUp .5s ease both;}
+  .ex-panel.active{display:block;}
+  .ex-panel-intro{
+    max-width:640px; margin:30px 0 36px; color:var(--ink-400); font-size:15px; line-height:1.6;
+  }
+
+  /* CASE CARDS - PANEL 1 */
+  .cases{display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:20px;}
+
+  .case-card{
+    border-radius:20px; border:1px solid var(--line);
+    background:linear-gradient(165deg, var(--navy-800), var(--navy-900) 60%);
+    overflow:hidden; position:relative; cursor:pointer;
+    transition:box-shadow .3s ease, transform .3s ease, border-color .3s ease;
+  }
+  .case-card:hover{transform:translateY(-3px); border-color:rgba(63,224,224,0.35); box-shadow:var(--glow);}
+
+  .case-top{padding:24px 24px 18px; border-bottom:1px solid var(--line);}
+  .case-brand{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:11px;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--navy-950);
+    background:var(--cyan-300); padding:4px 10px; border-radius:999px; margin-bottom:12px;
+  }
+  .case-card:nth-child(2) .case-brand{background:var(--violet-400);}
+  .case-card:nth-child(3) .case-brand{background:#4ade80;}
+  .case-card:nth-child(4) .case-brand{background:#fbbf24;}
+  .case-card:nth-child(5) .case-brand{background:var(--blue-500); color:#fff;}
+  .case-card:nth-child(6) .case-brand{background:#f472b6;}
+  .case-top h3{font-family:'Instrument Serif', serif; font-size:26px; font-weight:400; margin-bottom:8px;}
+  .case-top p{font-size:14px; color:var(--ink-400); line-height:1.55;}
+
+  .case-question{padding:18px 24px; background:rgba(139,92,246,0.06);}
+  .case-question .qlabel{font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--violet-400); margin-bottom:6px;}
+  .case-question p{font-size:15px; color:var(--ink-050); line-height:1.5; font-weight:500;}
+
+  .case-cta{
+    padding:14px 24px; display:flex; align-items:center; justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.05em; color:var(--cyan-300);
+  }
+  .case-cta .chev{transition:transform .3s ease;}
+  .case-card.open .case-cta .chev{transform:rotate(180deg);}
+
+  .answer-key{
+    max-height:0; overflow:hidden; transition:max-height .4s ease;
+    background:rgba(11,19,48,0.7); border-top:1px solid var(--line);
+  }
+  .case-card.open .answer-key{max-height:420px;}
+  .answer-key-inner{padding:20px 24px;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;}
+  .chip{
+    font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px;
+    background:rgba(63,224,224,0.12); border:1px solid rgba(63,224,224,0.3); color:var(--cyan-300);
+  }
+  .answer-key-inner p{font-size:13.5px; color:var(--ink-200); line-height:1.55;}
+
+  /* PANEL 2 - CONVERSATION PROMPTS */
+  .debate-list{display:flex; flex-direction:column; gap:16px;}
+  .debate-card{
+    border:1px solid var(--line); border-radius:18px;
+    background:linear-gradient(100deg, var(--navy-800), var(--navy-900));
+    padding:22px 26px; position:relative; overflow:hidden; cursor:pointer;
+    transition:border-color .3s ease, transform .3s ease;
+  }
+  .debate-card:hover{transform:translateX(4px); border-color:rgba(139,92,246,0.4);}
+  .debate-body h4{font-size:17px; font-weight:600; line-height:1.4; margin-bottom:10px;}
+  .debate-body .pillars-tag{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;}
+  .ptag{font-size:11px; padding:3px 9px; border-radius:999px; background:rgba(52,104,255,0.14); color:#a9c0ff; border:1px solid rgba(52,104,255,0.3);}
+  .debate-body .hint{
+    max-height:0; overflow:hidden; transition:max-height .35s ease;
+    font-size:13px; color:var(--ink-400); line-height:1.55; border-left:2px solid rgba(74,222,128,0.5);
+  }
+  .debate-card.open .debate-body .hint{max-height:200px; padding-left:12px; margin-top:10px;}
+
+  /* STAT STRIP */
+  .stat-strip{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:14px;
+    margin:36px 0 8px;
+  }
+  .stat-card{
+    background:var(--navy-950); border:1px solid var(--line); border-radius:16px;
+    padding:20px 22px;
+  }
+  .stat-card .num{font-family:'Instrument Serif', serif; font-size:34px; color:var(--cyan-300);}
+  .stat-card .desc{font-size:12.5px; color:var(--ink-400); margin-top:4px; line-height:1.4;}
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <span class="kicker">Conversatorio de clase</span>
+    <h1>Modelos de <em>negocios<br>digitales</em></h1>
+    <p class="lede">Miremos cómo ganan plata algunas de las apps que ya usas a diario, y después abrimos la conversación en grupo. No hay una única respuesta correcta — el objetivo es pensar en voz alta.</p>
+  </header>
+
+  <div class="legend" id="legend">
+    <div class="legend-head" onclick="document.getElementById('legend').classList.toggle('open')">
+      <h2>Glosario rápido · Los 4 modelos de negocio digital</h2>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="legend-body">
+      <div class="pillar-grid" id="pillarGrid">
+        <div class="pillar-item p1" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">🔗</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Modelo 01</span>
+              <strong>Marketplace / plataforma</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>El negocio no vende un producto propio, vende el encuentro entre dos o más grupos de usuarios y se queda con una comisión o tarifa por cada transacción. Entre más vendedores hay, más compradores llega — y viceversa. Ese efecto de red es lo que hace que, una vez el negocio alcanza masa crítica, crezca cada vez más rápido.</p></div>
+        </div>
+        <div class="pillar-item p2" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">🔁</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Modelo 02</span>
+              <strong>Suscripción (SaaS / D2C)</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>El ingreso ya no depende de una venta puntual, sino de un pago recurrente a cambio de acceso continuo a un producto o servicio. La pregunta deja de ser "¿cuánto vendo hoy?" y pasa a ser "¿cuánto valor entrego cada mes para que el cliente se quede?". Las métricas que importan aquí son el churn (cuánta gente se va), el LTV (cuánto vale un cliente en el tiempo) y el CAC (cuánto cuesta conseguirlo).</p></div>
+        </div>
+        <div class="pillar-item p3" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">📱</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Modelo 03</span>
+              <strong>Social commerce</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>La venta ocurre dentro de la misma red social o plataforma de mensajería —catálogos en Instagram o TikTok, chat de WhatsApp Business— acortando el camino entre descubrir un producto y comprarlo. Se apoya en contenido, comunidad e influencers como canal de adquisición, no en un aviso tradicional que interrumpe.</p></div>
+        </div>
+        <div class="pillar-item p4" onclick="togglePillar(this)">
+          <div class="pillar-item-head">
+            <div class="pillar-icon-wrap"><div class="pillar-icon">👁️</div></div>
+            <div class="pillar-text">
+              <span class="pillar-num">Modelo 04</span>
+              <strong>Freemium / economía de la atención</strong>
+            </div>
+            <span class="chev">⌄</span>
+          </div>
+          <div class="pillar-desc"><p>El acceso es gratuito, pero el negocio se financia con publicidad, datos o funciones premium para quien quiera pagar más. Aquí la competencia real no es solo contra productos parecidos, sino por cada minuto de atención disponible del usuario — por eso estos modelos generan cada vez más preguntas sobre privacidad y uso de datos personales.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-card"><div class="num">$145,4 B</div><div class="desc">en ventas online durante 2025 en Colombia (+11,1% vs. 2024)</div></div>
+    <div class="stat-card"><div class="num">684,6 M</div><div class="desc">transacciones digitales en 2025 (+19,9% interanual)</div></div>
+    <div class="stat-card"><div class="num">-35,8%</div><div class="desc">caída del ticket promedio entre 2019 y 2025 — compras más frecuentes, de menor valor</div></div>
+  </div>
+
+  <nav class="ex-nav">
+    <button class="ex-tab active" onclick="showPanel(1)"><span class="name">Casos reales</span></button>
+    <button class="ex-tab" onclick="showPanel(2)"><span class="name">Para conversar</span></button>
+  </nav>
+
+  <!-- PANEL 1 -->
+  <section class="ex-panel active" id="panel1">
+    <p class="ex-panel-intro">Seis negocios digitales que probablemente ya usas. Para cada uno, piensa qué modelo (o combinación de modelos) lo sostiene antes de mirar la respuesta.</p>
+
+    <div class="cases">
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Mercado Libre</span>
+          <h3>El negocio de conectar, no de vender</h3>
+          <p>Mercado Libre no fabrica ni almacena la mayoría de lo que se vende en su plataforma: conecta a miles de vendedores con millones de compradores y se queda con una comisión por cada transacción que ocurre ahí.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Por qué le conviene a Mercado Libre que sigan entrando más vendedores, aunque eso signifique más competencia entre ellos?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">Marketplace / plataforma</span>
+            </div>
+            <p>Más vendedores significa más variedad y mejores precios, lo que atrae más compradores — y más compradores vuelve el catálogo más atractivo para nuevos vendedores. Es el efecto de red: el valor de la plataforma no está en un solo producto, sino en el tamaño y la actividad de toda la comunidad que conecta.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Nequi</span>
+          <h3>De billetera a ecosistema</h3>
+          <p>Nequi empezó como una billetera digital con una relación continua con el usuario. Hoy suma un marketplace de comercios aliados (Nequi Va) y opera como plataforma financiera junto con Wompi (pagos) y Wenia (criptoactivos), dentro del ecosistema de Grupo Cibest.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿En qué momento un negocio digital deja de tener "un" modelo y pasa a operar varios modelos a la vez?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">Suscripción</span>
+              <span class="chip">Marketplace</span>
+              <span class="chip">Plataforma financiera</span>
+            </div>
+            <p>No pasa de golpe: Nequi fue agregando capas con lógicas de ingreso distintas sobre la misma base de usuarios — la relación continua típica de suscripción, comisiones de marketplace con los comercios aliados, y tarifas de una plataforma de pagos. El resultado ya no es un modelo, es un ecosistema.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Platzi</span>
+          <h3>No te vende un curso, te vende quedarte</h3>
+          <p>Platzi cobra una suscripción mensual o anual que da acceso a todo su catálogo de cursos, en lugar de cobrar cada curso por separado como una compra única.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Por qué le conviene más a Platzi que sigas suscrito varios meses que venderte un solo curso muy caro?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">Suscripción (SaaS / D2C)</span>
+            </div>
+            <p>Un ingreso recurrente es predecible: Platzi puede planear contenido, contratar instructores e invertir sabiendo más o menos cuánto va a entrar el próximo mes. Por eso cuidan tanto el churn — perder suscriptores les cuesta más a largo plazo que cualquier descuento que den por quedarse.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">El Tiempo</span>
+          <h3>Casi todo gratis, pero no gratis</h3>
+          <p>El Tiempo deja leer buena parte de sus noticias sin pagar nada, y reserva algunos contenidos y beneficios adicionales para quienes se suscriben, mientras la publicidad sigue apareciendo para todos los lectores.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>Si casi todo el contenido es gratis, ¿de qué vive realmente el negocio?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">Freemium / economía de la atención</span>
+            </div>
+            <p>Vive de la atención acumulada: entre más tiempo pasan los lectores gratuitos en el sitio, más vale ese espacio para publicidad y más datos hay para venderla mejor dirigida. La suscripción es una segunda capa de ingreso, pero el negocio ya es rentable capturando atención antes de que nadie pague un peso.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Tiendanube</span>
+          <h3>Vender sin montar una tienda</h3>
+          <p>Tiendanube le da a pequeños negocios las herramientas para vender directamente por catálogos de Instagram, WhatsApp y Facebook, sin que el comprador tenga que salir de la red social donde ya está.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Por qué tantos negocios pequeños prefieren vender así en vez de construir su propia tienda online desde cero?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">Social commerce</span>
+            </div>
+            <p>El camino entre descubrir el producto y comprarlo es mucho más corto: el cliente ya está en Instagram o WhatsApp, con confianza generada por contenido y comunidad, así que agregar un botón de compra ahí pesa más que mandarlo a un sitio nuevo donde hay que volver a ganarse esa confianza.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card" onclick="toggleCard(this)">
+        <div class="case-top">
+          <span class="case-brand">Rappi</span>
+          <h3>Una comisión, más una membresía</h3>
+          <p>Rappi cobra comisión a los comercios y tarifas de domicilio por cada pedido, y además ofrece Rappi Prime, una suscripción mensual que da domicilios gratis o con descuento a cambio de un pago fijo.</p>
+        </div>
+        <div class="case-question">
+          <div class="qlabel">Para pensar</div>
+          <p>¿Qué gana Rappi poniendo una suscripción encima de un negocio que ya cobra por transacción?</p>
+        </div>
+        <div class="case-cta"><span>Ver respuesta posible</span><span class="chev">⌄</span></div>
+        <div class="answer-key">
+          <div class="answer-key-inner">
+            <div class="chip-row">
+              <span class="chip">Marketplace / plataforma</span>
+              <span class="chip">Freemium / suscripción</span>
+            </div>
+            <p>La suscripción no reemplaza el negocio de comisiones, lo refuerza: alguien que ya pagó una membresía pide domicilios con más frecuencia para "sacarle provecho", lo que sube el volumen de transacciones. Es un modelo apalancando a otro — la lógica detrás de casi todos los híbridos de esta lista.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PANEL 2 -->
+  <section class="ex-panel" id="panel2">
+    <div class="debate-list">
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>Si un modelo freemium se financia recopilando datos de comportamiento para vender publicidad más precisa, ¿qué le está "cobrando" realmente a quien usa la versión gratuita?</h4>
+          <div class="pillars-tag"><span class="ptag">Freemium</span><span class="ptag">Datos y privacidad</span></div>
+          <div class="hint">No hay nada gratis del todo: cuando no pagas con dinero, casi siempre estás pagando con atención o con datos — la pregunta es si eso queda claro para quien usa la app.</div>
+        </div>
+      </div>
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>El ticket promedio del comercio digital colombiano bajó casi 36% entre 2019 y 2025. ¿Qué modelos de negocio se benefician de compras pequeñas y frecuentes, y cuáles pierden terreno con esa tendencia?</h4>
+          <div class="pillars-tag"><span class="ptag">Marketplace</span><span class="ptag">Suscripción</span></div>
+          <div class="hint">Un modelo de suscripción se lleva bien con esa tendencia — cobra poco pero seguido. Un negocio pensado para pocas compras grandes tiene que repensarse.</div>
+        </div>
+      </div>
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>Nequi y Rappi combinan varios modelos dentro de la misma app. ¿En qué momento esa mezcla deja de ser una fortaleza y se vuelve una fuente de confusión para el usuario?</h4>
+          <div class="pillars-tag"><span class="ptag">Modelos híbridos</span></div>
+          <div class="hint">Combinar modelos multiplica las formas de generar ingreso, pero también multiplica lo que el usuario tiene que entender para saber por qué está pagando cada cosa.</div>
+        </div>
+      </div>
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>Si tuvieras que elegir entre bajar el precio de una suscripción para atraer más usuarios o subirlo para quedarte con menos pero más leales, ¿qué datos necesitarías ver primero?</h4>
+          <div class="pillars-tag"><span class="ptag">Suscripción</span><span class="ptag">Churn / LTV / CAC</span></div>
+          <div class="hint">La respuesta casi nunca está en el precio en sí, sino en cuánto cuesta conseguir un cliente nuevo frente a cuánto deja ese cliente en el tiempo si se queda.</div>
+        </div>
+      </div>
+
+      <div class="debate-card" onclick="toggleCard(this)">
+        <div class="debate-body">
+          <h4>Si tuvieras que lanzar un negocio digital hoy en Colombia, ¿empezarías con un solo modelo bien claro, o intentarías combinar varios desde el principio, como hizo Nequi?</h4>
+          <div class="pillars-tag"><span class="ptag">Todos los modelos</span></div>
+          <div class="hint">Buena pregunta para cerrar: que cada grupo defienda una postura distinta y argumente con los casos que ya vimos.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function showPanel(n){
+    document.querySelectorAll('.ex-panel').forEach((p,i)=> p.classList.toggle('active', i === n-1));
+    document.querySelectorAll('.ex-tab').forEach((t,i)=> t.classList.toggle('active', i === n-1));
+  }
+
+  function toggleCard(card){
+    card.classList.toggle('open');
+  }
+
+  function togglePillar(item){
+    item.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
