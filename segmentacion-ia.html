@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Análisis de Datos y Segmentación con IA · Full Stack Marketing Digital con IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1d1d1f;
+  --ink-soft:#48484c;
+  --grey:#6e6e73;
+  --grey-soft:#86868b;
+  --hair:#d2d2d7;
+  --bg:#fbfbfd;
+  --card:#ffffff;
+  --card-tint:#f5f5f7;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.06);
+
+  /* modulo neutral gradient (cover/agenda) */
+  --a1:#0071e3; --a2:#af52de; --a3:#0a7f76;
+
+  /* clase activa (se re-asigna via JS) */
+  --accent:#0071e3;
+  --accent-2:#42a5f5;
+  --accent-soft:#eaf2fe;
+  --accent-ink:#0a3d75;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow:hidden; -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'JetBrains Mono', monospace;}
+
+/* ---------- animated background ---------- */
+#bg{position:fixed; inset:0; z-index:0; overflow:hidden; background:var(--bg);}
+#bg .orb{
+  position:absolute; border-radius:50%; filter:blur(70px);
+  opacity:.55; will-change:transform; transition:background 1.1s ease;
+  mix-blend-mode:normal;
+}
+#bg .orb.o1{width:52vw; height:52vw; left:-14vw; top:-18vw; background:radial-gradient(circle at 30% 30%, var(--accent), transparent 70%); animation:float1 26s ease-in-out infinite;}
+#bg .orb.o2{width:44vw; height:44vw; right:-12vw; top:6vw; background:radial-gradient(circle at 60% 40%, var(--accent-2), transparent 70%); animation:float2 32s ease-in-out infinite;}
+#bg .orb.o3{width:40vw; height:40vw; left:18vw; bottom:-20vw; background:radial-gradient(circle at 50% 50%, var(--a2), transparent 72%); opacity:.28; animation:float3 38s ease-in-out infinite;}
+#bg .grain{position:absolute; inset:0; opacity:.025; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+#bg .veil{position:absolute; inset:0; background:linear-gradient(180deg, rgba(251,251,253,.35), rgba(251,251,253,.86) 62%, rgba(251,251,253,.97));}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(6vw,8vw) scale(1.12);}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-7vw,6vw) scale(0.92);}}
+@keyframes float3{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(4vw,-6vw) scale(1.08);}}
+@media (prefers-reduced-motion: reduce){ #bg .orb{animation:none;} }
+
+/* ---------- deck shell ---------- */
+#deck{position:relative; z-index:1; height:100dvh; width:100vw;}
+.slide{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:7vh 8vw; opacity:0; pointer-events:none; transform:translateY(14px) scale(.99);
+  transition:opacity .55s cubic-bezier(.22,.61,.36,1), transform .55s cubic-bezier(.22,.61,.36,1);
+}
+.slide.active{opacity:1; pointer-events:auto; transform:translateY(0) scale(1);}
+.slide-inner{width:100%; max-width:1180px; margin:0 auto;}
+
+/* ---------- eyebrow / kicker ---------- */
+.kicker{display:flex; align-items:center; gap:10px; justify-content:center; margin-bottom:18px;}
+.kicker .dot{width:7px; height:7px; border-radius:50%; background:var(--accent);}
+.kicker span{font-size:15px; font-weight:600; color:var(--accent-ink); letter-spacing:.01em;}
+.slide-inner.left .kicker{justify-content:flex-start;}
+
+/* ---------- typography ---------- */
+h1.big{font-size:clamp(38px,5.4vw,74px); font-weight:800; letter-spacing:-.02em; line-height:1.03; margin:0 0 18px; text-align:center;}
+h1.mid{font-size:clamp(30px,4vw,48px); font-weight:700; letter-spacing:-.015em; line-height:1.08; margin:0 0 14px;}
+p.lede{font-size:clamp(17px,1.7vw,22px); color:var(--ink-soft); line-height:1.55; text-align:center; max-width:760px; margin:0 auto;}
+p.body{font-size:16.5px; color:var(--ink-soft); line-height:1.6;}
+.center{text-align:center;}
+
+/* ---------- COVER ---------- */
+.cover-num{font-family:'JetBrains Mono'; font-size:14px; color:var(--grey); letter-spacing:.08em; margin-bottom:26px;}
+.cover-title{font-size:clamp(44px,7vw,92px); font-weight:800; letter-spacing:-.025em; line-height:1.0;
+  background:linear-gradient(100deg, var(--a1), var(--a2) 55%, var(--a3)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.cover-sub{font-size:clamp(17px,2vw,23px); color:var(--ink-soft); margin-top:22px; max-width:640px;}
+.cover-meta{margin-top:52px; display:flex; gap:28px; flex-wrap:wrap; justify-content:center;}
+.cover-meta .chip{display:flex; align-items:center; gap:9px; font-size:14px; color:var(--grey); border:1px solid var(--hair); padding:9px 16px; border-radius:100px; background:rgba(255,255,255,.6); backdrop-filter:blur(6px);}
+.cover-meta .chip svg{width:16px; height:16px; stroke:var(--grey);}
+
+/* ---------- CLASS INTRO (section divider) ---------- */
+.type-classintro{color:#fff;}
+.type-classintro .wrap{position:absolute; inset:0; background:linear-gradient(150deg, var(--accent), var(--accent-2)); z-index:-1;}
+.type-classintro .tag{font-size:15px; font-weight:600; letter-spacing:.02em; opacity:.85; margin-bottom:18px;}
+.type-classintro .num{font-family:'JetBrains Mono'; font-size:clamp(70px,11vw,150px); font-weight:600; opacity:.22; line-height:1; margin-bottom:-.15em;}
+.type-classintro h1{font-size:clamp(36px,5.6vw,66px); font-weight:800; letter-spacing:-.02em; line-height:1.06; max-width:900px;}
+.type-classintro p{font-size:clamp(16px,1.7vw,20px); opacity:.92; max-width:620px; margin-top:16px; line-height:1.5;}
+.type-classintro .topics{margin-top:38px; display:flex; gap:14px; flex-wrap:wrap;}
+.type-classintro .topics span{font-size:13.5px; padding:8px 15px; border-radius:100px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28);}
+
+/* ---------- TOPIC HEADER ---------- */
+.type-topicheader .eyebrow{font-size:14px; font-weight:600; color:var(--accent); margin-bottom:14px;}
+.type-topicheader h1{font-size:clamp(30px,4.4vw,52px); font-weight:800; letter-spacing:-.02em; max-width:820px;}
+.type-topicheader .rule{width:64px; height:4px; border-radius:4px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); margin:22px 0;}
+.type-topicheader .items{display:flex; flex-direction:column; gap:9px; margin-top:10px;}
+.type-topicheader .items div{font-size:16px; color:var(--ink-soft); display:flex; align-items:center; gap:10px;}
+.type-topicheader .items div svg{width:16px; height:16px; stroke:var(--grey-soft); flex:none;}
+
+/* ---------- CONTENT header row ---------- */
+.head-row{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:30px; flex-wrap:wrap;}
+.head-row .eyebrow{font-size:13px; font-weight:600; color:var(--accent); text-transform:none; letter-spacing:.01em;}
+.head-row h2{font-size:clamp(24px,2.6vw,34px); font-weight:700; letter-spacing:-.015em; margin:6px 0 0; max-width:680px;}
+.head-row .step{font-family:'JetBrains Mono'; font-size:13px; color:var(--grey-soft);}
+
+/* ---------- card grid ---------- */
+.grid{display:grid; gap:16px;}
+.grid.c2{grid-template-columns:repeat(2,1fr);}
+.grid.c3{grid-template-columns:repeat(3,1fr);}
+.grid.c4{grid-template-columns:repeat(4,1fr);}
+.card{background:var(--card); border:1px solid var(--hair); border-radius:20px; padding:22px 22px; box-shadow:var(--shadow);}
+.card .ic{width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:var(--accent-soft); margin-bottom:14px;}
+.card .ic svg{width:20px; height:20px; stroke:var(--accent-ink);}
+.card h3{font-size:16.5px; font-weight:650; margin:0 0 6px; letter-spacing:-.005em;}
+.card p{font-size:14.5px; color:var(--grey); line-height:1.5; margin:0;}
+
+/* ---------- stat grid ---------- */
+.stat{background:var(--card); border:1px solid var(--hair); border-radius:20px; padding:26px 22px; box-shadow:var(--shadow);}
+.stat .num{font-family:'JetBrains Mono'; font-size:clamp(26px,3vw,38px); font-weight:600; color:var(--accent-ink); letter-spacing:-.01em;}
+.stat .lbl{font-size:14px; color:var(--grey); margin-top:8px; line-height:1.4;}
+
+/* ---------- split layout ---------- */
+.split{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;}
+.split .txt h2{font-size:clamp(24px,2.8vw,36px); font-weight:750; letter-spacing:-.015em; margin:0 0 16px;}
+.split .txt p{font-size:16.5px; color:var(--ink-soft); line-height:1.62;}
+.split .visual{display:flex; flex-direction:column; gap:12px;}
+.rowline{display:flex; align-items:center; gap:14px; background:var(--card); border:1px solid var(--hair); border-radius:16px; padding:16px 18px; box-shadow:var(--shadow);}
+.rowline .ic{width:34px; height:34px; border-radius:9px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; flex:none;}
+.rowline .ic svg{width:18px; height:18px; stroke:var(--accent-ink);}
+.rowline .t{font-size:14.5px; color:var(--ink); font-weight:500;}
+.rowline .t b{font-weight:650;}
+
+/* ---------- timeline ---------- */
+.timeline{display:flex; flex-direction:column; gap:0;}
+.tl-item{display:grid; grid-template-columns:120px 24px 1fr; gap:0; align-items:start;}
+.tl-item .yr{font-family:'JetBrains Mono'; font-size:13.5px; color:var(--grey-soft); padding-top:2px;}
+.tl-item .rail{display:flex; flex-direction:column; align-items:center; height:100%;}
+.tl-item .rail .d{width:11px; height:11px; border-radius:50%; background:var(--accent); margin-top:4px; flex:none;}
+.tl-item .rail .l{flex:1; width:2px; background:var(--hair); margin-top:4px;}
+.tl-item:last-child .rail .l{display:none;}
+.tl-item .tx{padding:0 0 26px 20px;}
+.tl-item .tx h4{margin:0 0 4px; font-size:16px; font-weight:650;}
+.tl-item .tx p{margin:0; font-size:14.5px; color:var(--grey); line-height:1.5;}
+
+/* ---------- comparison table ---------- */
+.cmp{display:grid; gap:16px;}
+.cmp-card{background:var(--card); border:1.5px solid var(--hair); border-radius:20px; padding:24px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px;}
+.cmp-card.hi{border-color:var(--accent); box-shadow:0 4px 26px rgba(0,0,0,.08);}
+.cmp-card .top{display:flex; align-items:center; gap:12px;}
+.cmp-card .top .ic{width:36px; height:36px; border-radius:10px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; flex:none;}
+.cmp-card .top .ic svg{width:19px; height:19px; stroke:var(--accent-ink);}
+.cmp-card .top h3{font-size:16.5px; font-weight:700; margin:0;}
+.cmp-card .top .pill{font-size:11px; font-weight:600; color:var(--accent-ink); background:var(--accent-soft); padding:3px 9px; border-radius:100px; margin-left:auto;}
+.cmp-card ul{margin:0; padding-left:18px;}
+.cmp-card li{font-size:14px; color:var(--grey); line-height:1.55; margin-bottom:3px;}
+
+/* ---------- checklist ---------- */
+.checklist{display:flex; flex-direction:column; gap:11px; max-width:760px; margin:0 auto;}
+.chk{display:flex; align-items:flex-start; gap:14px; background:var(--card); border:1px solid var(--hair); border-radius:16px; padding:15px 18px; box-shadow:var(--shadow);}
+.chk .n{font-family:'JetBrains Mono'; font-size:13px; color:#fff; background:var(--accent); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex:none; margin-top:1px;}
+.chk .t{font-size:15px; color:var(--ink); line-height:1.5;}
+.chk .t b{font-weight:650;}
+
+/* ---------- callout / quote ---------- */
+.callout{max-width:880px; margin:0 auto; text-align:center;}
+.callout .mark{font-size:56px; color:var(--accent); font-weight:800; line-height:.5; display:block; margin-bottom:18px;}
+.callout .q{font-size:clamp(22px,2.6vw,32px); font-weight:650; letter-spacing:-.015em; line-height:1.35; color:var(--ink);}
+.callout .src{margin-top:20px; font-size:14px; color:var(--grey);}
+
+/* ---------- exercise slide ---------- */
+.exercise{background:var(--card); border:1px solid var(--hair); border-radius:28px; box-shadow:0 4px 32px rgba(0,0,0,.08); padding:44px 48px; max-width:980px; margin:0 auto;}
+.exercise .tag{display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:650; color:#fff; background:var(--accent); padding:7px 14px; border-radius:100px; margin-bottom:20px; white-space:nowrap;}
+.exercise .tag svg{width:14px; height:14px; stroke:#fff; flex:none;}
+.exercise h2{font-size:clamp(26px,3.2vw,38px); font-weight:800; letter-spacing:-.02em; margin:0 0 12px;}
+.exercise p.ctx{font-size:16px; color:var(--ink-soft); line-height:1.6; max-width:760px;}
+.exercise .meta{display:flex; gap:26px; margin:22px 0 26px; flex-wrap:wrap;}
+.exercise .meta div{font-size:13.5px; color:var(--grey); display:flex; align-items:center; gap:8px;}
+.exercise .meta svg{width:16px; height:16px; stroke:var(--grey-soft);}
+.exercise .goals{display:flex; flex-direction:column; gap:8px; margin-bottom:28px;}
+.exercise .goals div{font-size:14.5px; color:var(--ink-soft); display:flex; gap:10px; align-items:flex-start;}
+.exercise .goals svg{width:16px; height:16px; stroke:var(--accent); flex:none; margin-top:2px;}
+.dl-row{display:flex; gap:14px; flex-wrap:wrap;}
+.dl-btn{display:flex; align-items:center; gap:10px; padding:13px 20px; border-radius:14px; text-decoration:none; font-size:14.5px; font-weight:650; transition:transform .15s ease, box-shadow .15s ease;}
+.dl-btn.primary{background:var(--ink); color:#fff;}
+.dl-btn.secondary{background:var(--card-tint); color:var(--ink); border:1px solid var(--hair);}
+.dl-btn:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.14);}
+.dl-btn svg{width:17px; height:17px;}
+.dl-btn.primary svg{stroke:#fff;}
+.dl-btn.secondary svg{stroke:var(--ink);}
+
+/* ---------- case study ---------- */
+.case-grid{display:grid; gap:16px;}
+.case-card{background:linear-gradient(180deg, var(--card), var(--card-tint)); border:1px solid var(--hair); border-radius:20px; padding:24px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px;}
+.case-card .co{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.case-card .co h3{font-size:17px; font-weight:750; margin:0; letter-spacing:-.005em;}
+.case-card .co span{font-size:11.5px; font-weight:650; color:var(--accent-ink); background:var(--accent-soft); padding:4px 10px; border-radius:100px; white-space:nowrap;}
+.case-card .res{display:flex; gap:18px; flex-wrap:wrap; margin:4px 0 2px;}
+.case-card .res div{display:flex; flex-direction:column;}
+.case-card .res .n{font-family:'JetBrains Mono'; font-size:22px; font-weight:600; color:var(--accent-ink);}
+.case-card .res .l{font-size:11.5px; color:var(--grey); margin-top:2px;}
+.case-card p{font-size:14px; color:var(--grey); line-height:1.55; margin:0;}
+.case-src{font-size:12px; color:var(--grey-soft); margin-top:18px; text-align:center;}
+
+/* ---------- closing ---------- */
+.closing-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; max-width:980px;}
+.closing-grid .c{background:var(--card); border:1px solid var(--hair); border-radius:18px; padding:20px; box-shadow:var(--shadow);}
+.closing-grid .c .k{font-family:'JetBrains Mono'; font-size:12px; color:var(--accent-ink); margin-bottom:8px;}
+.closing-grid .c h4{margin:0 0 6px; font-size:15px; font-weight:650;}
+.closing-grid .c p{margin:0; font-size:13px; color:var(--grey); line-height:1.5;}
+
+/* ---------- nav chrome ---------- */
+#chrome{position:fixed; inset:0; z-index:5; pointer-events:none;}
+#topbar{position:fixed; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between; padding:22px 30px; pointer-events:none;}
+#brand{font-size:13px; font-weight:650; color:var(--ink); display:flex; align-items:center; gap:9px; pointer-events:auto; opacity:.85;}
+#brand .sw{width:8px; height:8px; border-radius:50%; background:var(--accent); transition:background .5s;}
+#classdots{display:flex; gap:9px; pointer-events:auto;}
+#classdots button{width:34px; height:5px; border-radius:4px; border:none; background:var(--hair); cursor:pointer; padding:0; transition:background .3s, width .3s;}
+#classdots button.on{background:var(--accent); width:46px;}
+#progress-wrap{position:fixed; left:0; right:0; bottom:0; height:3px; background:rgba(0,0,0,.06); z-index:6;}
+#progress-bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .4s ease, background .6s;}
+#counter{position:fixed; right:30px; bottom:20px; font-family:'JetBrains Mono'; font-size:12.5px; color:var(--grey); pointer-events:auto; z-index:6;}
+.navbtn{position:fixed; top:50%; transform:translateY(-50%); width:46px; height:46px; border-radius:50%; border:1px solid var(--hair); background:rgba(255,255,255,.75); backdrop-filter:blur(10px); display:flex; align-items:center; justify-content:center; cursor:pointer; pointer-events:auto; z-index:6; box-shadow:var(--shadow); transition:opacity .2s, transform .15s;}
+.navbtn:hover{transform:translateY(-50%) scale(1.06);}
+.navbtn svg{width:19px; height:19px; stroke:var(--ink);}
+#prevBtn{left:22px;} #nextBtn{right:22px;}
+.navbtn.hide{opacity:0; pointer-events:none;}
+#hint{position:fixed; left:30px; bottom:20px; font-size:12px; color:var(--grey-soft); pointer-events:none; z-index:6;}
+@media (max-width: 820px){
+  #hint{display:none;}
+  .navbtn{width:40px; height:40px;}
+  .split{grid-template-columns:1fr; gap:26px;}
+  .grid.c2,.grid.c3,.grid.c4{grid-template-columns:1fr 1fr;}
+  .closing-grid{grid-template-columns:1fr;}
+  #topbar{padding:16px 18px;}
+  .slide{padding:9vh 6vw;}
+}
+@media (max-width:560px){
+  .grid.c2,.grid.c3,.grid.c4{grid-template-columns:1fr;}
+  .tl-item{grid-template-columns:70px 20px 1fr;}
+}
+</style>
+</head>
+<body data-class="0">
+
+<div id="bg"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grain"></div><div class="veil"></div></div>
+
+<div id="deck"></div>
+
+<div id="chrome">
+  <div id="topbar">
+    <div id="brand"><span class="sw"></span>Análisis de Datos y Segmentación con IA</div>
+    <div id="classdots">
+      <button data-jump="class1" title="Clase 1"></button>
+      <button data-jump="class2" title="Clase 2"></button>
+      <button data-jump="class3" title="Clase 3"></button>
+    </div>
+  </div>
+  <button class="navbtn" id="prevBtn" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <button class="navbtn" id="nextBtn" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+  <div id="hint">Usa las flechas del teclado o desliza para navegar</div>
+  <div id="counter">01 / 01</div>
+</div>
+<div id="progress-wrap"><div id="progress-bar"></div></div>
+
+<script>
+// ============================================================
+// ICONOS — set propio de líneas, estilo trazo simple (stroke)
+// ============================================================
+const ICONP = {
+  chart: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 15l2.5-3.5L13 14l3-5"/>',
+  bars: '<path d="M4 20V10M10 20V4M16 20v-7M22 20v-3" transform="translate(-1,0)"/>',
+  brain: '<path d="M9 4a3 3 0 0 0-3 3v.3A3 3 0 0 0 4 10v1a3 3 0 0 0 1.5 2.6A3 3 0 0 0 8 18a3 3 0 0 0 3-3V6a2 2 0 0 0-2-2z"/><path d="M15 4a3 3 0 0 1 3 3v.3A3 3 0 0 1 20 10v1a3 3 0 0 1-1.5 2.6A3 3 0 0 1 16 18a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2z"/>',
+  database: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  chat: '<path d="M4 5h16v11H8l-4 4V5z"/>',
+  funnel: '<path d="M3 4h18l-7 9v6l-4 2v-8L3 4z"/>',
+  target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".6" fill="currentColor"/>',
+  users: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14a5 5 0 0 1 5.5 5"/>',
+  layers: '<path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/>',
+  shield: '<path d="M12 3l8 3v6c0 5-3.4 8.5-8 9-4.6-.5-8-4-8-9V6l8-3z"/>',
+  bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.3 1 2.1h5c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+  check: '<path d="M20 6L9 17l-5-5"/>',
+  download: '<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/>',
+  arrow: '<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>',
+  warning: '<path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4"/><circle cx="12" cy="17.3" r=".7" fill="currentColor"/>',
+  gear: '<circle cx="12" cy="12" r="3.2"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H4a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.6V4a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V10c.1.7.6 1.3 1.6 1.5H20a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.4 1z"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  compass: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/>',
+  rocket: '<path d="M5 15c-1 2-1 5-1 5s3 0 5-1c1-.5 3-2.5 4-5l2-5-3-3-5 2c-2.5 1-4.5 3-5 4z"/><circle cx="15" cy="9" r="1.4"/>',
+  trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 5H5a3 3 0 0 0 3 4M16 5h3a3 3 0 0 1-3 4"/><path d="M12 13v3M9 20h6M10 20l.5-2h3l.5 2"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6l9 7 9-7"/>',
+  cart: '<circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M3 4h2l2.4 12.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6"/>',
+  click: '<path d="M9 3v3M4.2 5.2l2 2M3 12h3M17.8 5.2l-2 2"/><path d="M13 13l7 3-3.3 1.4L15 21l-3-8z"/>',
+  eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+  tag: '<path d="M3 12l9-9h6v6l-9 9-6-6z"/><circle cx="14.5" cy="6.5" r="1.2" fill="currentColor"/>',
+  trend: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  scale: '<path d="M12 3v18M6 7l-3 6a3 3 0 0 0 6 0l-3-6zM18 7l-3 6a3 3 0 0 0 6 0l-3-6z"/><path d="M5 7h14M9 21h6"/>',
+  puzzle: '<path d="M9 4h4v2a2 2 0 1 0 4 0V4h4v4h-2a2 2 0 1 0 0 4h2v4h-4v-2a2 2 0 1 0-4 0v2H9v-4H7a2 2 0 1 1 0-4h2V4z"/>',
+  filter: '<path d="M4 5h16l-6 8v6l-4-2v-4L4 5z"/>',
+  flag: '<path d="M5 3v18"/><path d="M5 4h13l-2.5 4L18 12H5"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  sparkle: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/>',
+  link: '<path d="M9 15l6-6"/><path d="M13 5l1.5-1.5a4 4 0 1 1 5.5 5.5L18 11"/><path d="M11 19l-1.5 1.5a4 4 0 1 1-5.5-5.5L6 13"/>',
+  file: '<path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/>',
+};
+function ic(name){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(ICONP[name]||'')+'</svg>'; }
+
+// ============================================================
+// PALETAS POR CLASE
+// ============================================================
+const PALETTE = {
+  0: { accent:'#0071e3', accent2:'#42a5f5', soft:'#eaf2fe', ink:'#0a3d75' },
+  1: { accent:'#0071e3', accent2:'#42a5f5', soft:'#eaf2fe', ink:'#0a3d75' },
+  2: { accent:'#af52de', accent2:'#ff375f', soft:'#f5eafb', ink:'#6b21a8' },
+  3: { accent:'#0a7f76', accent2:'#34c759', soft:'#e6f4f2', ink:'#075e57' },
+};
+
+// ============================================================
+// RENDER HELPERS por tipo de diapositiva
+// ============================================================
+function elKicker(txt){ return `<div class="kicker"><span class="dot"></span><span>${txt}</span></div>`; }
+
+function rCover(s){
+  return `<div class="slide-inner center">
+    <div class="cover-num mono">MÓDULO · FULL STACK MARKETING DIGITAL CON IA</div>
+    <div class="cover-title">${s.title}</div>
+    <p class="cover-sub">${s.sub}</p>
+    <div class="cover-meta">
+      ${s.chips.map(c=>`<div class="chip">${ic(c.icon)}<span>${c.t}</span></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function rAgenda(s){
+  return `<div class="slide-inner">
+    ${elKicker(s.kicker)}
+    <h1 class="big">${s.title}</h1>
+    <p class="lede">${s.lede}</p>
+    <div class="grid c3" style="margin-top:44px;">
+      ${s.items.map(it=>`
+        <div class="card" style="border-top:3px solid ${it.color}">
+          <div class="ic" style="background:${it.color}1a"><span style="color:${it.color}">${ic(it.icon)}</span></div>
+          <h3>${it.h}</h3>
+          <p>${it.p}</p>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function rClassIntro(s){
+  return `<div class="wrap"></div><div class="slide-inner">
+    <div class="tag">${s.tag}</div>
+    <div class="num">${s.num}</div>
+    <h1>${s.title}</h1>
+    <p>${s.p}</p>
+    <div class="topics">${s.topics.map(t=>`<span>${t}</span>`).join('')}</div>
+  </div>`;
+}
+
+function rTopicHeader(s){
+  return `<div class="slide-inner">
+    <div class="eyebrow">${s.eyebrow}</div>
+    <h1>${s.title}</h1>
+    <div class="rule"></div>
+    <div class="items">${s.items.map(i=>`<div>${ic('check')}${i}</div>`).join('')}</div>
+  </div>`;
+}
+
+function rHead(s){
+  return `<div class="head-row"><div><div class="eyebrow">${s.eyebrow}</div><h2>${s.h}</h2></div>${s.step?`<div class="step">${s.step}</div>`:''}</div>`;
+}
+
+function rCards(s){
+  const cols = s.cols||3;
+  return `<div class="slide-inner">${rHead(s)}
+    <div class="grid c${cols}">
+      ${s.cards.map(c=>`<div class="card">
+        <div class="ic">${ic(c.icon)}</div>
+        <h3>${c.h}</h3>
+        <p>${c.p}</p>
+      </div>`).join('')}
+    </div>
+    ${s.foot?`<p class="body" style="margin-top:22px; max-width:820px;">${s.foot}</p>`:''}
+  </div>`;
+}
+
+function rStats(s){
+  return `<div class="slide-inner">${rHead(s)}
+    <div class="grid c${s.stats.length>4?4:s.stats.length}">
+      ${s.stats.map(x=>`<div class="stat"><div class="num">${x.n}</div><div class="lbl">${x.l}</div></div>`).join('')}
+    </div>
+    ${s.foot?`<p class="body" style="margin-top:22px; max-width:820px;">${s.foot}</p>`:''}
+  </div>`;
+}
+
+function rSplit(s){
+  const visual = s.visualType==='rows'
+    ? `<div class="visual">${s.rows.map(r=>`<div class="rowline"><div class="ic">${ic(r.icon)}</div><div class="t">${r.t}</div></div>`).join('')}</div>`
+    : s.visualType==='timeline'
+    ? `<div class="visual timeline">${s.tl.map((t,i)=>`<div class="tl-item"><div class="yr">${t.yr}</div><div class="rail"><div class="d"></div><div class="l"></div></div><div class="tx"><h4>${t.h}</h4><p>${t.p}</p></div></div>`).join('')}</div>`
+    : '';
+  return `<div class="slide-inner">${rHead(s)}
+    <div class="split" style="margin-top:8px;">
+      <div class="txt"><p>${s.text}</p></div>
+      ${visual}
+    </div>
+  </div>`;
+}
+
+function rTimelineFull(s){
+  return `<div class="slide-inner">${rHead(s)}
+    <div class="timeline" style="max-width:760px;">
+      ${s.tl.map(t=>`<div class="tl-item"><div class="yr">${t.yr}</div><div class="rail"><div class="d"></div><div class="l"></div></div><div class="tx"><h4>${t.h}</h4><p>${t.p}</p></div></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function rCompare(s){
+  return `<div class="slide-inner">${rHead(s)}
+    <div class="cmp" style="grid-template-columns:repeat(${s.cards.length},1fr);">
+      ${s.cards.map(c=>`<div class="cmp-card ${c.hi?'hi':''}">
+        <div class="top"><div class="ic">${ic(c.icon)}</div><h3>${c.h}</h3>${c.pill?`<span class="pill">${c.pill}</span>`:''}</div>
+        <ul>${c.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function rChecklist(s){
+  return `<div class="slide-inner">${rHead(s)}
+    <div class="checklist">
+      ${s.items.map((t,i)=>`<div class="chk"><div class="n mono">${i+1}</div><div class="t">${t}</div></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function rCallout(s){
+  return `<div class="slide-inner"><div class="callout">
+    <span class="mark">&ldquo;</span>
+    <div class="q">${s.q}</div>
+    <div class="src">${s.src}</div>
+  </div></div>`;
+}
+
+function rExercise(s){
+  return `<div class="slide-inner center">
+    <div class="exercise" style="text-align:left;">
+      <span class="tag">${ic('rocket')}&nbsp;${s.tag}</span>
+      <h2>${s.title}</h2>
+      <p class="ctx">${s.ctx}</p>
+      <div class="meta">
+        <div>${ic('clock')}${s.dur}</div>
+        <div>${ic('database')}${s.data}</div>
+        <div>${ic('compass')}${s.tool}</div>
+      </div>
+      <div class="goals">${s.goals.map(g=>`<div>${ic('check')}<span>${g}</span></div>`).join('')}</div>
+      <div class="dl-row">
+        <a class="dl-btn primary" href="${s.guideHref}" download>${ic('file')}Descargar guía del ejercicio (.docx)</a>
+        <a class="dl-btn secondary" href="${s.dataHref}" download>${ic('download')}Descargar dataset (.csv)</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function rCase(s){
+  return `<div class="slide-inner">${rHead(s)}
+    <div class="case-grid" style="grid-template-columns:repeat(${s.cases.length>2?2:s.cases.length},1fr);">
+      ${s.cases.map(c=>`<div class="case-card">
+        <div class="co"><h3>${c.co}</h3><span>${c.tag}</span></div>
+        <div class="res">${c.stats.map(x=>`<div><span class="n mono">${x.n}</span><span class="l">${x.l}</span></div>`).join('')}</div>
+        <p>${c.p}</p>
+      </div>`).join('')}
+    </div>
+    ${s.src?`<div class="case-src">${s.src}</div>`:''}
+  </div>`;
+}
+
+function rClosing(s){
+  return `<div class="slide-inner center">
+    ${elKicker(s.kicker)}
+    <h1 class="big">${s.title}</h1>
+    <p class="lede">${s.lede}</p>
+    <div class="closing-grid" style="margin-left:auto;margin-right:auto;">
+      ${s.cols.map(c=>`<div class="c"><div class="k mono">${c.k}</div><h4>${c.h}</h4><p>${c.p}</p></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+const RENDERERS = {
+  cover: rCover, agenda: rAgenda, classintro: rClassIntro, topicheader: rTopicHeader,
+  cards: rCards, stats: rStats, split: rSplit, timeline: rTimelineFull, compare: rCompare,
+  checklist: rChecklist, callout: rCallout, exercise: rExercise, closing: rClosing, case: rCase,
+};
+
+// ============================================================
+// CONTENIDO — PORTADA + AGENDA
+// ============================================================
+const SLIDES = [];
+SLIDES.push({cls:0, type:'cover', title:'Análisis de Datos<br>y Segmentación con IA', sub:'Cómo convertir datos crudos en decisiones de marketing accionables, usando IA conversacional para analizar, segmentar y activar audiencias.', chips:[
+  {icon:'calendar', t:'3 clases · 3 horas cada una'},
+  {icon:'compass', t:'100% práctico, con datos reales'},
+  {icon:'sparkle', t:'Looker Studio · Julius AI · ChatGPT/Claude'},
+]});
+
+SLIDES.push({cls:0, type:'agenda', kicker:'RECORRIDO DEL MÓDULO', title:'De los datos a la decisión, en tres pasos', lede:'Cada clase avanza sobre la anterior: primero aprendemos a leer los datos, luego a agruparlos en segmentos con sentido, y por último a activarlos en campañas reales.', items:[
+  {color:'#0071e3', icon:'chart', h:'Clase 1 · Fundamentos', p:'Analítica con IA conversacional: de reportes estáticos a dashboards que se explican solos.'},
+  {color:'#af52de', icon:'users', h:'Clase 2 · Segmentación', p:'RFM, clustering y personas con IA: de "todos los clientes" al cliente correcto.'},
+  {color:'#0a7f76', icon:'target', h:'Clase 3 · Activación', p:'Audiencias predictivas y campañas diferenciadas por segmento, en Meta y Google Ads.'},
+]});
+
+// ============================================================
+// CLASE 1 — FUNDAMENTOS DEL ANÁLISIS DE DATOS CON IA
+// ============================================================
+SLIDES.push({cls:1, type:'classintro', tag:'CLASE 1 · 3 HORAS', num:'01', title:'Fundamentos del análisis de datos con IA', p:'De los reportes que nadie lee a los dashboards que cualquiera entiende. El punto de partida de todo el módulo.', topics:['Panorama y herramientas de IA 2026','Looker Studio + Gemini','Julius AI y ChatGPT Data Analysis','Ejercicio: Del caos al dashboard']});
+
+SLIDES.push({cls:1, type:'topicheader', eyebrow:'TEMA 1', title:'El nuevo paradigma del análisis de datos en marketing', items:['Por qué el dato importa más que nunca en 2026','De reportes estáticos a análisis conversacional','Los 4 tipos de analítica y el ecosistema de datos del marketer','Mapa de herramientas de IA para analizar datos']});
+
+SLIDES.push({cls:1, type:'stats', eyebrow:'CONTEXTO', h:'Por qué esto importa ahora, no en 5 años', step:'1 / 10', stats:[
+  {n:'+70%', l:'de las decisiones de inversión publicitaria en LATAM ya se apoyan en algún panel de datos automatizado, según reportes recientes de la industria.'},
+  {n:'3 clics', l:'es lo que hoy toma pedirle un análisis completo a una IA conversacional, frente a horas armando tablas dinámicas a mano.'},
+  {n:'1 pregunta', l:'en lenguaje natural puede reemplazar una fórmula compleja de spreadsheet gracias a los asistentes de IA integrados.'},
+]});
+
+SLIDES.push({cls:1, type:'split', eyebrow:'EVOLUCIÓN', h:'De reportes estáticos a análisis conversacional', step:'2 / 10', text:'Durante años, "hacer analítica" significó exportar un CSV, armar una tabla dinámica y esperar a que alguien del equipo la interpretara. Hoy, plataformas como Looker Studio, Julius AI o los asistentes de datos de ChatGPT y Claude permiten preguntarle directamente a los datos, en español, y recibir el gráfico y la explicación en el mismo paso. El rol del marketer no desaparece: cambia de "construir el reporte" a "hacer la pregunta correcta y verificar la respuesta". Esto no elimina el pensamiento analítico — lo concentra: en vez de gastar el 80% del tiempo limpiando y graficando, y el 20% pensando, la proporción se invierte.', visualType:'timeline', tl:[
+  {yr:'Antes', h:'Hojas de cálculo manuales', p:'Fórmulas, tablas dinámicas y horas de limpieza antes de la primera conclusión.'},
+  {yr:'2018–2023', h:'Dashboards de autoservicio', p:'Looker Studio y Power BI democratizan la visualización, pero siguen exigiendo fórmulas.'},
+  {yr:'2025–2026', h:'Análisis conversacional con IA', p:'Se le pregunta al dato en lenguaje natural y la IA construye el gráfico y la explicación.'},
+]});
+
+SLIDES.push({cls:1, type:'cards', eyebrow:'MARCO DE TRABAJO', h:'Los 4 tipos de analítica que debes reconocer', step:'3 / 10', cols:4, cards:[
+  {icon:'eye', h:'Descriptiva', p:'¿Qué pasó? Resume el desempeño histórico: gasto, clics, ventas del último mes. Es el punto de partida obligatorio, pero por sí sola no explica nada.'},
+  {icon:'search', h:'Diagnóstica', p:'¿Por qué pasó? Busca la causa cruzando variables: por qué cayó el CTR o subió el CPA en una campaña específica y no en las demás.'},
+  {icon:'trend', h:'Predictiva', p:'¿Qué va a pasar? Estima comportamiento futuro a partir de patrones históricos: quién comprará esta semana, quién está a punto de irse.'},
+  {icon:'compass', h:'Prescriptiva', p:'¿Qué debería hacer? Recomienda la acción concreta: a quién dirigir presupuesto, con qué mensaje y por qué, no solo qué pasó.'},
+]});
+
+SLIDES.push({cls:1, type:'cards', eyebrow:'MAPA DE FUENTES', h:'El ecosistema de datos de todo marketer digital', step:'4 / 10', cols:4, cards:[
+  {icon:'target', h:'Meta Ads', p:'Gasto, alcance, resultados por campaña, conjunto de anuncios y ubicación. La fuente más granular de intención publicitaria.'},
+  {icon:'globe', h:'Google Analytics 4', p:'Comportamiento en el sitio: sesiones, eventos, embudos de conversión y qué pasa después del clic en el anuncio.'},
+  {icon:'database', h:'CRM / Ventas', p:'Historial de compras, valor de vida del cliente, recurrencia. La fuente más confiable porque mide dinero real, no clics.'},
+  {icon:'mail', h:'Email / CRM de marketing', p:'Aperturas, clics y engagement por segmento de suscriptores; revela quién sigue interesado sin haber comprado aún.'},
+]});
+
+SLIDES.push({cls:1, type:'split', eyebrow:'EL COSTO DE NO ANALIZAR', h:'Qué le cuesta a una empresa no tener este hábito', step:'5 / 10', text:'La alternativa a construir este hábito no es "seguir igual sin costo" — es decidir a ciegas con el dinero de otro. Sin un panel que se revise cada semana, el presupuesto se queda donde ya estaba el mes pasado por inercia, no por evidencia; los errores se repiten porque nadie los ve a tiempo; y cuando alguien pregunta "¿por qué gastamos esto?", la respuesta es una opinión, no un número. El caso real de Marketboost con una viña boutique en Chile ilustra justo esto: bastó un dashboard conectado a Meta Ads para descubrir que el 80% de las ventas venía de un solo conjunto de anuncios que solo tenía el 30% del presupuesto — una desalineación que llevaba meses sin corregirse simplemente porque nadie la había visualizado.', visualType:'rows', rows:[
+  {icon:'warning', t:'Sin panel: el presupuesto se queda donde estaba, por costumbre'},
+  {icon:'clock', t:'Sin panel: los errores tardan semanas en detectarse, no minutos'},
+  {icon:'chat', t:'Sin panel: las decisiones se defienden con opinión, no con evidencia'},
+]});
+
+SLIDES.push({cls:1, type:'case', eyebrow:'CASO REAL', h:'Cuando un dashboard revela lo que nadie había visto', step:'6 / 10', cases:[
+  {co:'Viña boutique · Valle de Casablanca, Chile', tag:'Looker Studio + Meta Ads', stats:[{n:'+40%', l:'ventas, mismo presupuesto'},{n:'80%/30%', l:'ventas vs. presupuesto del ganador'}], p:'Un dashboard conectado directamente a Meta Ads reveló que un solo conjunto de anuncios generaba el 80% de las ventas con apenas el 30% del presupuesto. Al reasignar la inversión hacia ese conjunto, las ventas subieron 40% al mes siguiente, sin gastar un peso adicional.'},
+  {co:'Pyme de limpieza de oficinas (B2B)', tag:'Looker Studio + CRM', stats:[{n:'2.5x', l:'más rentable un segmento vs. el otro'}], p:'Conectar Google Ads con el CRM permitió ver el ciclo completo, no solo los leads: la campaña "General" traía más leads, pero la campaña "Santiago" resultó 2.5 veces más rentable para conseguir clientes reales.'},
+]});
+
+SLIDES.push({cls:1, type:'compare', eyebrow:'CAJA DE HERRAMIENTAS 2026', h:'Mapa de herramientas de IA para analizar datos', step:'7 / 10', cards:[
+  {icon:'chart', h:'Looker Studio + Gemini', pill:'Gratis', hi:true, items:['Estándar del mercado, en español','Conversational Analytics y asistente de fórmulas','Ideal para dashboards que se comparten con el equipo']},
+  {icon:'sparkle', h:'Julius AI', pill:'Freemium', items:['Sube un CSV y pregunta en lenguaje natural','Combina Excel + Python + chat en una sola herramienta','Ideal para exploración rápida sin preparar nada']},
+  {icon:'chat', h:'ChatGPT / Claude', pill:'Con suscripción', items:['Análisis de datos directo en la conversación','Útil si ya es tu herramienta de trabajo diaria','Genera gráficos y código bajo pedido']},
+]});
+
+SLIDES.push({cls:1, type:'cards', eyebrow:'MÁS ALLÁ DEL CHATBOT', h:'Tres clases de IA que conviene distinguir', step:'8 / 10', cols:3, cards:[
+  {icon:'chat', h:'IA generativa', p:'Crea contenido nuevo a partir de una instrucción: texto, imágenes, código o la explicación de un gráfico. Es la que responde tus preguntas sobre los datos.'},
+  {icon:'trend', h:'IA predictiva', p:'Estima un valor futuro a partir de patrones históricos: probabilidad de compra, de abandono, de churn. No "conversa", calcula.'},
+  {icon:'gear', h:'IA agentica', p:'Ejecuta una secuencia de acciones por sí sola —analizar, decidir, activar— con supervisión humana mínima. Es la frontera hacia 2026-2027.'},
+]});
+
+SLIDES.push({cls:1, type:'stats', eyebrow:'VOCABULARIO CLAVE', h:'Las métricas que todo marketer debe dominar', step:'9 / 10', stats:[
+  {n:'CAC', l:'Costo de adquisición: cuánto cuesta conseguir un cliente nuevo.'},
+  {n:'LTV', l:'Valor de vida del cliente: cuánto genera en toda su relación con la marca.'},
+  {n:'ROAS', l:'Retorno sobre la inversión publicitaria: ingresos generados por cada peso invertido.'},
+  {n:'CVR', l:'Tasa de conversión: qué porcentaje de visitantes o clics termina comprando.'},
+]});
+
+SLIDES.push({cls:1, type:'cards', eyebrow:'PARA CERRAR EL TEMA', h:'Preguntas que todo dashboard debería poder responder', step:'10 / 10', cols:2, cards:[
+  {icon:'target', h:'¿Dónde está el dinero?', p:'Qué campaña, canal o segmento concentra la mayoría de los resultados — y si el presupuesto está alineado con eso.'},
+  {icon:'warning', h:'¿Dónde se está perdiendo?', p:'Qué está consumiendo presupuesto sin retorno proporcional, y desde cuándo viene pasando eso sin corregirse.'},
+  {icon:'trend', h:'¿Qué va a pasar si no cambio nada?', p:'Si la tendencia actual continúa, ¿el resultado del próximo mes mejora, empeora o se mantiene?'},
+  {icon:'compass', h:'¿Qué debería hacer distinto esta semana?', p:'La pregunta que convierte un panel bonito en una decisión real — la que cierra todo análisis.'},
+]});
+
+SLIDES.push({cls:1, type:'topicheader', eyebrow:'TEMA 2', title:'Looker Studio + Gemini y asistentes de IA para dashboards', items:['Qué es Looker Studio y por qué sigue siendo el estándar','Las 3 funciones clave de Gemini dentro de Looker Studio','Cómo formular preguntas que generen insights, no solo gráficos']});
+
+SLIDES.push({cls:1, type:'split', eyebrow:'HERRAMIENTA BASE', h:'Qué es Looker Studio y por qué sigue siendo el estándar', step:'1 / 10', text:'Looker Studio (antes Google Data Studio) es gratuito, se conecta directamente a Google Ads, GA4, Meta Ads y archivos CSV o Excel, y es la herramienta que la mayoría de agencias y empresas en Colombia ya usan o esperan que sepas usar. Su gran salto en 2025-2026 fue la llegada de Gemini integrado: ya no hay que saber escribir fórmulas para construir un campo calculado o interpretar una tendencia. Google además lo posiciona como líder del Magic Quadrant de plataformas de analítica empresarial, lo que en la práctica significa soporte, actualizaciones constantes y una curva de aprendizaje que vale la pena invertir una sola vez.', visualType:'rows', rows:[
+  {icon:'link', t:'Se conecta a <b>Meta Ads, Google Ads, GA4</b> y archivos CSV/Excel'},
+  {icon:'gear', t:'Editor visual de arrastrar y soltar, sin necesidad de programar'},
+  {icon:'users', t:'Se comparte por enlace, como un Google Doc'},
+]});
+
+SLIDES.push({cls:1, type:'cards', eyebrow:'GEMINI EN LOOKER STUDIO', h:'Tres funciones que cambian cómo se construye un panel', step:'2 / 10', cols:3, cards:[
+  {icon:'chat', h:'Análisis conversacional', p:'Le preguntas a tus datos en español y Gemini responde con el gráfico y una explicación en texto, sin que tengas que saber qué tipo de gráfico pedir.'},
+  {icon:'sparkle', h:'Asistente de fórmulas', p:'Describes el campo calculado que necesitas ("ROAS = ingresos / gasto") y Gemini escribe la fórmula completa, evitando errores de sintaxis.'},
+  {icon:'bars', h:'Asistente de visualización', p:'Sugiere el tipo de gráfico más claro según la pregunta que estás haciendo, no solo según el tipo de dato disponible.'},
+]});
+
+SLIDES.push({cls:1, type:'split', eyebrow:'FLUJO DE TRABAJO', h:'Cómo construir un dashboard en minutos', step:'3 / 10', text:'El flujo cambió de "diseñar el reporte perfecto desde cero" a un ciclo corto de tres pasos que se repite hasta llegar al panel correcto. La clave está en no aceptar el primer gráfico que entrega la IA sin revisarlo: siempre se pide una segunda pregunta que confirme o cuestione el primer resultado. En la práctica, un dashboard útil rara vez sale perfecto al primer intento — sale de iterar el ciclo 3 o 4 veces en menos de 10 minutos, algo impensable con el método manual de hace unos años.', visualType:'rows', rows:[
+  {icon:'link', t:'<b>1. Conectar</b> la fuente de datos (CSV, GA4, Meta Ads)'},
+  {icon:'chat', t:'<b>2. Preguntar</b> en lenguaje natural lo que necesitas saber'},
+  {icon:'trend', t:'<b>3. Refinar</b> con una segunda pregunta que verifique el resultado'},
+]});
+
+SLIDES.push({cls:1, type:'cards', eyebrow:'DISEÑO PRÁCTICO', h:'Anatomía de un dashboard que sí se vuelve a abrir', step:'4 / 10', cols:2, cards:[
+  {icon:'target', h:'Empieza por la decisión, no por el dato', p:'Antes de conectar nada, escribe la pregunta de negocio que el panel debe responder. Si no puedes nombrarla, todavía no estás listo para construirlo.'},
+  {icon:'filter', h:'Máximo 5-6 visualizaciones por página', p:'Un dashboard que exige scroll infinito no se vuelve a abrir. Prioriza: si algo no cambia una decisión, no merece un gráfico propio.'},
+  {icon:'clock', h:'Fecha de actualización visible', p:'Un panel sin fecha de última actualización genera desconfianza de inmediato — siempre visible, siempre en la parte superior.'},
+  {icon:'users', h:'Piensa en quién lo va a leer sin ti al lado', p:'Si necesita tu explicación en vivo para tener sentido, el problema no es el lector: es el diseño del panel.'},
+]});
+
+SLIDES.push({cls:1, type:'compare', eyebrow:'CUÁNDO USAR CADA UNA', h:'Julius AI y ChatGPT/Claude: la comparación práctica', step:'5 / 10', cards:[
+  {icon:'sparkle', h:'Usa Julius AI cuando…', items:['Quieres explorar un CSV rápido sin montar nada','Necesitas un pronóstico o modelo simple al instante','Trabajas solo y no necesitas compartir un panel en vivo']},
+  {icon:'chart', h:'Usa Looker Studio + Gemini cuando…', items:['El panel se va a compartir con el equipo o el cliente','La fuente se va a actualizar sola (conexión en vivo a Meta/GA4)','Necesitas exportar a Slides o PDF de forma recurrente']},
+]});
+
+SLIDES.push({cls:1, type:'split', eyebrow:'EL RIESGO A VIGILAR', h:'Cuando la IA "alucina" un dato que no existe', step:'6 / 10', text:'Los modelos de IA generativa pueden producir con total seguridad un número, una tendencia o una fórmula que simplemente no se sostiene en los datos reales — el fenómeno conocido como "alucinación". En análisis de datos esto es más peligroso que en una conversación normal, porque el resultado se ve exactamente igual de confiable venga o no de un cálculo correcto: mismo gráfico limpio, mismo tono seguro. La defensa no es dejar de usar la IA, es no aceptar ningún número sin poder rastrear de dónde salió.', visualType:'rows', rows:[
+  {icon:'warning', t:'Señal de alerta: un número "redondo" que nadie puede explicar de dónde salió'},
+  {icon:'search', t:'Defensa: pedir siempre la fórmula o el cálculo detrás del resultado'},
+  {icon:'checklist', t:'Defensa: verificar a mano al menos un dato contra la fuente original'},
+]});
+
+SLIDES.push({cls:1, type:'cards', eyebrow:'PROMPTING PARA DATOS', h:'Qué preguntarle a la IA para obtener insights, no solo gráficos', step:'7 / 10', cols:2, cards:[
+  {icon:'target', h:'Pide comparación, no solo descripción', p:'"Compara el CPA de las campañas de retargeting contra las de reconocimiento" da más que "muéstrame el CPA".'},
+  {icon:'search', h:'Pide la causa, no solo el número', p:'"¿Por qué esta ubicación tiene el CTR más alto pero el ROAS más bajo?" obliga a la IA a razonar.'},
+  {icon:'filter', h:'Acota el universo de datos', p:'"Solo para las campañas con objetivo Conversiones" evita que la IA mezcle métricas que no son comparables.'},
+  {icon:'checklist', h:'Pide que muestre su cálculo', p:'"Muéstrame la fórmula que usaste" te permite verificar antes de confiar en el resultado.'},
+]});
+
+SLIDES.push({cls:1, type:'cards', eyebrow:'DE LA PANTALLA A LA REUNIÓN', h:'Cómo presentar un hallazgo de IA a alguien no técnico', step:'8 / 10', cols:3, cards:[
+  {icon:'target', h:'Empieza por la conclusión', p:'"Debemos mover presupuesto de X a Y" antes que la metodología. Un gerente decide con la conclusión, no con el proceso.'},
+  {icon:'bars', h:'Un gráfico, una idea', p:'Si necesitas explicar el eje antes que el punto, el gráfico está haciendo el trabajo equivocado — simplifícalo.'},
+  {icon:'checklist', h:'Ten la fuente lista, no la muestres primero', p:'Guarda el detalle del cálculo para cuando pregunten "¿y esto de dónde sale?" — no abras con eso.'},
+]});
+
+SLIDES.push({cls:1, type:'split', eyebrow:'AUTOMATIZAR EL REFRESCO', h:'Que el dashboard se actualice solo, no que lo actualices tú', step:'9 / 10', text:'La diferencia entre un dashboard que se usa por meses y uno que se abandona después de la segunda semana casi siempre es esta: si conectar la fuente en Looker Studio significa que los datos se refrescan automáticamente, el panel sigue vivo sin esfuerzo humano. Si en cambio hay que volver a exportar el CSV cada vez a mano, el panel muere en la primera semana ocupada del equipo.', visualType:'rows', rows:[
+  {icon:'link', t:'Conexión en vivo (GA4, Meta Ads, Google Ads): se actualiza sola'},
+  {icon:'file', t:'Archivo CSV/Excel subido a mano: exige repetir el proceso cada vez'},
+  {icon:'clock', t:'Regla práctica: si el refresco depende de una persona, no depende del proceso'},
+]});
+
+SLIDES.push({cls:1, type:'checklist', eyebrow:'ANTES DE DECIDIR', h:'Checklist de 5 puntos antes de confiar en un dashboard de IA', step:'10 / 10', items:[
+  '¿La IA mostró la fórmula o el cálculo detrás del número, y tiene sentido?',
+  '¿El gráfico compara cosas comparables (mismo período, mismo objetivo de campaña)?',
+  '¿Verificaste al menos un dato a mano contra la fuente original?',
+  '¿La conclusión distingue correlación de causalidad, o solo lo parece?',
+  '¿Alguien más del equipo podría entender el gráfico sin que se lo expliques?',
+]});
+
+SLIDES.push({cls:1, type:'exercise', tag:'EJERCICIO PRÁCTICO 1', title:'Del caos al dashboard', ctx:'Bloom & Co, una marca colombiana de skincare, corrió 6 campañas de Meta Ads en 8 semanas y nadie en el equipo sabe con certeza qué está funcionando. Con un export crudo de la cuenta publicitaria, construye en vivo un panel que responda esa pregunta con IA conversacional.', dur:'60–75 min en clase', data:'1.858 filas · 8 semanas de Meta Ads', tool:'Looker Studio + Gemini, Julius AI o ChatGPT/Claude', goals:[
+  'Conectar y explorar una fuente de datos publicitaria real con IA conversacional',
+  'Construir 4 visualizaciones que respondan preguntas de negocio, no solo muestren números',
+  'Entregar una recomendación de una frase: hacia dónde mover el presupuesto y por qué',
+], guideHref:'recursos/Ejercicio1_Guia_Dashboard_MetaAds.docx', dataHref:'recursos/ejercicio1_metaads_bloomco.csv'});
+
+// ============================================================
+// CLASE 2 — SEGMENTACIÓN DE CLIENTES CON IA
+// ============================================================
+SLIDES.push({cls:2, type:'classintro', tag:'CLASE 2 · 3 HORAS', num:'02', title:'Segmentación de clientes con IA', p:'De "todos los clientes son iguales" a un mapa claro de quién es quién, y qué hacer con cada grupo.', topics:['Fundamentos de segmentación y modelo RFM','Clustering y buyer personas con IA','Herramientas prácticas y ética del dato','Ejercicio: El mapa de tus clientes']});
+
+SLIDES.push({cls:2, type:'topicheader', eyebrow:'TEMA 1', title:'Fundamentos de segmentación de clientes', items:['Por qué segmentar cambia el resultado de una campaña','El modelo RFM explicado paso a paso','Clustering, buyer personas con IA y qué hacer con cada segmento']});
+
+SLIDES.push({cls:2, type:'split', eyebrow:'PUNTO DE PARTIDA', h:'Por qué segmentar: de "todos" al cliente correcto', step:'1 / 11', text:'Enviar el mismo mensaje a toda la base de clientes es la forma más rápida de desperdiciar presupuesto: al cliente VIP le sobra el descuento de bienvenida, y al cliente dormido no le sirve un recordatorio genérico. Segmentar no es una tarea de "ciencia de datos" reservada a especialistas — con IA, cualquier equipo de marketing puede construir segmentos accionables en una sesión de trabajo. Las marcas que dominan esto no tratan la segmentación como un proyecto que se hace una vez al año, sino como un hábito que se revisa cada campaña, porque el comportamiento de los clientes cambia más rápido de lo que cambia el organigrama de la empresa.', visualType:'rows', rows:[
+  {icon:'warning', t:'Sin segmentar: un solo mensaje, para todos, siempre'},
+  {icon:'users', t:'Segmentando: el mensaje correcto, al grupo correcto, en el momento correcto'},
+  {icon:'trend', t:'Resultado esperado: más conversión con el mismo presupuesto'},
+]});
+
+SLIDES.push({cls:2, type:'cards', eyebrow:'TIPOS DE SEGMENTACIÓN', h:'Cuatro formas de agrupar a tus clientes', step:'2 / 11', cols:4, cards:[
+  {icon:'globe', h:'Geográfica', p:'Ciudad, región o país. Útil cuando la logística o la cultura local cambian el mensaje.'},
+  {icon:'users', h:'Demográfica', p:'Edad, género, nivel de ingreso. La más común, pero la menos predictiva por sí sola.'},
+  {icon:'brain', h:'Psicográfica', p:'Valores, estilo de vida, intereses. Explica el "por qué" detrás de la compra.'},
+  {icon:'click', h:'Conductual', p:'Qué hace el cliente: frecuencia, recencia, valor de compra. La base del modelo RFM.'},
+]});
+
+SLIDES.push({cls:2, type:'cards', eyebrow:'EL MODELO CENTRAL', h:'RFM: Recencia, Frecuencia, Valor Monetario', step:'3 / 11', cols:3, cards:[
+  {icon:'clock', h:'Recencia', p:'¿Hace cuánto compró por última vez? Entre menos días, más "caliente" está el cliente y más receptivo suele estar a un nuevo mensaje.'},
+  {icon:'repeat', h:'Frecuencia', p:'¿Cuántas veces ha comprado? Más pedidos, más hábito de compra construido y más predecible su próxima decisión.'},
+  {icon:'tag', h:'Valor monetario', p:'¿Cuánto ha gastado en total? El indicador más directo de cuánto vale ese cliente para el negocio hoy.'},
+]});
+
+SLIDES.push({cls:2, type:'split', eyebrow:'RFM CON IA', h:'Cómo un asistente de IA calcula los scores en minutos', step:'4 / 11', text:'El cálculo tradicional de RFM exige dividir a cada cliente en quintiles (grupos del 20%) por cada una de las tres dimensiones y sumar los puntajes — un ejercicio de fórmulas que puede tomar una tarde entera en Excel. Herramientas como Julius AI, ChatGPT o Claude hacen ese cálculo estadístico en segundos cuando se les describe la lógica en lenguaje natural, dejando el tiempo humano para lo que realmente importa: decidir qué hacer con cada grupo. Esto no reemplaza el criterio de negocio — lo libera: el marketer deja de ser quien arma la fórmula y pasa a ser quien decide qué umbral tiene sentido para su categoría.', visualType:'rows', rows:[
+  {icon:'database', t:'Sube el historial de compras en un CSV'},
+  {icon:'sparkle', t:'Describe la lógica: quintiles de Recencia, Frecuencia y Monetario'},
+  {icon:'users', t:'Recibe los 5 segmentos, con nombre y tamaño, listos para revisar'},
+]});
+
+SLIDES.push({cls:2, type:'case', eyebrow:'CASO REAL', h:'Marcas globales que llevan años segmentando con datos', step:'5 / 11', cases:[
+  {co:'Netflix', tag:'Segmentación conductual', stats:[{n:'80%', l:'del contenido visto llega por recomendación'}], p:'Analiza patrones de visualización, calificaciones y búsquedas para predecir qué quiere ver cada usuario, en vez de mostrarle lo mismo a todos los suscriptores.'},
+  {co:'Starbucks · Amazon · Nike', tag:'Personalización a escala', stats:[{n:'3', l:'marcas, un mismo patrón de éxito'}], p:'Coinciden en usar datos de comportamiento —no solo demografía— para identificar a sus clientes de mayor valor y construir experiencias distintas para cada grupo, en vez de una oferta única para toda la base.'},
+]});
+
+SLIDES.push({cls:2, type:'case', eyebrow:'CASO REAL', h:'La retención también se segmenta con IA', step:'6 / 11', cases:[
+  {co:'Sephora', tag:'IA conversacional + retención', stats:[{n:'2024', l:'año de implementación reportado'}], p:'Sephora incorporó un asistente conversacional basado en IA para reforzar la retención y la asistencia al cliente, atendiendo consultas y personalizando la relación con distintos grupos de compradoras según su comportamiento.'},
+]});
+
+SLIDES.push({cls:2, type:'cards', eyebrow:'ERRORES COMUNES', h:'Lo que arruina una segmentación antes de empezar', step:'7 / 11', cols:3, cards:[
+  {icon:'warning', h:'Demasiados segmentos', p:'Si el equipo no puede recordar de memoria qué hacer con cada grupo, hay más segmentos de los que la organización puede activar.'},
+  {icon:'database', h:'Datos sucios sin limpiar', p:'Clientes duplicados o correos mal escritos distorsionan el score antes de que la IA calcule nada.'},
+  {icon:'clock', h:'Ventanas de tiempo inconsistentes', p:'Comparar "compras del último mes" con "compras del último año" en el mismo modelo rompe la lógica del score.'},
+]});
+
+SLIDES.push({cls:2, type:'compare', eyebrow:'DOS TÉCNICAS, DOS USOS', h:'Clustering vs. RFM: cuándo usar cada uno', step:'8 / 11', cards:[
+  {icon:'tag', h:'RFM', pill:'Simple y rápido', hi:true, items:['No requiere entrenar ningún modelo','Resultado interpretable de inmediato por cualquiera','Ideal para e-commerce y bases transaccionales simples']},
+  {icon:'layers', h:'Clustering (Cluster Analysis)', pill:'Más profundo', items:['Agrupa por múltiples variables a la vez (no solo 3)','Encuentra patrones que RFM no puede ver por sí solo','Requiere más datos y más validación humana del resultado']},
+]});
+
+SLIDES.push({cls:2, type:'split', eyebrow:'MÁS ALLÁ DEL NÚMERO', h:'Buyer personas enriquecidos con IA generativa', step:'9 / 11', text:'Un segmento RFM te dice "quién compra más", pero no "por qué". La IA generativa puede tomar los datos duros de un segmento y redactar un perfil cualitativo — un buyer persona — que ayuda al equipo creativo a escribir mensajes con el tono correcto para cada grupo, sin inventar datos que el segmento no respalda. El riesgo a evitar es el inverso: dejar que la IA invente rasgos de personalidad que ningún dato sostiene, solo porque "suenan bien" en el prompt.', visualType:'rows', rows:[
+  {icon:'database', t:'Datos duros: recencia, frecuencia, ticket promedio, categoría favorita'},
+  {icon:'brain', t:'IA generativa redacta el perfil: motivaciones, objeciones, tono de mensaje'},
+  {icon:'chat', t:'El equipo creativo escribe copy específico para ese perfil'},
+]});
+
+SLIDES.push({cls:2, type:'cards', eyebrow:'DE SEGMENTO A ACCIÓN', h:'Qué hacer con cada grupo, en la práctica', step:'10 / 11', cols:4, cards:[
+  {icon:'trophy', h:'Clientes VIP', p:'Programa de lealtad, acceso anticipado a lanzamientos, atención prioritaria. Nunca el mismo descuento genérico que a un cliente nuevo.'},
+  {icon:'warning', h:'En riesgo / dormidos', p:'Campaña de reactivación con oferta por tiempo limitado, antes de perderlos por completo frente a la competencia.'},
+  {icon:'sparkle', h:'Nuevos', p:'Secuencia de bienvenida que construya hábito de compra desde el primer pedido, no solo un cupón de bienvenida aislado.'},
+  {icon:'trend', h:'Frecuentes', p:'Venta cruzada y upsell: ya confían en la marca, es el momento de subir el ticket promedio con recomendaciones relevantes.'},
+]});
+
+SLIDES.push({cls:2, type:'split', eyebrow:'PARA IR MÁS LEJOS', h:'La matriz valor × riesgo: priorizar cuando hay presupuesto limitado', step:'11 / 11', text:'Cuando el presupuesto de campaña no alcanza para atender los 5 segmentos con la misma intensidad, cruzar el valor monetario de cada grupo contra su riesgo de fuga (qué tan cerca está de volverse "dormido") da una prioridad clara: un cliente de alto valor y alto riesgo de irse justifica una inversión de retención mucho mayor que un cliente nuevo de bajo valor, aunque ambos "se vean iguales" en un reporte simple de ventas.', visualType:'rows', rows:[
+  {icon:'warning', t:'Alto valor + alto riesgo: prioridad máxima, intervención inmediata'},
+  {icon:'trophy', t:'Alto valor + bajo riesgo: proteger la relación, no hay que rescatar nada'},
+  {icon:'sparkle', t:'Bajo valor + bajo riesgo: automatizar con el mínimo esfuerzo posible'},
+]});
+
+SLIDES.push({cls:2, type:'topicheader', eyebrow:'TEMA 2', title:'Herramientas de IA para segmentación práctica', items:['Cómo pedir la segmentación paso a paso a una IA','Visualizar segmentos y exportarlos para activación','Un caso real de LATAM y los límites éticos del dato']});
+
+SLIDES.push({cls:2, type:'cards', eyebrow:'PASO A PASO', h:'Julius AI / ChatGPT para segmentación RFM', step:'1 / 9', cols:2, cards:[
+  {icon:'file', h:'Sube el historial de compras', p:'Un CSV con id de cliente, fecha de última compra, número de pedidos y valor total.'},
+  {icon:'chat', h:'Describe la lógica del cálculo', p:'"Calcula quintiles de Recencia, Frecuencia y Monetario, y asigna un score de 1 a 5 en cada uno."'},
+  {icon:'users', h:'Pide nombres de negocio', p:'"Agrupa los scores en 5 segmentos con nombre: VIP, Frecuentes, Prometedores, En riesgo, Dormidos."'},
+  {icon:'checklist', h:'Verifica con ejemplos', p:'"Muéstrame 3 clientes de cada segmento y explica por qué obtuvieron ese puntaje."'},
+]});
+
+SLIDES.push({cls:2, type:'cards', eyebrow:'PLANTILLA DE PROMPT', h:'La estructura de un buen prompt de segmentación', step:'2 / 9', cols:2, cards:[
+  {icon:'target', h:'1. Rol + tarea', p:'"Actúa como analista de CRM. Calcula un modelo RFM sobre este dataset de clientes."'},
+  {icon:'filter', h:'2. Reglas exactas', p:'"Usa quintiles (20% por grupo), no rangos fijos. Invierte la Recencia: menos días = mejor score."'},
+  {icon:'users', h:'3. Formato de salida', p:'"Devuélvelo en una tabla con id_cliente, score_rfm y nombre del segmento."'},
+  {icon:'checklist', h:'4. Verificación obligatoria', p:'"Muestra 3 ejemplos con su cálculo detallado antes de generar el resto de la tabla."'},
+]});
+
+SLIDES.push({cls:2, type:'split', eyebrow:'VISUALIZAR PARA DECIDIR', h:'Looker Studio para visualizar segmentos', step:'3 / 9', text:'Una vez calculado el score RFM, visualizarlo en una matriz o mapa de calor de Recencia contra Frecuencia hace evidente, de un vistazo, dónde está concentrado el valor de la base de clientes y qué tan grande es cada grupo — algo mucho más difícil de comunicar solo con una tabla de números. Compartir ese panel con el equipo comercial, además, abre una conversación distinta: ya no se discute "si" segmentar, sino "qué hacer" con cada segmento que ya está sobre la mesa.', visualType:'rows', rows:[
+  {icon:'bars', t:'Matriz de calor: Recencia (eje X) contra Frecuencia (eje Y)'},
+  {icon:'chart', t:'Gráfico de burbujas: tamaño = valor monetario del segmento'},
+  {icon:'users', t:'Tabla resumen: número de clientes y % del total por segmento'},
+]});
+
+SLIDES.push({cls:2, type:'cards', eyebrow:'DE LA IA A LA CAMPAÑA', h:'Exportar segmentos para activación', step:'4 / 9', cols:3, cards:[
+  {icon:'download', h:'CSV / Excel', p:'El formato universal: id de cliente y segmento asignado, listo para cualquier plataforma.'},
+  {icon:'target', h:'Audiencias de Meta Ads', p:'Se sube como lista de clientes en Audiencias personalizadas, por segmento.'},
+  {icon:'mail', h:'CRM / Email marketing', p:'Se importa como etiqueta o lista, para automatizar secuencias por segmento.'},
+]});
+
+SLIDES.push({cls:2, type:'split', eyebrow:'MANTENIMIENTO', h:'Qué pasa cuando el segmento se queda desactualizado', step:'5 / 9', text:'Un segmento RFM no es una foto que se toma una vez y sirve para siempre: el cliente VIP de enero puede ser el cliente dormido de julio si nadie recalcula los scores. La mayoría de equipos que abandonan la segmentación no lo hacen porque falló — la abandonan porque nunca definieron cada cuánto se vuelve a correr el cálculo, y seis meses después el segmento "activo" está lleno de gente que ya se fue.', visualType:'rows', rows:[
+  {icon:'calendar', t:'Define una frecuencia fija: mensual para e-commerce, trimestral para B2B'},
+  {icon:'gear', t:'Automatiza el recálculo si la herramienta lo permite, no dependas de la memoria'},
+  {icon:'warning', t:'Un segmento sin fecha de recálculo es, en la práctica, un segmento desactualizado'},
+]});
+
+SLIDES.push({cls:2, type:'case', eyebrow:'CASO REAL · COLOMBIA', h:'Cuando la segmentación con IA cambia números de negocio de verdad', step:'6 / 9', cases:[
+  {co:'Nequi', tag:'Scoring de crédito con IA', stats:[{n:'10x', l:'creció la cartera de crédito'},{n:'-75%', l:'la mora'}], p:'Nequi usa machine learning para predecir la probabilidad de pago de cada usuario y segmentar a quién ofrecer crédito. El resultado reportado: la cartera se multiplicó por diez y la mora cayó 75%, mientras la atención al cliente llegó a 98% de resolución automatizada.'},
+  {co:'Comfama (con Pragma)', tag:'Segmentación de afiliados', stats:[{n:'+', l:'comunicaciones más pertinentes'}], p:'Comfama segmentó su base de afiliados con minería de datos y business intelligence para entender necesidades reales por grupo, logrando comunicaciones más relevantes y mayor compromiso de sus usuarios.'},
+]});
+
+SLIDES.push({cls:2, type:'cards', eyebrow:'LÍMITES Y RESPONSABILIDAD', h:'Ética y privacidad al segmentar con datos de clientes', step:'7 / 9', cols:2, cards:[
+  {icon:'shield', h:'Ley 1581 de 2012 (Habeas Data)', p:'En Colombia, todo tratamiento de datos personales para segmentación requiere autorización previa del titular.'},
+  {icon:'warning', h:'Evita segmentos discriminatorios', p:'Segmentar por comportamiento de compra es válido; excluir por raza, religión o condición de salud no lo es.'},
+  {icon:'eye', h:'Transparencia con el cliente', p:'El cliente tiene derecho a saber que sus datos se usan para personalizar lo que ve.'},
+  {icon:'database', h:'Minimiza lo que guardas', p:'Usa solo los campos que realmente necesitas para el segmento — no todo dato disponible debe usarse.'},
+]});
+
+SLIDES.push({cls:2, type:'cards', eyebrow:'CUANDO LAS HERRAMIENTAS NO COINCIDEN', h:'Qué hacer si Julius y ChatGPT dan segmentos distintos', step:'8 / 9', cols:2, cards:[
+  {icon:'search', h:'Pide el criterio exacto a cada una', p:'Casi siempre la diferencia está en el umbral usado (ej. "más de 60 días" vs. "más de 90 días"), no en un error real.'},
+  {icon:'checklist', h:'Elige el umbral con criterio de negocio, no con la IA que "suene mejor"', p:'La herramienta no decide el punto de corte correcto para tu categoría — tú lo decides, y luego se lo indicas explícitamente.'},
+]});
+
+SLIDES.push({cls:2, type:'checklist', eyebrow:'ANTES DE PRESIONAR "ENVIAR"', h:'Checklist ético de 4 puntos para cualquier campaña segmentada', step:'9 / 9', items:[
+  '¿Tienes autorización del titular para usar estos datos con este fin específico?',
+  '¿El criterio de segmentación es un comportamiento (compró, hizo clic) y no un atributo protegido?',
+  '¿El cliente podría enterarse de cómo lo segmentaste sin sentirse vigilado o expuesto?',
+  '¿Guardaste solo los campos necesarios para este segmento, y por el tiempo necesario?',
+]});
+
+SLIDES.push({cls:2, type:'exercise', tag:'EJERCICIO PRÁCTICO 2', title:'El mapa de tus clientes', ctx:'Andina Home, una tienda de decoración y hogar, tiene 650 clientes registrados y ninguna segmentación formal. Con su historial de compras, construye un modelo RFM con IA y define una acción de campaña concreta para cada uno de los 5 segmentos.', dur:'70–90 min en clase', data:'650 clientes · 24 meses de historial', tool:'Julius AI, ChatGPT/Claude o Looker Studio + Gemini', goals:[
+  'Calcular el score RFM de cada cliente delegando el cálculo estadístico en una IA',
+  'Nombrar y cuantificar 5 segmentos accionables, con tamaño y valor de cada uno',
+  'Exportar un segmento listo para subir como audiencia personalizada en Meta Ads',
+], guideHref:'recursos/Ejercicio2_Guia_Segmentacion_RFM.docx', dataHref:'recursos/ejercicio2_crm_andinahome.csv'});
+
+// ============================================================
+// CLASE 3 — SEGMENTACIÓN PREDICTIVA Y ACTIVACIÓN
+// ============================================================
+SLIDES.push({cls:3, type:'classintro', tag:'CLASE 3 · 3 HORAS', num:'03', title:'Segmentación predictiva y activación en campañas', p:'El cierre del módulo: de un segmento en una hoja de cálculo a una campaña activa en Meta Ads y Google Ads.', topics:['Analítica predictiva y audiencias inteligentes','Lookalikes, Advantage+ y audiencias GA4','Plan de activación por segmento','Ejercicio: De segmento a campaña']});
+
+SLIDES.push({cls:3, type:'topicheader', eyebrow:'TEMA 1', title:'Analítica predictiva y audiencias inteligentes', items:['Qué cambia cuando la segmentación deja de mirar solo el pasado','Lookalikes, Advantage+ de Meta y audiencias predictivas de GA4','Cuándo confiar en la IA y cuándo mantener el control humano']});
+
+SLIDES.push({cls:3, type:'split', eyebrow:'DEL PASADO AL FUTURO', h:'Qué es la analítica predictiva', step:'1 / 9', text:'Todo lo visto en la Clase 2 describe lo que un cliente ya hizo. La analítica predictiva usa esos mismos datos históricos para estimar qué va a hacer a continuación: quién está a punto de comprar, quién está a punto de irse. Es el paso que convierte una fotografía del pasado en una decisión sobre a quién impactar hoy. La diferencia no es sutil en resultados: llegar tres días tarde a un cliente con alta intención de compra suele significar que ya compró en otro lugar.', visualType:'rows', rows:[
+  {icon:'clock', t:'Analítica descriptiva: "este cliente compró hace 5 días"'},
+  {icon:'trend', t:'Analítica predictiva: "este cliente tiene alta probabilidad de comprar esta semana"'},
+  {icon:'target', t:'Resultado: la campaña llega antes de que la ventana de oportunidad se cierre'},
+]});
+
+SLIDES.push({cls:3, type:'stats', eyebrow:'META ADS EN 2026', h:'Lookalikes y Advantage+: la IA detrás de la segmentación automática', step:'2 / 9', stats:[
+  {n:'1–3%', l:'sigue siendo el rango óptimo de similitud para lookalikes orientados a conversión en 2026.'},
+  {n:'+22%', l:'de mejora promedio en ROAS que reportan cuentas de e-commerce al usar Advantage+ Shopping frente a campañas manuales equivalentes.'},
+  {n:'1 riesgo', l:'ceder toda la segmentación al algoritmo reduce la visibilidad sobre a quién se está llegando realmente.'},
+]});
+
+SLIDES.push({cls:3, type:'case', eyebrow:'CASO REAL', h:'Cuando Advantage+ funciona — y cuando conviene revisarlo', step:'3 / 9', cases:[
+  {co:'FULLBEAUTY Brands', tag:'Advantage+ Shopping · creativos con IA', stats:[{n:'+45%', l:'ROAS'},{n:'+22%', l:'tasa de conversión'},{n:'+36%', l:'CTR'}], p:'La marca de moda adoptó variaciones de creativo generadas con IA dentro de Advantage+ Shopping. El resultado reportado: 45% más ROAS, 22% más conversión y 36% más clics frente a su configuración anterior.'},
+  {co:'Estudio Haus (640 pruebas de incrementalidad)', tag:'Señal de alerta', stats:[{n:'$257→$528', l:'costo de adquisición de nuevo cliente'}], p:'Aun con un ROAS reportado estable cerca de 4.5x, el costo real de adquirir un cliente nuevo vía Advantage+ más que se duplicó en un año — el ROAS que muestra la plataforma no siempre cuenta toda la historia.'},
+]});
+
+SLIDES.push({cls:3, type:'cards', eyebrow:'GOOGLE EN 2026', h:'Audiencias predictivas en GA4 y Performance Max', step:'4 / 9', cols:2, cards:[
+  {icon:'brain', h:'Audiencias predictivas de GA4', p:'GA4 puede construir audiencias de usuarios con alta probabilidad de compra o de abandono, basándose en patrones de comportamiento pasado, sin que tengas que definir reglas manuales.'},
+  {icon:'target', h:'Performance Max', p:'Usa señales de audiencia (listas de clientes, eventos de conversión) como punto de partida, y la IA de Google expande desde ahí a través de toda su red de inventario.'},
+]});
+
+SLIDES.push({cls:3, type:'split', eyebrow:'CÓMO SE VE EN LA PRÁCTICA', h:'Construir una audiencia predictiva en GA4, paso a paso', step:'5 / 9', text:'GA4 no exige saber estadística para construir una audiencia predictiva: dentro de "Audiencias" existen plantillas ya entrenadas como "probable de comprar en 7 días" o "probable de abandonar en 7 días", calculadas automáticamente a partir del historial de eventos del sitio. El trabajo del marketer es decidir cuál de esas audiencias conecta a qué campaña — no calcular la probabilidad, sino usarla.', visualType:'rows', rows:[
+  {icon:'gear', t:'Activa los eventos de compra y de "purchase" en GA4 con suficiente volumen histórico'},
+  {icon:'target', t:'Selecciona la plantilla predictiva (compra probable / abandono probable)'},
+  {icon:'link', t:'Conecta esa audiencia directamente a Google Ads como lista de remarketing'},
+]});
+
+SLIDES.push({cls:3, type:'split', eyebrow:'EL VALOR A FUTURO', h:'Customer Lifetime Value (LTV) predictivo con IA', step:'6 / 9', text:'El LTV tradicional se calcula mirando hacia atrás: cuánto ha gastado un cliente hasta hoy. El LTV predictivo usa IA para estimar cuánto va a gastar en los próximos 6 o 12 meses, a partir de patrones de clientes similares — y ese número es el que debería definir cuánto invertir en retenerlo. Un ejemplo simple: si el histórico de clientes similares muestra que quien compra dos veces en el primer mes termina gastando en promedio 3 veces más en el año, ese patrón —no el gasto actual— es el que debería fijar el presupuesto de retención.', visualType:'rows', rows:[
+  {icon:'clock', t:'LTV histórico: lo que el cliente ya gastó'},
+  {icon:'trend', t:'LTV predictivo: lo que se estima que gastará'},
+  {icon:'target', t:'Decisión: invertir en retención en proporción al LTV futuro, no solo al pasado'},
+]});
+
+SLIDES.push({cls:3, type:'cards', eyebrow:'MODELOS DE PROPENSIÓN', h:'Tres preguntas que la IA puede responder por cliente', step:'7 / 9', cols:3, cards:[
+  {icon:'warning', h:'Propensión a churn', p:'¿Qué tan probable es que este cliente deje de comprar en los próximos meses, y con cuánta anticipación se puede intervenir?'},
+  {icon:'repeat', h:'Propensión a próxima compra', p:'¿Cuándo es más probable que este cliente vuelva a comprar, para no llegarle ni muy pronto ni demasiado tarde?'},
+  {icon:'trend', h:'Propensión a upsell', p:'¿Qué tan probable es que este cliente acepte un producto de mayor valor sin sentir que le están vendiendo de más?'},
+]});
+
+SLIDES.push({cls:3, type:'cards', eyebrow:'MONITOREO CONTINUO', h:'Señales para no ser sorprendido por el algoritmo', step:'8 / 9', cols:3, cards:[
+  {icon:'trend', h:'CAC de cliente nuevo, no solo ROAS', p:'El ROAS puede verse estable mientras el costo real de cada cliente nuevo se duplica silenciosamente, como mostró el estudio Haus.'},
+  {icon:'clock', h:'Revisa cada 2-3 semanas, no solo al cierre de mes', p:'La deriva de un algoritmo automatizado se detecta antes si se revisa con frecuencia, no al final del período.'},
+  {icon:'search', h:'Compara contra un grupo de control cuando algo se ve "demasiado bueno"', p:'Un ROAS excelente y estable durante meses amerita una prueba de incrementalidad, no solo confianza.'},
+]});
+
+SLIDES.push({cls:3, type:'compare', eyebrow:'DECISIÓN CLAVE', h:'Cuándo confiar en la IA y cuándo mantener el control', step:'9 / 9', cards:[
+  {icon:'sparkle', h:'Cede el control a la IA cuando…', items:['El catálogo es amplio y el volumen de datos es alto','El objetivo es de conversión y hay histórico suficiente','No hay restricciones de audiencia (edad, categoría regulada)']},
+  {icon:'shield', h:'Mantén control manual cuando…', items:['La marca tiene un posicionamiento muy específico','El producto tiene restricciones legales de audiencia','Necesitas explicar con precisión a quién le estás hablando']},
+]});
+
+SLIDES.push({cls:3, type:'callout', q:'Varias agencias de performance han reportado, entrando a 2025, el desempeño más inconsistente que han visto en Performance Max. La lección no es abandonar la automatización — es medir su resultado real con pruebas de incrementalidad antes de confiarle todo el presupuesto.', src:'Basado en el análisis comparativo Advantage+ vs. Performance Max 2026 de Pixis, con testimonios de agencias de performance marketing.'});
+
+SLIDES.push({cls:3, type:'topicheader', eyebrow:'TEMA 2', title:'De la segmentación al plan de activación', items:['Conectar cada segmento con su canal y su mensaje','Medir si la segmentación realmente mejoró los resultados','Construir un playbook reutilizable para el próximo lanzamiento']});
+
+SLIDES.push({cls:3, type:'split', eyebrow:'CIERRE DEL CICLO', h:'Conectar segmentos con campañas, por canal', step:'1 / 8', text:'Un segmento sin canal de activación es solo una lista en una hoja de cálculo. El paso final es decidir, para cada grupo, en qué plataforma y con qué tipo de audiencia se va a activar: subida directa como lista de clientes, lookalike a partir de esa lista, o audiencia predictiva nativa de la plataforma.', visualType:'rows', rows:[
+  {icon:'target', t:'Meta Ads: audiencia personalizada, lookalike o Advantage+'},
+  {icon:'compass', t:'Google Ads: señales de audiencia para Performance Max'},
+  {icon:'mail', t:'Email / CRM: secuencia automatizada por segmento'},
+]});
+
+SLIDES.push({cls:3, type:'cards', eyebrow:'MATRIZ DE ACTIVACIÓN', h:'Un mensaje distinto para cada segmento', step:'2 / 8', cols:4, cards:[
+  {icon:'trophy', h:'VIP', p:'Mensaje de reconocimiento y acceso exclusivo, no de descuento.'},
+  {icon:'warning', h:'En riesgo', p:'Mensaje de reactivación con urgencia genuina y una razón concreta para volver.'},
+  {icon:'sparkle', h:'Nuevos', p:'Mensaje educativo: cómo sacarle más provecho a lo que ya compraron.'},
+  {icon:'repeat', h:'Frecuentes', p:'Mensaje de venta cruzada, apalancado en la confianza ya construida.'},
+]});
+
+SLIDES.push({cls:3, type:'case', eyebrow:'CASO REAL', h:'Simplificar la segmentación también puede ganar', step:'3 / 8', cases:[
+  {co:'E-commerce de ropa deportiva (agencia Cuva Ads)', tag:'Consolidación a Advantage+', stats:[{n:'-41%', l:'costo por adquisición'},{n:'+87%', l:'volumen de conversiones'}], p:'Tenían 12 campañas separadas por género, edad e interés. Al consolidar todo en 2 campañas Advantage+ con audiencias amplias, el algoritmo tuvo más presupuesto y datos por campaña para encontrar bolsones de audiencia que manualmente nunca se habrían especificado.'},
+]});
+
+SLIDES.push({cls:3, type:'split', eyebrow:'CERRAR EL LOOP', h:'Medición: ¿la segmentación mejoró los resultados?', step:'4 / 8', text:'Segmentar no es el objetivo final — mejorar el resultado sí lo es. Antes de lanzar, define cómo vas a comparar el desempeño de las campañas segmentadas contra el enfoque anterior de "un solo mensaje para todos", y con qué métrica exacta se va a declarar el experimento exitoso. La forma más rigurosa de hacerlo es con una prueba de incrementalidad: dejar un pequeño grupo de control sin la campaña segmentada y comparar el resultado real contra el grupo que sí la recibió — el mismo principio que reveló que el ROAS de Advantage+ no siempre cuenta toda la historia.', visualType:'rows', rows:[
+  {icon:'chart', t:'Compara ROAS y CPA: segmentado vs. no segmentado'},
+  {icon:'clock', t:'Define una ventana de medición clara antes de lanzar (ej. 4 semanas)'},
+  {icon:'checklist', t:'Documenta el resultado, gane o pierda la hipótesis'},
+]});
+
+SLIDES.push({cls:3, type:'cards', eyebrow:'METODOLOGÍA DE PRUEBA', h:'Cómo montar un grupo de control sin complicarte', step:'5 / 8', cols:3, cards:[
+  {icon:'users', h:'Divide, no elimines', p:'Reserva un 10-20% de la audiencia sin la campaña segmentada, en vez de lanzarle a todos desde el día uno.'},
+  {icon:'clock', h:'Misma ventana, mismo período', p:'Compara ambos grupos en las mismas fechas — nunca un mes de alta demanda contra uno bajo.'},
+  {icon:'chart', h:'Compara el resultado de negocio', p:'Ventas incrementales reales, no solo el ROAS que reporta la plataforma.'},
+]});
+
+SLIDES.push({cls:3, type:'cards', eyebrow:'PLAYBOOK REUTILIZABLE', h:'Qué debe contener el documento que se reusa en cada lanzamiento', step:'6 / 8', cols:2, cards:[
+  {icon:'file', h:'Los prompts exactos que funcionaron', p:'La redacción específica que le dio buenos resultados a la IA, para no reinventar la rueda cada vez.'},
+  {icon:'filter', h:'Los umbrales elegidos y por qué', p:'Por qué se usó "más de 7 días" para carrito abandonado y no otro número — la justificación de negocio detrás.'},
+  {icon:'target', h:'La matriz de mensajes por segmento', p:'Qué se le dijo a cada grupo, para no partir de cero en el próximo lanzamiento.'},
+  {icon:'chart', h:'El resultado medido de la última vez', p:'Qué tan bien funcionó, con números — el playbook se actualiza con cada campaña, no se archiva.'},
+]});
+
+SLIDES.push({cls:3, type:'cards', eyebrow:'DASHBOARD DE SEGUIMIENTO', h:'Lo que un panel por segmento debe mostrar siempre', step:'7 / 8', cols:2, cards:[
+  {icon:'bars', h:'ROAS y CPA por segmento, no solo global', p:'El promedio general esconde que un segmento va excelente y otro está perdiendo dinero.'},
+  {icon:'clock', h:'Tendencia semana a semana, no solo el total', p:'Un segmento puede verse bien en el acumulado y estar deteriorándose las últimas 3 semanas.'},
+]});
+
+SLIDES.push({cls:3, type:'cards', eyebrow:'ERRORES COMUNES', h:'Lo que arruina un plan de activación por segmento', step:'8 / 8', cols:3, cards:[
+  {icon:'warning', h:'Activar sin verificar el tamaño del segmento', p:'Un segmento de 40 personas no justifica una campaña propia — mézclalo con uno similar antes de activar.'},
+  {icon:'repeat', h:'Reciclar el mismo mensaje "personalizado" por meses', p:'Un mensaje "de reactivación" que el cliente ve por tercera vez deja de sentirse personal y empieza a sentirse spam.'},
+  {icon:'database', h:'Activar sobre una audiencia desactualizada', p:'Subir a Meta Ads una lista de "clientes VIP" calculada hace 4 meses activa gente que ya cambió de segmento.'},
+]});
+
+SLIDES.push({cls:3, type:'callout', q:'La frontera de 2026 no es segmentar mejor: es que agentes de IA autónomos detecten el cambio de comportamiento de un cliente y activen la campaña correcta sin que un humano tenga que pedirlo. La segmentación deja de ser un evento puntual y se vuelve un proceso continuo.', src:'Tendencia observada en la evolución de plataformas de marketing automation y agentes de IA, 2025–2026.'});
+
+SLIDES.push({cls:3, type:'exercise', tag:'EJERCICIO PRÁCTICO 3', title:'De segmento a campaña', ctx:'Con datos de comportamiento web de Andina Home (estilo GA4), identifica a los usuarios con mayor probabilidad de compra a corto plazo y diseña una estrategia de activación diferenciada en Meta Ads y Google Ads. Este ejercicio cierra el ciclo completo del módulo.', dur:'70–90 min en clase', data:'900 usuarios · comportamiento 30–90 días', tool:'Julius AI, ChatGPT/Claude y Looker Studio', goals:[
+  'Clasificar usuarios en segmentos de intención de compra a partir de señales de comportamiento',
+  'Construir una matriz de activación: segmento, plataforma, tipo de audiencia y mensaje',
+  'Justificar cuándo automatizar con IA (Advantage+/PMax) y cuándo mantener control manual',
+], guideHref:'recursos/Ejercicio3_Guia_Segmentacion_Predictiva.docx', dataHref:'recursos/ejercicio3_ga4_andinahome.csv'});
+
+// ============================================================
+// CIERRE DEL MÓDULO
+// ============================================================
+SLIDES.push({cls:0, type:'checklist', eyebrow:'SÍNTESIS FINAL', h:'Del dato a la decisión: checklist de cierre del módulo', step:'', items:[
+  '¿Conectaste una fuente de datos real y le hiciste preguntas concretas a una IA, no solo pediste "un análisis"?',
+  '¿Calculaste al menos un modelo de segmentación (RFM) y verificaste su lógica con ejemplos?',
+  '¿Tradujiste cada segmento en una acción de campaña específica, con canal y mensaje?',
+  '¿Sabes distinguir cuándo ceder el control a la IA (Advantage+, PMax) y cuándo mantenerlo manual?',
+  '¿Documentaste el proceso para poder repetirlo en tu próximo proyecto o cliente?',
+]});
+
+SLIDES.push({cls:0, type:'closing', kicker:'MÓDULO COMPLETADO', title:'De los datos crudos a la decisión de campaña', lede:'Tres clases, tres ejercicios, un mismo hilo conductor: analizar con IA, segmentar con criterio, y activar con un plan claro.', cols:[
+  {k:'EJERCICIO 1', h:'Del caos al dashboard', p:'Panel de campañas de Meta Ads construido con IA conversacional.'},
+  {k:'EJERCICIO 2', h:'El mapa de tus clientes', p:'Segmentación RFM de 650 clientes, lista para activar.'},
+  {k:'EJERCICIO 3', h:'De segmento a campaña', p:'Audiencias predictivas y matriz de activación en Meta y Google Ads.'},
+]});
+
+// ============================================================
+// INIT + NAVEGACIÓN
+// ============================================================
+const deckEl = document.getElementById('deck');
+let current = 0;
+
+function build(){
+  SLIDES.forEach((s, i)=>{
+    const div = document.createElement('div');
+    div.className = 'slide type-'+s.type;
+    div.dataset.cls = s.cls;
+    try{
+      const fn = RENDERERS[s.type];
+      div.innerHTML = fn ? fn(s) : '<div class="slide-inner center"><p class="lede">(Slide vacío)</p></div>';
+    }catch(err){
+      console.error('Error renderizando slide', i, s.type, err);
+      div.innerHTML = '<div class="slide-inner center"><p class="lede">No se pudo renderizar esta diapositiva ('+(s.h||s.title||s.type)+').</p></div>';
+    }
+    deckEl.appendChild(div);
+  });
+}
+build();
+
+const slideEls = Array.from(document.querySelectorAll('.slide'));
+const progressBar = document.getElementById('progress-bar');
+const counter = document.getElementById('counter');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const dots = Array.from(document.querySelectorAll('#classdots button'));
+const root = document.documentElement;
+
+function applyPalette(cls){
+  const p = PALETTE[cls] || PALETTE[0];
+  root.style.setProperty('--accent', p.accent);
+  root.style.setProperty('--accent-2', p.accent2);
+  root.style.setProperty('--accent-soft', p.soft);
+  root.style.setProperty('--accent-ink', p.ink);
+}
+
+function pad(n){ return String(n).padStart(2,'0'); }
+
+function go(i, dir){
+  i = Math.max(0, Math.min(SLIDES.length-1, i));
+  slideEls[current].classList.remove('active');
+  current = i;
+  const s = SLIDES[current];
+  applyPalette(s.cls);
+  slideEls[current].classList.add('active');
+  progressBar.style.width = ((current+1)/SLIDES.length*100)+'%';
+  counter.textContent = pad(current+1)+' / '+pad(SLIDES.length);
+  prevBtn.classList.toggle('hide', current===0);
+  nextBtn.classList.toggle('hide', current===SLIDES.length-1);
+  dots.forEach(d=>d.classList.remove('on'));
+  const dotIdx = s.cls>=1 ? s.cls-1 : (current > firstIndexOfClass(3) ? 2 : current > firstIndexOfClass(2) ? 1 : 0);
+  if (dots[dotIdx]) dots[dotIdx].classList.add('on');
+  try{ history.replaceState(null, '', '#s'+(current+1)); }catch(e){ /* algunos entornos con sandbox (iframes de vista previa) bloquean history.replaceState; se ignora sin afectar la navegación */ }
+}
+function firstIndexOfClass(c){ return SLIDES.findIndex(s=>s.cls===c); }
+
+function next(){ go(current+1); }
+function prev(){ go(current-1); }
+
+nextBtn.addEventListener('click', next);
+prevBtn.addEventListener('click', prev);
+
+document.addEventListener('keydown', (e)=>{
+  if (['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); next(); }
+  else if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); prev(); }
+  else if (e.key==='Home'){ go(0); }
+  else if (e.key==='End'){ go(SLIDES.length-1); }
+});
+
+// swipe
+let touchX = null, touchY = null;
+document.addEventListener('touchstart', (e)=>{ touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; }, {passive:true});
+document.addEventListener('touchend', (e)=>{
+  if (touchX===null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  const dy = e.changedTouches[0].clientY - touchY;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)){ dx < 0 ? next() : prev(); }
+  touchX = null;
+}, {passive:true});
+
+// click zones (borde izquierdo/derecho de la pantalla, evitando controles)
+deckEl.addEventListener('click', (e)=>{
+  if (e.target.closest('a, button, .dl-btn')) return;
+  const w = window.innerWidth;
+  const x = e.clientX;
+  if (x < w*0.14) prev();
+  else if (x > w*0.86) next();
+});
+
+dots.forEach((d,idx)=>{
+  d.addEventListener('click', ()=>{
+    const cls = idx+1;
+    const target = SLIDES.findIndex(s=>s.cls===cls);
+    if (target>=0) go(target);
+  });
+});
+
+// deep link inicial (#s12)
+const hash = location.hash.match(/#s(\d+)/);
+const startIdx = hash ? Math.max(0, Math.min(SLIDES.length-1, parseInt(hash[1],10)-1)) : 0;
+go(startIdx);
+</script>
+</body>
+</html>
