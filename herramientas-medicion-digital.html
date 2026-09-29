@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herramientas de Medición Digital y del Entorno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-base:#f5f6fb;
+  --surface:#ffffff;
+  --surface-alt:#eef0f9;
+  --line:rgba(11,19,48,0.10);
+  --ink-950:#0b1330;
+  --ink-800:#232a4d;
+  --ink-600:#565f8a;
+  --ink-400:#8790b5;
+
+  --cyan-600:#0c8f8f; --cyan-100:#e1fbf9;
+  --blue-600:#2451e0; --blue-100:#e8edff;
+  --violet-600:#7c3aed; --violet-100:#f1ebff;
+  --green-600:#149247; --green-100:#e5fbec;
+  --amber-600:#b56a04; --amber-100:#fff3df;
+  --pink-600:#c2247a; --pink-100:#ffeaf4;
+
+  --glow: 0 18px 40px -22px rgba(36,81,224,0.28);
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 12% -10%, rgba(124,58,237,0.10), transparent 60%),
+    radial-gradient(ellipse 900px 600px at 100% 0%, rgba(12,143,143,0.08), transparent 55%),
+    radial-gradient(ellipse 1200px 800px at 50% 120%, rgba(36,81,224,0.07), transparent 60%),
+    var(--bg-base);
+  color:var(--ink-950);
+  font-family:'IBM Plex Sans', sans-serif;
+  min-height:100vh;
+  padding-bottom:80px;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(11,19,48,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11,19,48,0.035) 1px, transparent 1px);
+  background-size:56px 56px;
+  pointer-events:none;
+  z-index:0;
+  mask-image: radial-gradient(ellipse 100% 60% at 50% 0%, black, transparent);
+}
+
+.wrap{max-width:1180px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+/* NAV */
+.site-nav{
+  position:sticky; top:0; z-index:20;
+  background:rgba(245,246,251,0.82); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:1180px; margin:0 auto; padding:16px 28px;
+  display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
+}
+.nav-logo{font-family:'Instrument Serif', serif; font-size:19px; color:var(--ink-950);}
+.nav-links{display:flex; gap:6px;}
+.nav-link{
+  font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.03em;
+  color:var(--ink-600); text-decoration:none; padding:8px 14px; border-radius:999px;
+  transition:all .2s ease;
+}
+.nav-link:hover{background:var(--surface-alt); color:var(--ink-950);}
+.nav-link.active{background:var(--blue-100); color:var(--blue-600); font-weight:600;}
+
+/* HEADER */
+header.page-head{padding:56px 0 36px; text-align:center;}
+
+.kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--cyan-600);
+  background:var(--cyan-100);
+  border:1px solid rgba(12,143,143,0.25);
+  padding:6px 14px; border-radius:999px;
+  animation:fadeUp .7s ease both;
+}
+.kicker::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--cyan-600); box-shadow:0 0 8px rgba(12,143,143,0.5);}
+
+h1{
+  font-family:'Instrument Serif', serif;
+  font-weight:400;
+  font-size:clamp(32px, 5vw, 54px);
+  line-height:1.08;
+  margin:20px 0 14px;
+  background:linear-gradient(100deg, var(--ink-950) 10%, var(--blue-600) 55%, var(--violet-600) 92%);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  animation:fadeUp .8s .05s ease both;
+}
+h1 em{font-style:italic; color:var(--violet-600); -webkit-text-fill-color:var(--violet-600);}
+
+.lede{
+  max-width:640px; margin:0 auto;
+  color:var(--ink-600); font-size:16.5px; line-height:1.6;
+  animation:fadeUp .8s .1s ease both;
+}
+
+@keyframes fadeUp{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+
+/* SECTION LABEL */
+.section-label{display:flex; align-items:center; gap:14px; margin:56px 0 22px;}
+.section-label h2{font-family:'Instrument Serif', serif; font-weight:400; font-size:26px; color:var(--ink-950); white-space:nowrap;}
+.section-label .rule{flex:1; height:1px; background:linear-gradient(90deg, var(--line), transparent);}
+.section-label .count{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-400); letter-spacing:.05em;}
+.section-intro{max-width:660px; margin:-6px 0 30px; color:var(--ink-600); font-size:15px; line-height:1.6;}
+
+/* FILTER BAR */
+.filter-bar{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:40px 0 8px; animation:fadeUp .8s .15s ease both;}
+.pill{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.04em;
+  padding:9px 16px; border-radius:999px; cursor:pointer;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink-600);
+  transition:all .25s ease; display:flex; align-items:center; gap:8px;
+}
+.pill .dot{width:7px; height:7px; border-radius:50%; background:currentColor;}
+.pill:hover{border-color:rgba(11,19,48,0.25); color:var(--ink-950);}
+.pill.active{background:var(--blue-100); border-color:var(--blue-600); color:var(--blue-600);}
+
+/* TOOL CARDS */
+.tool-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(310px,1fr)); gap:18px;}
+.tool-card{
+  border-radius:18px; border:1px solid var(--line); border-left:3px solid var(--accent, var(--cyan-600));
+  background:var(--surface);
+  padding:22px 22px 20px;
+  display:flex; flex-direction:column; gap:14px;
+  box-shadow:0 1px 2px rgba(11,19,48,0.03);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.tool-card:hover{transform:translateY(-3px); box-shadow:var(--glow);}
+
+.tool-head{display:flex; align-items:flex-start; gap:14px;}
+.tool-icon-wrap{perspective:700px; width:46px; height:46px; flex-shrink:0;}
+.tool-icon{
+  width:46px; height:46px; border-radius:13px; background:var(--accent, var(--cyan-600));
+  display:flex; align-items:center; justify-content:center; font-size:21px;
+  transform-style:preserve-3d; animation:floatSpin 7s ease-in-out infinite;
+  box-shadow:0 10px 18px -8px var(--accent, var(--cyan-600));
+}
+@keyframes floatSpin{
+  0%{transform:rotateY(0deg) rotateX(0deg) translateY(0px);}
+  25%{transform:rotateY(90deg) rotateX(8deg) translateY(-4px);}
+  50%{transform:rotateY(180deg) rotateX(0deg) translateY(0px);}
+  75%{transform:rotateY(270deg) rotateX(-8deg) translateY(-4px);}
+  100%{transform:rotateY(360deg) rotateX(0deg) translateY(0px);}
+}
+.tool-titles{flex:1;}
+.tool-titles h3{font-size:17px; font-weight:600; color:var(--ink-950); margin-bottom:4px;}
+.tool-titles .cat{font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent, var(--cyan-600));}
+.price-badge{
+  font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
+  padding:3px 9px; border-radius:999px; white-space:nowrap; flex-shrink:0; margin-top:2px;
+  background:var(--surface-alt); border:1px solid var(--line); color:var(--ink-400);
+}
+
+.tool-desc{font-size:13.5px; color:var(--ink-600); line-height:1.55;}
+.tool-use{font-size:12.5px; color:var(--ink-400); line-height:1.6; padding-left:16px; position:relative;}
+.tool-use::before{content:'→'; position:absolute; left:0; color:var(--accent, var(--cyan-600));}
+
+.tool-link{
+  margin-top:auto; display:inline-flex; align-items:center; gap:6px;
+  font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.03em;
+  color:#fff; background:var(--accent, var(--cyan-600));
+  padding:9px 14px; border-radius:10px; text-decoration:none; width:fit-content;
+  transition:filter .2s ease, transform .2s ease;
+}
+.tool-link:hover{filter:brightness(1.08); transform:translateX(2px);}
+
+/* EXAMPLES */
+.example-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:18px;}
+.example-card{
+  border-radius:18px; border:1px solid var(--line);
+  background:var(--surface);
+  padding:22px 24px; display:flex; flex-direction:column; gap:12px;
+  box-shadow:0 1px 2px rgba(11,19,48,0.03);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.example-card:hover{transform:translateY(-3px); box-shadow:var(--glow);}
+.example-top{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.example-brand{font-family:'Instrument Serif', serif; font-size:21px; color:var(--ink-950);}
+.example-tool-tag{
+  font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+  padding:4px 10px; border-radius:999px; white-space:nowrap;
+  background:var(--tint, var(--cyan-100)); border:1px solid var(--line); color:var(--accent, var(--cyan-600));
+}
+.example-scenario{font-size:13.5px; color:var(--ink-600); line-height:1.6;}
+.example-takeaway{
+  font-size:12.5px; color:var(--ink-400); line-height:1.55;
+  border-left:2px solid var(--green-600); padding-left:12px;
+}
+.example-takeaway strong{color:var(--green-600); font-weight:600;}
+
+/* MATRIX / COMPARATIVA */
+.matrix-wrap{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:8px; box-shadow:0 1px 2px rgba(11,19,48,0.03);}
+.matrix-scroll{overflow-x:auto;}
+table.matrix{border-collapse:separate; border-spacing:0; width:100%; min-width:760px;}
+table.matrix thead th{
+  font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.03em; text-transform:uppercase;
+  color:var(--ink-600); font-weight:600; text-align:left; padding:18px 18px 14px; vertical-align:bottom;
+}
+table.matrix thead th:first-child{width:230px;}
+table.matrix thead th .sub{display:block; font-family:'IBM Plex Sans',sans-serif; text-transform:none; letter-spacing:0; font-size:11px; color:var(--ink-400); margin-top:3px; font-weight:400;}
+table.matrix tbody tr:nth-child(odd){background:var(--surface-alt);}
+table.matrix tbody tr:first-child td, table.matrix tbody tr:first-child th{border-top:1px solid var(--line);}
+table.matrix tbody th{
+  padding:18px; text-align:left; display:flex; align-items:center; gap:12px; white-space:nowrap;
+  font-size:14px; font-weight:600; color:var(--ink-950); border-bottom:1px solid var(--line);
+}
+table.matrix tbody td{padding:18px; border-bottom:1px solid var(--line); vertical-align:middle;}
+table.matrix tbody tr:last-child th, table.matrix tbody tr:last-child td{border-bottom:none;}
+table.matrix tbody tr:first-child th{border-radius:0;}
+.row-icon{
+  width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+  font-size:14px; flex-shrink:0; background:var(--accent); box-shadow:0 6px 12px -6px var(--accent);
+}
+.meter{display:flex; flex-direction:column; gap:6px; min-width:120px;}
+.meter-track{height:7px; border-radius:999px; background:var(--surface-alt); border:1px solid var(--line); overflow:hidden;}
+.meter-fill{height:100%; border-radius:999px; background:var(--accent);}
+.meter-label{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-400); letter-spacing:.02em;}
+
+.matrix-legend{display:flex; gap:22px; flex-wrap:wrap; margin:18px 4px 0; font-size:12px; color:var(--ink-400);}
+.matrix-legend .li{display:flex; align-items:center; gap:8px;}
+.matrix-legend .mini-track{width:44px; height:6px; border-radius:999px; background:var(--surface-alt); border:1px solid var(--line); overflow:hidden;}
+.matrix-legend .mini-fill{height:100%; background:var(--ink-400); border-radius:999px;}
+
+/* GUIDANCE STRIP */
+.guide-strip{
+  margin-top:64px; border:1px solid var(--line); border-radius:20px;
+  background:var(--surface);
+  padding:30px 30px 26px;
+  box-shadow:0 1px 2px rgba(11,19,48,0.03);
+}
+.guide-strip h2{font-family:'Instrument Serif', serif; font-weight:400; font-size:24px; margin-bottom:18px; color:var(--ink-950);}
+.guide-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:18px;}
+.guide-item .gnum{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--blue-600); letter-spacing:.08em; margin-bottom:6px;}
+.guide-item h4{font-size:14.5px; font-weight:600; margin-bottom:6px; color:var(--ink-950);}
+.guide-item p{font-size:13px; color:var(--ink-600); line-height:1.55;}
+
+@media (max-width:640px){
+  .section-label h2{font-size:21px;}
+}
+
+.nav-link{background:none; border:none; cursor:pointer; font-family:'IBM Plex Mono', monospace;}
+.page-panel{display:none;}
+.page-panel.active{display:block;}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <span class="nav-logo">Medición Digital</span>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="showPanel(1, this)">Catálogo</button>
+      <button class="nav-link" onclick="showPanel(2, this)">Ejemplos aplicados</button>
+      <button class="nav-link" onclick="showPanel(3, this)">Comparativa</button>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ===================== PANEL 1 · CATÁLOGO ===================== -->
+<section class="page-panel active" id="panel1">
+
+  <header class="page-head">
+    <span class="kicker">Caja de herramientas · Medición digital</span>
+    <h1>Herramientas de <em>medición digital</em><br>y del entorno</h1>
+    <p class="lede">Un mapa de herramientas reales para medir, buscar y entender el entorno digital durante un proceso de investigación. Todas tienen versión gratuita o de prueba — ábrelas, explóralas y compara qué te entrega cada una.</p>
+  </header>
+
+  <div class="filter-bar" id="filterBar">
+    <button class="pill active" data-filter="all" onclick="filterTools('all', this)"><span class="dot" style="color:var(--ink-600)"></span>Todas</button>
+    <button class="pill" data-filter="analitica" onclick="filterTools('analitica', this)"><span class="dot" style="color:var(--cyan-600)"></span>Analítica web</button>
+    <button class="pill" data-filter="seo" onclick="filterTools('seo', this)"><span class="dot" style="color:var(--blue-600)"></span>SEO y búsquedas</button>
+    <button class="pill" data-filter="social" onclick="filterTools('social', this)"><span class="dot" style="color:var(--violet-600)"></span>Redes y escucha social</button>
+    <button class="pill" data-filter="mercado" onclick="filterTools('mercado', this)"><span class="dot" style="color:var(--green-600)"></span>Entorno y mercado</button>
+    <button class="pill" data-filter="encuestas" onclick="filterTools('encuestas', this)"><span class="dot" style="color:var(--amber-600)"></span>Encuestas</button>
+    <button class="pill" data-filter="colombia" onclick="filterTools('colombia', this)"><span class="dot" style="color:var(--pink-600)"></span>Fuentes oficiales CO</button>
+  </div>
+
+  <!-- ANALÍTICA WEB -->
+  <div class="section-label"><h2>Analítica web y comportamiento</h2><div class="rule"></div><span class="count">3 herramientas</span></div>
+  <div class="tool-grid">
+
+    <div class="tool-card" data-cat="analitica" style="--accent:var(--cyan-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">📊</div></div>
+        <div class="tool-titles"><h3>Google Analytics 4</h3><span class="cat">Analítica web</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">El estándar para medir tráfico, conversiones y comportamiento dentro de un sitio o una app: de dónde vienen los usuarios, qué páginas ven y en qué momento abandonan.</p>
+      <p class="tool-use">Útil para responder "¿por dónde está entrando la gente y en qué momento se pierde?"</p>
+      <a class="tool-link" href="https://analytics.google.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="analitica" style="--accent:var(--cyan-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">📈</div></div>
+        <div class="tool-titles"><h3>Looker Studio</h3><span class="cat">Analítica web</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Convierte datos de Analytics, hojas de cálculo o anuncios en tableros visuales que se pueden compartir y actualizar en tiempo real, sin depender de un informe estático.</p>
+      <p class="tool-use">Útil para cruzar varias fuentes de datos en un solo tablero de investigación.</p>
+      <a class="tool-link" href="https://lookerstudio.google.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="analitica" style="--accent:var(--cyan-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">🖱️</div></div>
+        <div class="tool-titles"><h3>Microsoft Clarity</h3><span class="cat">Analítica web</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Graba sesiones reales de usuarios y genera mapas de calor gratuitos: dónde hacen clic, hasta dónde bajan en la página y dónde se frustran.</p>
+      <p class="tool-use">Útil para ver el comportamiento real, no solo los números agregados.</p>
+      <a class="tool-link" href="https://clarity.microsoft.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+  </div>
+
+  <!-- SEO -->
+  <div class="section-label"><h2>SEO y búsquedas</h2><div class="rule"></div><span class="count">3 herramientas</span></div>
+  <div class="tool-grid">
+
+    <div class="tool-card" data-cat="seo" style="--accent:var(--blue-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">🔎</div></div>
+        <div class="tool-titles"><h3>Google Search Console</h3><span class="cat">SEO y búsquedas</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Muestra cómo aparece un sitio en los resultados de Google: qué términos lo llevan hasta ahí, en qué posición aparece y qué páginas tienen errores técnicos.</p>
+      <p class="tool-use">Útil para saber con qué palabras te está encontrando realmente la gente.</p>
+      <a class="tool-link" href="https://search.google.com/search-console" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="seo" style="--accent:var(--blue-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">📉</div></div>
+        <div class="tool-titles"><h3>Google Trends</h3><span class="cat">SEO y búsquedas</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Muestra qué está buscando la gente y cómo cambia el interés en un tema a lo largo del tiempo, por región e incluso comparando varios términos entre sí.</p>
+      <p class="tool-use">Útil para validar si un tema de investigación está creciendo, estable o perdiendo interés.</p>
+      <a class="tool-link" href="https://trends.google.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="seo" style="--accent:var(--blue-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">🧩</div></div>
+        <div class="tool-titles"><h3>Ubersuggest</h3><span class="cat">SEO y búsquedas</span></div>
+        <span class="price-badge">Freemium</span>
+      </div>
+      <p class="tool-desc">Sugiere palabras clave relacionadas a un tema, su volumen de búsqueda estimado y qué tan competido está, además de un vistazo básico al SEO de cualquier dominio.</p>
+      <p class="tool-use">Útil para mapear cómo habla la gente de un tema, no solo cómo lo llama la marca.</p>
+      <a class="tool-link" href="https://neilpatel.com/ubersuggest/" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="section-label"><h2>Redes sociales y escucha social</h2><div class="rule"></div><span class="count">3 herramientas</span></div>
+  <div class="tool-grid">
+
+    <div class="tool-card" data-cat="social" style="--accent:var(--violet-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">💬</div></div>
+        <div class="tool-titles"><h3>Meta Business Suite</h3><span class="cat">Redes y escucha social</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Centraliza las métricas de páginas de Facebook e Instagram: alcance, interacción, crecimiento de seguidores y desempeño de publicaciones y anuncios.</p>
+      <p class="tool-use">Útil para entender qué contenido genera más conversación en una marca o competencia.</p>
+      <a class="tool-link" href="https://business.facebook.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="social" style="--accent:var(--violet-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">📺</div></div>
+        <div class="tool-titles"><h3>Social Blade</h3><span class="cat">Redes y escucha social</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Sigue el crecimiento estimado de cualquier cuenta pública en YouTube, Instagram, Twitch y TikTok a lo largo del tiempo, así no sea tuya.</p>
+      <p class="tool-use">Útil para comparar el ritmo de crecimiento de varias cuentas o competidores.</p>
+      <a class="tool-link" href="https://socialblade.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="social" style="--accent:var(--violet-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">📡</div></div>
+        <div class="tool-titles"><h3>Mention</h3><span class="cat">Redes y escucha social</span></div>
+        <span class="price-badge">Freemium</span>
+      </div>
+      <p class="tool-desc">Rastrea dónde se está mencionando una marca, un tema o una palabra clave en la web y redes sociales, casi en tiempo real.</p>
+      <p class="tool-use">Útil para monitorear cómo se habla de un tema fuera de los canales propios.</p>
+      <a class="tool-link" href="https://mention.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+  </div>
+
+  <!-- ENTORNO Y MERCADO -->
+  <div class="section-label"><h2>Entorno y mercado</h2><div class="rule"></div><span class="count">3 herramientas</span></div>
+  <div class="tool-grid">
+
+    <div class="tool-card" data-cat="mercado" style="--accent:var(--green-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">🌐</div></div>
+        <div class="tool-titles"><h3>Similarweb</h3><span class="cat">Entorno y mercado</span></div>
+        <span class="price-badge">Freemium</span>
+      </div>
+      <p class="tool-desc">Estima el tráfico de cualquier sitio web, de dónde viene y con qué otros sitios lo comparten los usuarios — incluida la competencia, sin acceso a su cuenta.</p>
+      <p class="tool-use">Útil para dimensionar a un competidor cuando no tienes acceso a sus datos internos.</p>
+      <a class="tool-link" href="https://www.similarweb.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="mercado" style="--accent:var(--green-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">📚</div></div>
+        <div class="tool-titles"><h3>Statista</h3><span class="cat">Entorno y mercado</span></div>
+        <span class="price-badge">Freemium</span>
+      </div>
+      <p class="tool-desc">Reúne estadísticas y reportes de mercado por industria, país y tema, con gráficos listos para citar en una investigación.</p>
+      <p class="tool-use">Útil para respaldar un argumento con una cifra de una fuente reconocida.</p>
+      <a class="tool-link" href="https://www.statista.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="mercado" style="--accent:var(--green-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">🛒</div></div>
+        <div class="tool-titles"><h3>CCCE — Cámara Colombiana de Comercio Electrónico</h3><span class="cat">Entorno y mercado</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Publica informes y cifras oficiales sobre el estado del comercio electrónico en Colombia: ventas, transacciones, ticket promedio y tendencias por sector.</p>
+      <p class="tool-use">Útil como referencia local cuando una cifra global no aplica bien al contexto colombiano.</p>
+      <a class="tool-link" href="https://www.ccce.org.co" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+  </div>
+
+  <!-- ENCUESTAS -->
+  <div class="section-label"><h2>Encuestas y research primario</h2><div class="rule"></div><span class="count">3 herramientas</span></div>
+  <div class="tool-grid">
+
+    <div class="tool-card" data-cat="encuestas" style="--accent:var(--amber-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">📝</div></div>
+        <div class="tool-titles"><h3>Google Forms</h3><span class="cat">Encuestas</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Encuestas y formularios simples, con respuestas organizadas automáticamente en una hoja de cálculo lista para analizar.</p>
+      <p class="tool-use">Útil como primer paso rápido para levantar información propia sin costo.</p>
+      <a class="tool-link" href="https://forms.google.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="encuestas" style="--accent:var(--amber-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">💭</div></div>
+        <div class="tool-titles"><h3>Typeform</h3><span class="cat">Encuestas</span></div>
+        <span class="price-badge">Freemium</span>
+      </div>
+      <p class="tool-desc">Convierte una encuesta en una conversación de una pregunta a la vez, con un diseño más cuidado — pensado para que la gente sí la termine.</p>
+      <p class="tool-use">Útil cuando la tasa de abandono de una encuesta larga es el problema a resolver.</p>
+      <a class="tool-link" href="https://www.typeform.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="encuestas" style="--accent:var(--amber-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">📐</div></div>
+        <div class="tool-titles"><h3>SurveyMonkey</h3><span class="cat">Encuestas</span></div>
+        <span class="price-badge">Freemium</span>
+      </div>
+      <p class="tool-desc">Encuestas con plantillas validadas por metodólogos y análisis estadístico incluido, útil cuando la muestra empieza a crecer.</p>
+      <p class="tool-use">Útil cuando además de recoger respuestas necesitas empezar a cruzarlas estadísticamente.</p>
+      <a class="tool-link" href="https://www.surveymonkey.com" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+  </div>
+
+  <!-- FUENTES OFICIALES COLOMBIA -->
+  <div class="section-label"><h2>Fuentes oficiales de contexto en Colombia</h2><div class="rule"></div><span class="count">3 fuentes</span></div>
+  <div class="tool-grid">
+
+    <div class="tool-card" data-cat="colombia" style="--accent:var(--pink-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">🏛️</div></div>
+        <div class="tool-titles"><h3>DANE</h3><span class="cat">Fuente oficial</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Estadísticas oficiales de población, empleo, economía y consumo en Colombia, publicadas por el Departamento Administrativo Nacional de Estadística.</p>
+      <p class="tool-use">Útil como base demográfica y económica sólida para cualquier investigación local.</p>
+      <a class="tool-link" href="https://www.dane.gov.co" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="colombia" style="--accent:var(--pink-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">📶</div></div>
+        <div class="tool-titles"><h3>MinTIC</h3><span class="cat">Fuente oficial</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Indicadores oficiales de conectividad, acceso a internet y avance de la transformación digital en el país, por región.</p>
+      <p class="tool-use">Útil para dimensionar qué tan parejo (o no) es el acceso digital según la zona del país.</p>
+      <a class="tool-link" href="https://www.mintic.gov.co" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+    <div class="tool-card" data-cat="colombia" style="--accent:var(--pink-600)">
+      <div class="tool-head">
+        <div class="tool-icon-wrap"><div class="tool-icon">💵</div></div>
+        <div class="tool-titles"><h3>Banco de la República</h3><span class="cat">Fuente oficial</span></div>
+        <span class="price-badge">Gratis</span>
+      </div>
+      <p class="tool-desc">Indicadores macroeconómicos oficiales: inflación, tasas de interés, PIB y tasa de cambio, actualizados de forma periódica.</p>
+      <p class="tool-use">Útil cuando una investigación necesita contexto económico para interpretar un dato de consumo.</p>
+      <a class="tool-link" href="https://www.banrep.gov.co" target="_blank" rel="noopener">Probar herramienta ↗</a>
+    </div>
+
+  </div>
+
+  <div class="guide-strip">
+    <h2>Antes de elegir una herramienta</h2>
+    <div class="guide-grid">
+      <div class="guide-item">
+        <div class="gnum">01</div>
+        <h4>Parte de la pregunta, no de la herramienta</h4>
+        <p>Define primero qué necesitas responder. Una misma pregunta de investigación casi nunca necesita las seis categorías al tiempo.</p>
+      </div>
+      <div class="guide-item">
+        <div class="gnum">02</div>
+        <h4>Cruza al menos dos fuentes</h4>
+        <p>Un solo dato aislado rara vez sostiene una conclusión. Comparar lo que dice una herramienta de comportamiento con una de contexto da una lectura más completa.</p>
+      </div>
+      <div class="guide-item">
+        <div class="gnum">03</div>
+        <h4>Verifica la fecha del dato</h4>
+        <p>Varias de estas herramientas muestran estimaciones que cambian mes a mes. Revisa siempre cuándo se actualizó por última vez lo que estás citando.</p>
+      </div>
+      <div class="guide-item">
+        <div class="gnum">04</div>
+        <h4>Usa cuentas de prueba con criterio</h4>
+        <p>La mayoría se puede explorar sin pagar. Aprovecha esas versiones gratuitas para decidir si vale la pena invertir tiempo antes de comprometerte con una sola.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== PANEL 2 · EJEMPLOS ===================== -->
+<section class="page-panel" id="panel2">
+
+  <header class="page-head">
+    <span class="kicker">Casos reales · Colombia</span>
+    <h1>Ejemplos aplicados en<br><em>negocios colombianos</em></h1>
+    <p class="lede">Así se vería cada herramienta puesta a trabajar en un negocio real que opera en Colombia — para entender el "para qué" antes de abrir la pestaña.</p>
+  </header>
+
+  <div class="example-grid">
+
+    <div class="example-card">
+      <div class="example-top"><span class="example-brand">Grupo Éxito</span><span class="example-tool-tag" style="--accent:var(--cyan-600); --tint:var(--cyan-100)">Google Analytics 4</span></div>
+      <p class="example-scenario">El equipo digital del Éxito revisa el recorrido de compra en la tienda online: cuántas personas agregan un producto al carrito y en qué paso exacto del checkout se salen sin terminar la compra.</p>
+      <p class="example-takeaway"><strong>Con eso pueden:</strong> identificar si el problema está en los costos de envío, en el método de pago o en un formulario demasiado largo, y priorizar qué arreglar primero.</p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-top"><span class="example-brand">Rappi</span><span class="example-tool-tag" style="--accent:var(--blue-600); --tint:var(--blue-100)">Search Console + Trends</span></div>
+      <p class="example-scenario">Antes de escribir contenido para su blog o landing pages de restaurantes, el equipo de SEO revisa qué términos como "domicilios cerca" o "restaurantes que abren hoy" ya les traen tráfico, y cuáles están creciendo en búsquedas.</p>
+      <p class="example-takeaway"><strong>Con eso pueden:</strong> priorizar qué ciudades o categorías de restaurante necesitan más contenido optimizado antes de invertir en pauta paga.</p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-top"><span class="example-brand">Águila (Bavaria)</span><span class="example-tool-tag" style="--accent:var(--violet-600); --tint:var(--violet-100)">Escucha social</span></div>
+      <p class="example-scenario">Durante el lanzamiento de una campaña con filtro de realidad aumentada, el equipo de marca monitorea en tiempo real cuántas veces se menciona la campaña y en qué tono se está comentando en redes.</p>
+      <p class="example-takeaway"><strong>Con eso pueden:</strong> reaccionar rápido si algo del mensaje se está malinterpretando, en vez de esperar el informe de cierre de campaña.</p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-top"><span class="example-brand">Bold</span><span class="example-tool-tag" style="--accent:var(--green-600); --tint:var(--green-100)">Similarweb</span></div>
+      <p class="example-scenario">Antes de ajustar su estrategia de adquisición de comercios, el equipo de producto revisa el tráfico estimado y las fuentes de tráfico de fintechs competidoras que atienden al mismo segmento de tenderos.</p>
+      <p class="example-takeaway"><strong>Con eso pueden:</strong> detectar si la competencia está creciendo por SEO, por redes o por pauta, y decidir dónde vale la pena competir primero.</p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-top"><span class="example-brand">Platzi</span><span class="example-tool-tag" style="--accent:var(--amber-600); --tint:var(--amber-100)">Typeform</span></div>
+      <p class="example-scenario">Al terminar cada curso, se envía una encuesta corta de satisfacción para medir qué tan probable es que el estudiante recomiende el curso y qué fue lo que más le costó entender.</p>
+      <p class="example-takeaway"><strong>Con eso pueden:</strong> detectar qué cursos necesitan ajustes de contenido antes de que baje la tasa de renovación de la suscripción.</p>
+    </div>
+
+    <div class="example-card">
+      <div class="example-top"><span class="example-brand">Comfama</span><span class="example-tool-tag" style="--accent:var(--pink-600); --tint:var(--pink-100)">DANE + MinTIC</span></div>
+      <p class="example-scenario">Antes de decidir en qué municipios del Valle del Cauca lanzar un nuevo servicio digital, el equipo revisa cifras oficiales de conectividad y composición poblacional por región.</p>
+      <p class="example-takeaway"><strong>Con eso pueden:</strong> evitar lanzar un servicio 100% digital en una zona donde la conectividad todavía no lo soporta bien.</p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ===================== PANEL 3 · COMPARATIVA ===================== -->
+<section class="page-panel" id="panel3">
+
+  <header class="page-head">
+    <span class="kicker">Guía de decisión</span>
+    <h1>Qué herramienta usar<br><em>y en qué momento</em></h1>
+    <p class="lede">Ninguna categoría sirve igual en todos los momentos de una investigación. Esta comparativa muestra qué tan útil es cada una según la etapa en la que estés — entre más larga la barra, más te conviene ahí.</p>
+  </header>
+
+  <div class="matrix-wrap">
+    <div class="matrix-scroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Explorar el entorno<span class="sub">antes de lanzar</span></th>
+            <th>Monitorear<span class="sub">una campaña en curso</span></th>
+            <th>Evaluar resultados<span class="sub">al cerrar</span></th>
+            <th>Sustentar cifras<span class="sub">en un argumento</span></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <th><span class="row-icon" style="--accent:var(--cyan-600)">📊</span>Analítica web</th>
+            <td><div class="meter" style="--accent:var(--cyan-600)"><div class="meter-track"><div class="meter-fill" style="width:22%"></div></div><span class="meter-label">Baja</span></div></td>
+            <td><div class="meter" style="--accent:var(--cyan-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+            <td><div class="meter" style="--accent:var(--cyan-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+            <td><div class="meter" style="--accent:var(--cyan-600)"><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><span class="meter-label">Media</span></div></td>
+          </tr>
+
+          <tr>
+            <th><span class="row-icon" style="--accent:var(--blue-600)">🔎</span>SEO y búsquedas</th>
+            <td><div class="meter" style="--accent:var(--blue-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+            <td><div class="meter" style="--accent:var(--blue-600)"><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><span class="meter-label">Media</span></div></td>
+            <td><div class="meter" style="--accent:var(--blue-600)"><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><span class="meter-label">Media</span></div></td>
+            <td><div class="meter" style="--accent:var(--blue-600)"><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><span class="meter-label">Media</span></div></td>
+          </tr>
+
+          <tr>
+            <th><span class="row-icon" style="--accent:var(--violet-600)">💬</span>Redes y escucha social</th>
+            <td><div class="meter" style="--accent:var(--violet-600)"><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><span class="meter-label">Media</span></div></td>
+            <td><div class="meter" style="--accent:var(--violet-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+            <td><div class="meter" style="--accent:var(--violet-600)"><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><span class="meter-label">Media</span></div></td>
+            <td><div class="meter" style="--accent:var(--violet-600)"><div class="meter-track"><div class="meter-fill" style="width:22%"></div></div><span class="meter-label">Baja</span></div></td>
+          </tr>
+
+          <tr>
+            <th><span class="row-icon" style="--accent:var(--green-600)">🌐</span>Entorno y mercado</th>
+            <td><div class="meter" style="--accent:var(--green-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+            <td><div class="meter" style="--accent:var(--green-600)"><div class="meter-track"><div class="meter-fill" style="width:22%"></div></div><span class="meter-label">Baja</span></div></td>
+            <td><div class="meter" style="--accent:var(--green-600)"><div class="meter-track"><div class="meter-fill" style="width:22%"></div></div><span class="meter-label">Baja</span></div></td>
+            <td><div class="meter" style="--accent:var(--green-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+          </tr>
+
+          <tr>
+            <th><span class="row-icon" style="--accent:var(--amber-600)">📝</span>Encuestas</th>
+            <td><div class="meter" style="--accent:var(--amber-600)"><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><span class="meter-label">Media</span></div></td>
+            <td><div class="meter" style="--accent:var(--amber-600)"><div class="meter-track"><div class="meter-fill" style="width:22%"></div></div><span class="meter-label">Baja</span></div></td>
+            <td><div class="meter" style="--accent:var(--amber-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+            <td><div class="meter" style="--accent:var(--amber-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+          </tr>
+
+          <tr>
+            <th><span class="row-icon" style="--accent:var(--pink-600)">🏛️</span>Fuentes oficiales CO</th>
+            <td><div class="meter" style="--accent:var(--pink-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+            <td><div class="meter" style="--accent:var(--pink-600)"><div class="meter-track"><div class="meter-fill" style="width:8%"></div></div><span class="meter-label">Baja</span></div></td>
+            <td><div class="meter" style="--accent:var(--pink-600)"><div class="meter-track"><div class="meter-fill" style="width:8%"></div></div><span class="meter-label">Baja</span></div></td>
+            <td><div class="meter" style="--accent:var(--pink-600)"><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><span class="meter-label">Alta</span></div></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div class="matrix-legend">
+      <span class="li"><div class="mini-track"><div class="mini-fill" style="width:100%"></div></div> Alta utilidad</span>
+      <span class="li"><div class="mini-track"><div class="mini-fill" style="width:60%"></div></div> Utilidad media</span>
+      <span class="li"><div class="mini-track"><div class="mini-fill" style="width:22%"></div></div> Utilidad baja</span>
+    </div>
+  </div>
+
+  <div class="guide-strip">
+    <h2>Cómo leer esta comparativa</h2>
+    <div class="guide-grid">
+      <div class="guide-item">
+        <div class="gnum">01</div>
+        <h4>No es una jerarquía de "mejor a peor"</h4>
+        <p>Una barra corta no significa que la categoría sea mala, significa que no es la mejor opción para ese momento específico de la investigación.</p>
+      </div>
+      <div class="guide-item">
+        <div class="gnum">02</div>
+        <h4>Las columnas son etapas, no categorías de proyecto</h4>
+        <p>Un mismo proyecto normalmente pasa por varias columnas: primero explora el entorno, después monitorea, después evalúa.</p>
+      </div>
+      <div class="guide-item">
+        <div class="gnum">03</div>
+        <h4>Combina filas, no te quedes en una sola</h4>
+        <p>Las lecturas más sólidas cruzan al menos dos categorías con utilidad alta en la misma columna — por ejemplo, entorno y mercado junto con fuentes oficiales al sustentar cifras.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</div>
+
+<script>
+  function showPanel(n, btn){
+    document.querySelectorAll('.page-panel').forEach((p,i)=> p.classList.toggle('active', i === n-1));
+    document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function filterTools(filter, btn){
+    document.querySelectorAll('#filterBar .pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.tool-card').forEach(card => {
+      card.style.display = (filter === 'all' || card.dataset.cat === filter) ? 'flex' : 'none';
+    });
+
+    document.querySelectorAll('#panel1 .section-label').forEach(label => {
+      const grid = label.nextElementSibling;
+      const visibleCount = [...grid.querySelectorAll('.tool-card')].filter(c => c.style.display !== 'none').length;
+      const showSection = filter === 'all' || visibleCount > 0;
+      label.style.display = showSection ? 'flex' : 'none';
+      grid.style.display = showSection ? 'grid' : 'none';
+    });
+  }
+</script>
+
+</body>
+</html>
