@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sesión 4 · Google Ads: rol y creación de campañas por objetivo · Pauta Digital UAO</title>
+<style>
+:root{--bg:#FAFAF7;--ink:#0E1116;--mute:#5B6472;--line:#E4E6EB;--meta:#4285F4;--meta2:#1A73E8;--warm:#34A853;--soft:#E8F0FE}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.deck{position:relative;width:100%;height:100vh;overflow:hidden}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:6vh 8vw 10vh;overflow-y:auto}
+.slide.on{display:flex;animation:fade .6s ease}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.kicker{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--meta);font-weight:600;margin-bottom:16px}
+h1{font-size:clamp(34px,4.9vw,68px);line-height:1.05;letter-spacing:-.02em;max-width:18ch}
+h2{font-size:clamp(26px,3.3vw,44px);line-height:1.12;letter-spacing:-.015em;margin-bottom:24px;max-width:26ch}
+h3{font-size:18px;margin-bottom:8px}
+p{font-size:17px;line-height:1.55;color:#2A3038}
+p.lead{font-size:clamp(18px,1.8vw,22px);color:var(--mute);max-width:56ch;line-height:1.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+.card .n{display:block;font-size:13px;color:var(--meta);font-weight:700;margin-bottom:6px;letter-spacing:.05em}
+.card p{font-size:16px}
+.big{font-size:clamp(44px,6vw,84px);font-weight:700;letter-spacing:-.03em;color:var(--meta);line-height:1}
+.note{font-size:13px;color:var(--mute);margin-top:18px;max-width:100ch;line-height:1.5}
+a{color:var(--meta2);text-decoration:none;border-bottom:1px solid rgba(8,102,255,.25)}
+a:hover{border-bottom-color:var(--meta2)}
+.link{display:flex;justify-content:space-between;gap:16px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px;font-size:16px;color:var(--ink);transition:border-color .2s,transform .2s}
+.link:hover{border-color:var(--meta);transform:translateX(3px)}
+.link small{display:block;color:var(--mute);font-size:13px;margin-top:2px}
+.link .arr{color:var(--meta);font-weight:700;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--meta2);margin-right:6px;font-weight:600}
+/* gráficas animadas */
+.chart{display:flex;flex-direction:column;gap:16px;max-width:780px}
+.row{display:grid;grid-template-columns:200px 1fr 110px;align-items:center;gap:16px;font-size:17px}
+.track{height:44px;background:var(--soft);border-radius:12px;overflow:hidden}
+.bar{height:100%;width:0;border-radius:12px;background:linear-gradient(90deg,var(--meta),var(--meta2));transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.bar.warm{background:linear-gradient(90deg,#34A853,#66BB6A)}
+.on .bar{width:var(--w)}
+.val{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.funnel{display:flex;flex-direction:column;gap:12px;align-items:center;max-width:720px}
+.stage{height:72px;border-radius:14px;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:18px;font-weight:600;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.on .stage{width:var(--w)}
+.stage span{font-size:14px;font-weight:500;opacity:.92}
+/* jerarquía de campaña */
+.tiers{display:flex;flex-direction:column;gap:10px;max-width:760px}
+.tier{border-radius:14px;padding:16px 22px;background:#fff;border:1px solid var(--line);transform:translateX(-30px);opacity:0;transition:all .6s}
+.on .tier{transform:none;opacity:1}
+.on .tier:nth-child(2){transition-delay:.25s}.on .tier:nth-child(3){transition-delay:.5s}
+.tier:nth-child(2){margin-left:30px}.tier:nth-child(3){margin-left:60px}
+.tier b{font-size:17px}.tier p{font-size:15px;margin-top:4px}
+/* glosario y pasos */
+.gl{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 28px}
+.gl div{border-bottom:1px solid var(--line);padding:10px 0}
+.gl b{font-size:16px}.gl p{font-size:15px;color:var(--mute)}
+.step{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;font-size:17px;line-height:1.5}
+.num{flex:0 0 36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{background:#fff;border:1px dashed #C7CDD8;border-radius:12px;padding:12px 16px;font-size:15px}
+.field b{display:block;color:var(--meta2);font-size:13px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+footer{position:absolute;bottom:3vh;left:8vw;right:8vw;display:flex;justify-content:space-between;gap:20px;font-size:12px;color:var(--mute)}
+.nav{position:fixed;bottom:2.5vh;right:3vw;display:flex;gap:10px;align-items:center;font-size:13px;color:var(--mute);z-index:5}
+.nav button{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;font-size:14px;color:var(--ink)}
+.nav button:hover{border-color:var(--meta);color:var(--meta)}
+.prog{position:fixed;top:0;left:0;height:3px;background:var(--meta);transition:width .5s;z-index:5}
+@media (max-width:820px){.grid,.grid3,.gl,.form{grid-template-columns:1fr}.row{grid-template-columns:110px 1fr 70px;font-size:14px}}
+/* fondo animado: red de partículas */
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.deck,.nav,.prog{position:relative;z-index:1}
+.nav{position:fixed}.prog{position:fixed}
+.slide{z-index:1}
+.card,.link,.field,.gl div{background:rgba(255,255,255,.88);backdrop-filter:blur(2px)}
+/* PDF: todas las diapositivas en estado final */
+@page{size:297mm 167mm;margin:0}
+@media print{
+  .deck{height:auto;overflow:visible}
+  .slide{position:relative;display:flex!important;height:167mm;width:297mm;page-break-after:always;animation:none;padding:12mm 22mm 18mm;overflow:hidden}
+  .bar,.stage,.tier{transition:none!important}
+  .bar{width:var(--w)!important}.stage{width:var(--w)!important}.tier{transform:none!important;opacity:1!important}
+  .nav,.prog,#bg{display:none!important}
+  footer{bottom:7mm;left:22mm;right:22mm}
+  html,body{height:auto;overflow:visible}
+}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="prog" id="prog"></div>
+<main class="deck" id="deck">
+
+<section class="slide on">
+  <div class="kicker">Pauta Digital</div>
+  <div style="display:flex;height:6px;width:220px;border-radius:4px;overflow:hidden;margin:-4px 0 22px"><span style="flex:1;background:#4285F4"></span><span style="flex:1;background:#EA4335"></span><span style="flex:1;background:#FBBC05"></span><span style="flex:1;background:#34A853"></span></div>
+  <h1>Google Ads: capturar la demanda y crearla</h1>
+  <p class="lead" style="margin-top:24px">Cuándo la búsqueda es la herramienta correcta, cuándo hace falta video o Demand Gen, y cómo elegir el objetivo antes que el tipo de campaña.</p>
+  <div style="margin-top:28px"><span class="tag">Módulo 2 · Google Ads</span><span class="tag">Rol y creación de campañas</span></div>
+  <footer><span>Universidad Autónoma de Occidente · Especialización en Gerencia de Negocios Digitales</span><span>1 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Hoy</div>
+  <h2>Qué vas a poder hacer al terminar la sesión</h2>
+  <div class="grid">
+    <div class="card"><span class="n">OBJETIVO 1</span><p>Ubicar Google Ads en el embudo: demanda existente frente a demanda por crear.</p></div>
+    <div class="card"><span class="n">OBJETIVO 2</span><p>Elegir objetivo y tipo de campaña a partir de la estrategia, no al revés.</p></div>
+    <div class="card"><span class="n">OBJETIVO 3</span><p>Estructurar una campaña de Search con grupos de anuncios, palabras clave y anuncios.</p></div>
+    <div class="card"><span class="n">OBJETIVO 4</span><p>Seleccionar una estrategia de puja y los requisitos de medición que necesita.</p></div>
+  </div>
+  <footer><span>Módulo 2a y 2b · Rol y creación de campañas basadas en objetivos</span><span>2 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Rol en la estrategia</div>
+  <h2>Search captura la demanda; otros formatos la crean</h2>
+  <div class="funnel">
+    <div class="stage" style="--w:100%;background:#4285F4">Crear demanda <span>Video · Demand Gen · Display</span></div>
+    <div class="stage" style="--w:82%;background:#34A853">Comparar opciones <span>Shopping · Performance Max</span></div>
+    <div class="stage" style="--w:64%;background:#EA4335">Buscar y decidir <span>Search · Brand y no brand</span></div>
+  </div>
+  <p class="note">Search responde a una intención que la persona ya expresó: escribió algo en Google. Video y Demand Gen llegan a personas que no buscan, en YouTube, Gmail y Discover. La decisión de inversión depende de en qué momento del embudo está tu público y de cuánta demanda ya existe.</p>
+  <footer><span>Esquema conceptual; la distribución de inversión depende del objetivo de cada campaña</span><span>3 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Objetivos de campaña</div>
+  <h2>El objetivo define qué optimiza Google y qué tipos puedes usar</h2>
+  <div class="grid3">
+    <div class="card"><span class="n">VENTAS</span><p>Compras o valor de conversión en tu sitio o tienda.</p></div>
+    <div class="card"><span class="n">CLIENTES POTENCIALES</span><p>Formularios, llamadas o contactos. Ideal para admisiones.</p></div>
+    <div class="card"><span class="n">TRÁFICO</span><p>Visitas al sitio. Útil cuando la conversión aún no está medida.</p></div>
+    <div class="card"><span class="n">NOTORIEDAD Y ALCANCE</span><p>Reconocimiento de marca. Mide impresiones y alcance, no respuesta directa.</p></div>
+    <div class="card"><span class="n">CONSIDERACIÓN</span><p>Interacción con la marca: visitas a la web, reproducciones de video, participación.</p></div>
+    <div class="card"><span class="n">PROMOCIÓN DE LA APP</span><p>Instalaciones y acciones dentro de la app.</p></div>
+  </div>
+  <div style="margin-top:14px"><a class="tag" href="https://support.google.com/google-ads/answer/7450050" target="_blank" rel="noopener">Acerca de los objetivos de campaña en Google Ads ↗</a></div>
+  <footer><span>Lista de objetivos según la ayuda de Google Ads; algunos tipos de campaña no admiten todos los objetivos</span><span>4 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Tipos de campaña</div>
+  <h2>Siete tipos principales y un uso claro para cada uno</h2>
+  <div class="card" style="padding:6px 20px">
+    <table style="width:100%;border-collapse:collapse;font-size:15px">
+      <tr style="text-align:left;color:#5B6472"><th style="padding:10px 8px">Tipo</th><th>Dónde aparece</th><th>Úsalo cuando</th></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:10px 8px"><b>Search</b></td><td>Resultados de Google</td><td>Hay demanda expresada y quieres captarla</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:10px 8px"><b>Shopping</b></td><td>Google Shopping</td><td>Vendes productos con feed de datos</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:10px 8px"><b>Performance Max</b></td><td>Todos los canales de Google</td><td>Tienes conversiones confiables y creativos suficientes</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:10px 8px"><b>Demand Gen</b></td><td>YouTube, Gmail, Discover</td><td>Quieres crear demanda con creativos visuales</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:10px 8px"><b>Video</b></td><td>YouTube y socios</td><td>Notoriedad o consideración con video</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:10px 8px"><b>Display</b></td><td>Red de sitios asociados</td><td>Alcance y remarketing con banners</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:10px 8px"><b>App</b></td><td>Google y socios</td><td>Promocionas una aplicación</td></tr>
+    </table>
+  </div>
+  <p class="note">Performance Max y Demand Gen no permiten editar el objetivo después de crear la campaña. Confírmalo antes de publicar.</p>
+  <footer><span>Tipos de campaña vigentes según la documentación de Google Ads; verificar cambios antes de la clase</span><span>5 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Search en detalle</div>
+  <h2>Anuncios y palabras clave: la intención se controla con el tipo de coincidencia</h2>
+  <div class="grid">
+    <div class="card"><span class="n">COINCIDENCIA AMPLIA</span><p>Muestra el anuncio para búsquedas relacionadas. Máximo alcance, mayor riesgo de búsquedas irrelevantes.</p></div>
+    <div class="card"><span class="n">COINCIDENCIA DE FRASE</span><p>Búsquedas que contienen la frase con su orden, con variaciones cercanas.</p></div>
+    <div class="card"><span class="n">COINCIDENCIA EXACTA</span><p>Búsquedas con el mismo significado. Control alto, volumen menor.</p></div>
+    <div class="card"><span class="n">PALABRAS NEGATIVAS</span><p>Excluyen términos que no te interesan, como "gratis" o "empleo" en una maestría.</p></div>
+  </div>
+  <p class="note">Anuncios de búsqueda adaptables (RSA): hasta 15 titulares y 4 descripciones. Google combina y prueba. Un buen titular responde a la búsqueda; uno genérico no compite. Los cambios de la función de coincidencia y de los anuncios de búsqueda se actualizan con frecuencia; verifícalos en la ayuda vigente.</p>
+  <footer><span>Planificador de palabras clave de Google Ads para estimar volumen y costo por clic</span><span>6 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Estrategia de puja</div>
+  <h2>Automatizar la puja solo cuando hay datos para aprender</h2>
+  <div class="tiers">
+    <div class="tier"><b>Maximizar clics</b><p>Lleva tráfico al sitio. Útil cuando todavía no tienes conversiones medidas.</p></div>
+    <div class="tier"><b>CPA objetivo</b><p>Busca un costo por conversión definido. Necesita historial de conversiones.</p></div>
+    <div class="tier"><b>ROAS objetivo</b><p>Busca un retorno sobre la inversión definido. Requiere valores de conversión.</p></div>
+    <div class="tier"><b>Maximizar conversiones</b><p>Gasta el presupuesto buscando el mayor número de conversiones.</p></div>
+  </div>
+  <p class="note">Google recomienda tener un historial suficiente de conversiones para las estrategias basadas en CPA o ROAS. El dato de referencia cambia con el tiempo: consúltalo en la ayuda oficial antes de elegir una estrategia para una campaña nueva.</p>
+  <footer><span>Estrategias de puja según la documentación de Google Ads</span><span>7 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Medición</div>
+  <h2>Sin conversión medida, la campaña optimiza a ciegas</h2>
+  <div class="grid">
+    <div class="card"><span class="n">ETIQUETA DE GOOGLE</span><p>Código en tu sitio que registra conversiones: envíos de formulario, llamadas, compras.</p></div>
+    <div class="card"><span class="n">IMPORTAR DESDE GA4</span><p>Llevas a Google Ads las conversiones que ya defines en Google Analytics 4.</p></div>
+    <div class="card"><span class="n">CONVERSIÓN PRIMARIA</span><p>Elige cuál conversión optimiza la campaña. Las secundarias se miden, pero no la guían.</p></div>
+    <div class="card"><span class="n">PUNTAJE DE CALIDAD</span><p>Relevancia del anuncio, CTR esperado y experiencia de la página. Afecta el costo por clic.</p></div>
+  </div>
+  <footer><span>Componentes del puntaje de calidad: documentación de Google Ads</span><span>8 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Estructura de cuenta</div>
+  <h2>Cuatro niveles que separan intención, presupuesto y mensaje</h2>
+  <div class="tiers">
+    <div class="tier"><b>Cuenta</b><p>Facturación y configuración general. Una por organización.</p></div>
+    <div class="tier"><b>Campaña</b><p>Objetivo, tipo, presupuesto y estrategia de puja.</p></div>
+    <div class="tier"><b>Grupo de anuncios</b><p>Un tema de búsqueda con sus palabras clave y anuncios. En Performance Max se llaman grupos de recursos.</p></div>
+    <div class="tier"><b>Anuncios y palabras clave</b><p>Lo que ve el usuario y lo que dispara el anuncio.</p></div>
+  </div>
+  <p class="note">Regla práctica: un grupo de anuncios por intención. Mezclar "maestría en gerencia" con "curso de Excel" en el mismo grupo hace que el mensaje sirva para ninguno de los dos.</p>
+  <footer><span>Estructura de cuenta de Google Ads</span><span>9 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Ejemplo de estructura</div>
+  <h2>Una campaña de Search para admisiones de maestría</h2>
+  <div class="tiers">
+    <div class="tier"><b>Campaña · Clientes potenciales · Search</b><p>Presupuesto diario, estrategia CPA objetivo una vez haya historial de conversiones.</p></div>
+    <div class="tier"><b>Grupo 1 · Maestría en gerencia digital</b><p>Palabras de frase y exactas sobre el programa. Anuncio con titular que responde a la búsqueda.</p></div>
+    <div class="tier"><b>Grupo 2 · Posgrados en Cali</b><p>Búsquedas locales con intención de comparación. Destino: página de admisiones.</p></div>
+    <div class="tier"><b>Negativas compartidas</b><p>"gratis", "empleo", "curso corto" para proteger el presupuesto.</p></div>
+  </div>
+  <p class="note">Ejemplo ilustrativo. Las palabras clave deben validarse con el Planificador de palabras clave y con los términos de búsqueda reales de la campaña.</p>
+  <footer><span>Ejemplo ilustrativo; no representa datos de una institución</span><span>10 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Taller grupal · Semana 4 · 25 %</div>
+  <h2>Diseñen una campaña de Google Ads completa</h2>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div><b>Objetivo y tipo.</b> Elijan el objetivo, el tipo de campaña y la razón.</div></div>
+    <div class="step"><div class="num">2</div><div><b>Grupos y palabras clave.</b> Dos grupos por intención, con palabras y tipo de coincidencia.</div></div>
+    <div class="step"><div class="num">3</div><div><b>Anuncios.</b> Titulares y descripciones que respondan a la búsqueda.</div></div>
+    <div class="step"><div class="num">4</div><div><b>Puja y medición.</b> Estrategia de puja, conversión primaria y umbral de éxito.</div></div>
+  </div>
+  <p class="note">Entregable: documento de Word con la plantilla del taller, entregado en la semana 4.</p>
+  <footer><span>Plantilla de Word: taller-sesion4-campana-google-ads.docx</span><span>11 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Recursos para profundizar</div>
+  <h2>Lecturas y referencias</h2>
+  <div class="grid" style="gap:12px 20px">
+    <div>
+      <a class="link" href="https://elibro.proxyuao.elogim.com/es/lc/bibliouao/titulos/106408" target="_blank" rel="noopener"><span>Ortega, F. M. (2016). <i>Google Adwords: diseña tu estrategia ganadora</i>. RA-MA<small>Lectura principal para la estrategia de cuenta</small></span><span class="arr">Abrir ↗</span></a>
+      <a class="link" href="https://elibro.proxyuao.elogim.com/es/lc/bibliouao/titulos/66738" target="_blank" rel="noopener"><span>Harnett, M. (2016). <i>Guía de acceso rápido a Google Adwords</i>. Granica<small>Para la configuración de campañas</small></span><span class="arr">Abrir ↗</span></a>
+    </div>
+    <div>
+      <a class="link" href="https://support.google.com/google-ads/answer/7450050" target="_blank" rel="noopener"><span>Ayuda de Google Ads · Objetivos de campaña<small>Documentación oficial</small></span><span class="arr">Abrir ↗</span></a>
+      <div class="link"><span>Ayuda de Google Ads · Estrategias de puja<small>Busca el término en la ayuda oficial</small></span><span class="arr">Buscar</span></div>
+    </div>
+  </div>
+  <footer><span>Los libros requieren inicio de sesión institucional</span><span>12 / 13</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Para la próxima semana</div>
+  <h2>Sesión 5 · Plataformas complementarias de Google Ads</h2>
+  <div class="grid">
+    <div class="card"><span class="n">ANTES DE LA SESIÓN 5</span><p>Entrega el borrador del taller con objetivo, tipo y grupos de palabras clave.</p></div>
+    <div class="card"><span class="n">EN LA SESIÓN 5</span><p>Analizaremos cómo se conectan Google Ads, GA4, Looker Studio y el CRM para medir el resultado real.</p></div>
+    <div class="card"><span class="n">PREGUNTA</span><p>Si una palabra clave genera clics pero nunca convierte, ¿qué revisarías primero?</p></div>
+    <div class="card"><span class="n">PARA PENSAR</span><p>¿Qué diferencia hay entre el costo por clic de Google y el costo por matrícula?</p></div>
+  </div>
+  <footer><span>Pauta Digital · UAO · Taller grupal semana 4 (25 %)</span><span>13 / 13</span></footer>
+</section>
+
+</main>
+
+<div class="nav">
+  <button id="prev">← Anterior</button>
+  <span id="count">1 / 12</span>
+  <button id="next">Siguiente →</button>
+</div>
+
+<script>
+(function(){
+  var c=document.getElementById('bg'),x=c.getContext('2d'),W,H,pts=[],dpr=Math.min(window.devicePixelRatio||1,2);
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';
+    var k=Math.round((innerWidth*innerHeight)/16000);pts=[];
+    for(var j=0;j<k;j++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35*dpr,vy:(Math.random()-.5)*.35*dpr,r:(1+Math.random()*2)*dpr});}
+  var t=0;
+  function frame(){
+    x.clearRect(0,0,W,H);t+=.004;
+    // onda suave de fondo
+    x.beginPath();
+    for(var px=0;px<=W;px+=24*dpr){var py=H*.82+Math.sin(px/(160*dpr)+t*6)*18*dpr+Math.sin(px/(70*dpr)-t*4)*8*dpr;px?x.lineTo(px,py):x.moveTo(px,py);}
+    x.strokeStyle='rgba(66,133,244,.14)';x.lineWidth=2*dpr;x.stroke();
+    x.beginPath();
+    for(var px2=0;px2<=W;px2+=24*dpr){var py2=H*.88+Math.sin(px2/(200*dpr)-t*5)*14*dpr;px2?x.lineTo(px2,py2):x.moveTo(px2,py2);}
+    x.strokeStyle='rgba(251,188,5,.22)';x.lineWidth=1.5*dpr;x.stroke();
+    // partículas y conexiones
+    for(var a=0;a<pts.length;a++){var p=pts[a];p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+      x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle='rgba(66,133,244,.35)';x.fill();
+      for(var b=a+1;b<pts.length;b++){var q=pts[b],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy),lim=130*dpr;
+        if(d<lim){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.strokeStyle='rgba(66,133,244,'+(0.16*(1-d/lim))+')';x.lineWidth=dpr;x.stroke();}}}
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  size();frame();window.addEventListener('resize',function(){size()});
+  if(reduce){/* fondo estático */}
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var i=0,n=slides.length;
+  var prog=document.getElementById('prog'),count=document.getElementById('count');
+  function paint(){count.textContent=(i+1)+' / '+n;prog.style.width=((i+1)/n*100)+'%';}
+  function show(k){
+    if(k<0||k>=n) return;
+    slides[i].classList.remove('on');
+    i=k;
+    slides[i].classList.remove('on'); void slides[i].offsetWidth; slides[i].classList.add('on');
+    paint();
+    try{history.replaceState(null,'','#'+(i+1))}catch(e){}
+  }
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('next').onclick=function(){show(i+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.target.tagName==='A') return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(i+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+  });
+  var h=parseInt((location.hash||'').replace('#',''),10);
+  slides.forEach(function(s){s.classList.remove('on')});
+  if(h>=1&&h<=n){i=h-1}
+  slides[i].classList.add('on');paint();
+})();
+</script>
+</body>
+</html>
