@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sesión 2 · Campañas de Facebook por objetivo · Pauta Digital UAO</title>
+<style>
+:root{--bg:#FAFAF7;--ink:#0E1116;--mute:#5B6472;--line:#E4E6EB;--meta:#1877F2;--meta2:#0866FF;--warm:#FF6B4A;--soft:#EEF4FF}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.deck{position:relative;width:100%;height:100vh;overflow:hidden}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:6vh 8vw 10vh;overflow-y:auto}
+.slide.on{display:flex;animation:fade .6s ease}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.kicker{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--meta);font-weight:600;margin-bottom:16px}
+h1{font-size:clamp(34px,4.9vw,68px);line-height:1.05;letter-spacing:-.02em;max-width:18ch}
+h2{font-size:clamp(26px,3.3vw,44px);line-height:1.12;letter-spacing:-.015em;margin-bottom:24px;max-width:26ch}
+h3{font-size:18px;margin-bottom:8px}
+p{font-size:17px;line-height:1.55;color:#2A3038}
+p.lead{font-size:clamp(18px,1.8vw,22px);color:var(--mute);max-width:56ch;line-height:1.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+.card .n{display:block;font-size:13px;color:var(--meta);font-weight:700;margin-bottom:6px;letter-spacing:.05em}
+.card p{font-size:16px}
+.big{font-size:clamp(44px,6vw,84px);font-weight:700;letter-spacing:-.03em;color:var(--meta);line-height:1}
+.note{font-size:13px;color:var(--mute);margin-top:18px;max-width:100ch;line-height:1.5}
+a{color:var(--meta2);text-decoration:none;border-bottom:1px solid rgba(8,102,255,.25)}
+a:hover{border-bottom-color:var(--meta2)}
+.link{display:flex;justify-content:space-between;gap:16px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px;font-size:16px;color:var(--ink);transition:border-color .2s,transform .2s}
+.link:hover{border-color:var(--meta);transform:translateX(3px)}
+.link small{display:block;color:var(--mute);font-size:13px;margin-top:2px}
+.link .arr{color:var(--meta);font-weight:700;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--meta2);margin-right:6px;font-weight:600}
+/* gráficas animadas */
+.chart{display:flex;flex-direction:column;gap:16px;max-width:780px}
+.row{display:grid;grid-template-columns:200px 1fr 110px;align-items:center;gap:16px;font-size:17px}
+.track{height:44px;background:var(--soft);border-radius:12px;overflow:hidden}
+.bar{height:100%;width:0;border-radius:12px;background:linear-gradient(90deg,var(--meta),var(--meta2));transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.bar.warm{background:linear-gradient(90deg,var(--warm),#FF8A6E)}
+.on .bar{width:var(--w)}
+.val{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.funnel{display:flex;flex-direction:column;gap:12px;align-items:center;max-width:720px}
+.stage{height:72px;border-radius:14px;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:18px;font-weight:600;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.on .stage{width:var(--w)}
+.stage span{font-size:14px;font-weight:500;opacity:.92}
+/* jerarquía de campaña */
+.tiers{display:flex;flex-direction:column;gap:10px;max-width:760px}
+.tier{border-radius:14px;padding:16px 22px;background:#fff;border:1px solid var(--line);transform:translateX(-30px);opacity:0;transition:all .6s}
+.on .tier{transform:none;opacity:1}
+.on .tier:nth-child(2){transition-delay:.25s}.on .tier:nth-child(3){transition-delay:.5s}
+.tier:nth-child(2){margin-left:30px}.tier:nth-child(3){margin-left:60px}
+.tier b{font-size:17px}.tier p{font-size:15px;margin-top:4px}
+/* glosario y pasos */
+.gl{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 28px}
+.gl div{border-bottom:1px solid var(--line);padding:10px 0}
+.gl b{font-size:16px}.gl p{font-size:15px;color:var(--mute)}
+.step{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;font-size:17px;line-height:1.5}
+.num{flex:0 0 36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{background:#fff;border:1px dashed #C7CDD8;border-radius:12px;padding:12px 16px;font-size:15px}
+.field b{display:block;color:var(--meta2);font-size:13px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+footer{position:absolute;bottom:3vh;left:8vw;right:8vw;display:flex;justify-content:space-between;gap:20px;font-size:12px;color:var(--mute)}
+.nav{position:fixed;bottom:2.5vh;right:3vw;display:flex;gap:10px;align-items:center;font-size:13px;color:var(--mute);z-index:5}
+.nav button{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;font-size:14px;color:var(--ink)}
+.nav button:hover{border-color:var(--meta);color:var(--meta)}
+.prog{position:fixed;top:0;left:0;height:3px;background:var(--meta);transition:width .5s;z-index:5}
+@media (max-width:820px){.grid,.grid3,.gl,.form{grid-template-columns:1fr}.row{grid-template-columns:110px 1fr 70px;font-size:14px}}
+/* fondo animado: red de partículas */
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.deck,.nav,.prog{position:relative;z-index:1}
+.nav{position:fixed}.prog{position:fixed}
+.slide{z-index:1}
+.card,.link,.field,.gl div{background:rgba(255,255,255,.88);backdrop-filter:blur(2px)}
+/* PDF: todas las diapositivas en estado final */
+@page{size:297mm 167mm;margin:0}
+@media print{
+  .deck{height:auto;overflow:visible}
+  .slide{position:relative;display:flex!important;height:167mm;width:297mm;page-break-after:always;animation:none;padding:12mm 22mm 18mm;overflow:hidden}
+  .bar,.stage,.tier{transition:none!important}
+  .bar{width:var(--w)!important}.stage{width:var(--w)!important}.tier{transform:none!important;opacity:1!important}
+  .nav,.prog,#bg{display:none!important}
+  footer{bottom:7mm;left:22mm;right:22mm}
+  html,body{height:auto;overflow:visible}
+}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="prog" id="prog"></div>
+<main class="deck" id="deck">
+
+<section class="slide on">
+  <div class="kicker">Pauta Digital</div>
+  <h1>Campañas de Facebook por objetivo</h1>
+  <p class="lead" style="margin-top:24px">Cómo convertir una estrategia en una campaña configurada: objetivo, público, formato y medición antes de publicar.</p>
+  <div style="margin-top:28px"><span class="tag">Módulo 1 · Facebook Marketing</span><span class="tag">Creación de campañas</span></div>
+  <footer><span>Universidad Autónoma de Occidente · Especialización en Gerencia de Negocios Digitales</span><span>1 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Hoy</div>
+  <h2>Qué vas a poder hacer al terminar la sesión</h2>
+  <div class="grid">
+    <div class="card"><span class="n">OBJETIVO 1</span><p>Traducir un objetivo de negocio en un objetivo de campaña de Meta.</p></div>
+    <div class="card"><span class="n">OBJETIVO 2</span><p>Diseñar tres niveles de público (frío, tibio y caliente) con su lógica de uso.</p></div>
+    <div class="card"><span class="n">OBJETIVO 3</span><p>Elegir el formato de anuncio y sus medidas según la ubicación.</p></div>
+    <div class="card"><span class="n">OBJETIVO 4</span><p>Preparar la medición (píxel y API de Conversiones) antes de gastar un peso.</p></div>
+  </div>
+  <footer><span>Módulo 1b · Creación de campañas basadas en objetivos</span><span>2 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Antes de tocar Ads Manager</div>
+  <h2>El brief estratégico responde cinco preguntas</h2>
+  <div class="grid3">
+    <div class="card"><span class="n">01 · NEGOCIO</span><p>¿Qué resultado económico necesitamos? Admisiones, ventas, reconocimiento de marca.</p></div>
+    <div class="card"><span class="n">02 · PERSONA</span><p>¿Quién decide la compra y en qué momento está (no sabe, compara, está listo)?</p></div>
+    <div class="card"><span class="n">03 · OFERTA</span><p>¿Qué le damos a cambio de su atención? Beca, cita, prueba gratis, programa.</p></div>
+    <div class="card"><span class="n">04 · PRESUPUESTO</span><p>¿Cuánto invertimos y durante cuánto tiempo? Sin esto no hay plan de aprendizaje.</p></div>
+    <div class="card"><span class="n">05 · MEDICIÓN</span><p>¿Qué métrica decide si la campaña funcionó y qué umbral la hace exitosa?</p></div>
+    <div class="card"><span class="n">REGLA</span><p>Si no puedes responder una pregunta, la campaña todavía no está lista para publicarse.</p></div>
+  </div>
+  <footer><span>Brief estratégico: el mismo formato se usa en el taller de la semana 2</span><span>3 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Objetivo → evento → métrica</div>
+  <h2>Cada objetivo optimiza para un evento distinto</h2>
+  <div class="card" style="padding:8px 22px">
+    <table style="width:100%;border-collapse:collapse;font-size:15px">
+      <tr style="text-align:left;color:#5B6472"><th style="padding:12px 8px">Objetivo</th><th>Etapa</th><th>Evento que optimiza Meta</th><th>Métrica de decisión</th></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:12px 8px"><b>Notoriedad</b></td><td>Conciencia</td><td>Personas alcanzadas</td><td>Alcance, frecuencia, CPM</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:12px 8px"><b>Tráfico</b></td><td>Consideración</td><td>Clics en el enlace o vistas de la página</td><td>Costo por clic de enlace</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:12px 8px"><b>Interacción</b></td><td>Consideración</td><td>Reacciones, comentarios, compartidos</td><td>Costo por interacción</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:12px 8px"><b>Clientes potenciales</b></td><td>Consideración</td><td>Formulario enviado o mensaje iniciado</td><td>Costo por cliente potencial</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:12px 8px"><b>Promoción de la app</b></td><td>Conversión</td><td>Instalaciones o eventos dentro de la app</td><td>Costo por instalación</td></tr>
+      <tr style="border-top:1px solid #E4E6EB"><td style="padding:12px 8px"><b>Ventas</b></td><td>Conversión</td><td>Compras o eventos de valor (requiere píxel)</td><td>Costo por compra y ROAS</td></tr>
+    </table>
+  </div>
+  <p class="note">Regla práctica: el objetivo define el evento; el evento define el costo que vas a pagar. Si optimizas para clics y vendes en compras, Meta encontrará clics baratos que no compran.</p>
+  <footer><span>Objetivos según la lista vigente de Meta; verifica nombres en el Ads Manager antes de la clase</span><span>4 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Público</div>
+  <h2>Tres niveles de audiencia, tres mensajes distintos</h2>
+  <div class="funnel">
+    <div class="stage" style="--w:100%;background:#1877F2">Público frío <span>No conoce la marca · intereses, edad, ubicación</span></div>
+    <div class="stage" style="--w:78%;background:#0866FF">Público tibio <span>Interactuó con la página o el video (personalizado)</span></div>
+    <div class="stage" style="--w:56%;background:#FF6B4A">Público caliente <span>Visitó la web o inició formulario, pero no convirtió</span></div>
+  </div>
+  <p class="note"><b>Público similar (lookalike):</b> Meta busca personas parecidas a una fuente de al menos 100 personas, por ejemplo tus estudiantes actuales. Elige un porcentaje cercano al 1 % para más parecido y más alcance cuando subas el porcentaje. Con Advantage+ de audiencia, Meta puede ampliar tu público; la sugerencia sigue siendo una señal, no una orden.</p>
+  <footer><span>Estructura de audiencias: Centro de ayuda de Meta Business (buscar "público similar")</span><span>5 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Formatos</div>
+  <h2>Medidas que tu creativo debe respetar</h2>
+  <div class="grid3">
+    <div class="card"><span class="n">FEED · CUADRADO</span><h3>1080 × 1080 px</h3><p>Relación 1:1. Funciona bien en Facebook e Instagram en el feed.</p></div>
+    <div class="card"><span class="n">FEED · VERTICAL</span><h3>1080 × 1350 px</h3><p>Relación 4:5. Ocupa más pantalla en el móvil sin cortar el texto.</p></div>
+    <div class="card"><span class="n">REELS · STORIES</span><h3>1080 × 1920 px</h3><p>Relación 9:16. Pantalla completa; deja margen superior e inferior para los controles.</p></div>
+  </div>
+  <p class="note">Formatos de anuncio: imagen única, video, carrusel y colección. Cada formato cambia la forma en que el usuario interactúa: el carrusel sirve para mostrar varios programas o beneficios; el video, para contar una historia en 15 a 30 segundos.</p>
+  <footer><span>Medidas recomendadas; confirma las especificaciones vigentes en el Centro de ayuda de Meta</span><span>6 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Aprendizaje de la campaña</div>
+  <h2>Meta necesita datos antes de optimizar bien</h2>
+  <div class="chart">
+    <div class="row"><span>Semana 1 · Aprendizaje</span><div class="track"><div class="bar" style="--w:100%"></div></div><span class="val">~50 eventos</span></div>
+    <div class="row"><span>Semana 2 · Estable</span><div class="track"><div class="bar warm" style="--w:60%"></div></div><span class="val">optimizando</span></div>
+  </div>
+  <p class="note">Meta indica alrededor de 50 eventos de optimización por conjunto de anuncios en 7 días para salir de la fase de aprendizaje. Editar presupuesto, público o creativo con frecuencia reinicia ese aprendizaje. Por eso el brief debe estar cerrado antes de publicar.</p>
+  <footer><span>Fase de aprendizaje: documentación de Meta Business Help (verificar cifra vigente)</span><span>7 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Medición</div>
+  <h2>Sin píxel ni API de Conversiones no hay optimización de ventas</h2>
+  <div class="grid">
+    <div class="card"><span class="n">PÍXEL DE META</span><p>Código en tu sitio web que registra visitas y eventos estándar: ViewContent, Lead, AddToCart, Purchase.</p></div>
+    <div class="card"><span class="n">API DE CONVERSIONES</span><p>Envía eventos desde tu servidor. Complementa al píxel cuando los bloqueadores o el navegador pierden datos.</p></div>
+    <div class="card"><span class="n">DEDUPLICACIÓN</span><p>El mismo evento puede llegar por píxel y por API. Usa el mismo identificador de evento para contarlo una sola vez.</p></div>
+    <div class="card"><span class="n">CALIDAD</span><p>Revisa en el Administrador de eventos que el puntaje de calidad de datos esté en buen estado antes de optimizar a conversiones.</p></div>
+  </div>
+  <footer><span>Eventos estándar y Administrador de eventos: Centro de ayuda de Meta Business</span><span>8 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Ejemplo de estructura</div>
+  <h2>Una campaña de admisiones de posgrado, nivel por nivel</h2>
+  <div class="tiers">
+    <div class="tier"><b>Campaña · Clientes potenciales</b><p>Presupuesto de campaña diario. Objetivo: formularios de inscripción para una maestría.</p></div>
+    <div class="tier"><b>Conjunto 1 · Público frío</b><p>Profesionales de 25 a 45 años en Cali, intereses en gestión, marketing y negocios.</p></div>
+    <div class="tier"><b>Conjunto 2 · Público tibio</b><p>Personas que vieron el video de 15 s o interactuaron con la publicación en los últimos 30 días.</p></div>
+    <div class="tier"><b>Anuncios</b><p>Carrusel con tres beneficios del programa y un video testimonial con la misma oferta.</p></div>
+  </div>
+  <p class="note">Este es el modelo que construirán en el taller. No es la única forma correcta, pero cada decisión debe justificarse con el brief.</p>
+  <footer><span>Ejemplo ilustrativo; no representa cifras reales de ninguna institución</span><span>9 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Taller grupal · Semana 2 · 25 %</div>
+  <h2>Diseñen una campaña de Facebook completa</h2>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div><b>Brief.</b> Respondan las cinco preguntas con un caso real o un programa de su institución.</div></div>
+    <div class="step"><div class="num">2</div><div><b>Objetivo y métrica.</b> Elijan un objetivo y justifiquen el evento que optimiza.</div></div>
+    <div class="step"><div class="num">3</div><div><b>Público.</b> Definan un público frío y uno tibio, con tamaño estimado y razón de uso.</div></div>
+    <div class="step"><div class="num">4</div><div><b>Formato y mensaje.</b> Elijan el formato, la medida y el texto principal del anuncio.</div></div>
+    <div class="step"><div class="num">5</div><div><b>Medición.</b> Listen los eventos que necesitan configurar antes de publicar.</div></div>
+  </div>
+  <p class="note">Entregable: documento de Word con la plantilla del taller, entregado en la semana 2. Lo recibirán antes de la sesión.</p>
+  <footer><span>La plantilla de Word acompaña esta presentación</span><span>10 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Recursos para profundizar</div>
+  <h2>Lecturas y referencias</h2>
+  <div class="grid" style="gap:12px 20px">
+    <div>
+      <a class="link" href="https://elibro.proxyuao.elogim.com/es/lc/bibliouao/titulos/106451" target="_blank" rel="noopener"><span>Guerrero, D. (2019). <i>Facebook Guía Práctica</i>. RA-MA<small>Lectura principal para creación de campañas</small></span><span class="arr">Abrir ↗</span></a>
+      <a class="link" href="https://elibro.proxyuao.elogim.com/es/lc/bibliouao/titulos/44623" target="_blank" rel="noopener"><span>Gálvez Clavijo, I. (2019). <i>Facebook para empresas y emprendedores</i>. IC Editorial<small>Para el brief y la oferta</small></span><span class="arr">Abrir ↗</span></a>
+    </div>
+    <div>
+      <a class="link" href="https://www.facebook.com/ads/library/" target="_blank" rel="noopener"><span>Biblioteca de Anuncios de Meta<small>Revisa formatos reales de anunciantes colombianos</small></span><span class="arr">Abrir ↗</span></a>
+      <div class="link"><span>Centro de ayuda de Meta Business<small>Busca "eventos estándar", "público similar" y "fase de aprendizaje"</small></span><span class="arr">Buscar</span></div>
+    </div>
+  </div>
+  <footer><span>Los libros se abren con inicio de sesión institucional</span><span>11 / 12</span></footer>
+</section>
+
+<section class="slide">
+  <div class="kicker">Para la próxima semana</div>
+  <h2>Sesión 3 · Plataformas complementarias de Meta</h2>
+  <div class="grid">
+    <div class="card"><span class="n">ANTES DE LA SESIÓN 3</span><p>Entrega el borrador del taller con el brief y el objetivo definidos.</p></div>
+    <div class="card"><span class="n">EN LA SESIÓN 3</span><p>Veremos cómo medir la campaña con herramientas complementarias: Looker Studio, Google Analytics y el propio Administrador de eventos.</p></div>
+    <div class="card"><span class="n">PREGUNTA</span><p>Si tu campaña genera 200 formularios pero solo 10 inscripciones, ¿qué revisarías primero?</p></div>
+    <div class="card"><span class="n">PARA PENSAR</span><p>¿Qué datos necesitas para saber si el costo por inscrito es rentable para la institución?</p></div>
+  </div>
+  <footer><span>Pauta Digital · UAO · Taller grupal semana 2 (25 %)</span><span>12 / 12</span></footer>
+</section>
+
+</main>
+
+<div class="nav">
+  <button id="prev">← Anterior</button>
+  <span id="count">1 / 12</span>
+  <button id="next">Siguiente →</button>
+</div>
+
+<script>
+(function(){
+  var c=document.getElementById('bg'),x=c.getContext('2d'),W,H,pts=[],dpr=Math.min(window.devicePixelRatio||1,2);
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';
+    var k=Math.round((innerWidth*innerHeight)/16000);pts=[];
+    for(var j=0;j<k;j++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35*dpr,vy:(Math.random()-.5)*.35*dpr,r:(1+Math.random()*2)*dpr});}
+  var t=0;
+  function frame(){
+    x.clearRect(0,0,W,H);t+=.004;
+    // onda suave de fondo
+    x.beginPath();
+    for(var px=0;px<=W;px+=24*dpr){var py=H*.82+Math.sin(px/(160*dpr)+t*6)*18*dpr+Math.sin(px/(70*dpr)-t*4)*8*dpr;px?x.lineTo(px,py):x.moveTo(px,py);}
+    x.strokeStyle='rgba(24,119,242,.14)';x.lineWidth=2*dpr;x.stroke();
+    x.beginPath();
+    for(var px2=0;px2<=W;px2+=24*dpr){var py2=H*.88+Math.sin(px2/(200*dpr)-t*5)*14*dpr;px2?x.lineTo(px2,py2):x.moveTo(px2,py2);}
+    x.strokeStyle='rgba(255,107,74,.10)';x.lineWidth=1.5*dpr;x.stroke();
+    // partículas y conexiones
+    for(var a=0;a<pts.length;a++){var p=pts[a];p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+      x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle='rgba(24,119,242,.35)';x.fill();
+      for(var b=a+1;b<pts.length;b++){var q=pts[b],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy),lim=130*dpr;
+        if(d<lim){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.strokeStyle='rgba(24,119,242,'+(0.16*(1-d/lim))+')';x.lineWidth=dpr;x.stroke();}}}
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  size();frame();window.addEventListener('resize',function(){size()});
+  if(reduce){/* fondo estático */}
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var i=0,n=slides.length;
+  var prog=document.getElementById('prog'),count=document.getElementById('count');
+  function paint(){count.textContent=(i+1)+' / '+n;prog.style.width=((i+1)/n*100)+'%';}
+  function show(k){
+    if(k<0||k>=n) return;
+    slides[i].classList.remove('on');
+    i=k;
+    slides[i].classList.remove('on'); void slides[i].offsetWidth; slides[i].classList.add('on');
+    paint();
+    try{history.replaceState(null,'','#'+(i+1))}catch(e){}
+  }
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('next').onclick=function(){show(i+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.target.tagName==='A') return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(i+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+  });
+  var h=parseInt((location.hash||'').replace('#',''),10);
+  slides.forEach(function(s){s.classList.remove('on')});
+  if(h>=1&&h<=n){i=h-1}
+  slides[i].classList.add('on');paint();
+})();
+</script>
+</body>
+</html>
