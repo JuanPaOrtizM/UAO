@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sesión 1 · Meta Ads en la estrategia digital · Pauta Digital UAO</title>
+<style>
+:root{--bg:#FAFAF7;--ink:#0E1116;--mute:#5B6472;--line:#E4E6EB;--meta:#1877F2;--meta2:#0866FF;--warm:#FF6B4A;--soft:#EEF4FF}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.deck{position:relative;width:100%;height:100vh;overflow:hidden}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:6vh 8vw 10vh;overflow-y:auto}
+.slide.on{display:flex;animation:fade .6s ease}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.kicker{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--meta);font-weight:600;margin-bottom:16px}
+h1{font-size:clamp(34px,4.9vw,68px);line-height:1.05;letter-spacing:-.02em;max-width:18ch}
+h2{font-size:clamp(26px,3.3vw,44px);line-height:1.12;letter-spacing:-.015em;margin-bottom:24px;max-width:26ch}
+h3{font-size:18px;margin-bottom:8px}
+p{font-size:17px;line-height:1.55;color:#2A3038}
+p.lead{font-size:clamp(18px,1.8vw,22px);color:var(--mute);max-width:56ch;line-height:1.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+.card .n{display:block;font-size:13px;color:var(--meta);font-weight:700;margin-bottom:6px;letter-spacing:.05em}
+.card p{font-size:16px}
+.big{font-size:clamp(44px,6vw,84px);font-weight:700;letter-spacing:-.03em;color:var(--meta);line-height:1}
+.note{font-size:13px;color:var(--mute);margin-top:18px;max-width:100ch;line-height:1.5}
+a{color:var(--meta2);text-decoration:none;border-bottom:1px solid rgba(8,102,255,.25)}
+a:hover{border-bottom-color:var(--meta2)}
+.link{display:flex;justify-content:space-between;gap:16px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px;font-size:16px;color:var(--ink);transition:border-color .2s,transform .2s}
+.link:hover{border-color:var(--meta);transform:translateX(3px)}
+.link small{display:block;color:var(--mute);font-size:13px;margin-top:2px}
+.link .arr{color:var(--meta);font-weight:700;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--meta2);margin-right:6px;font-weight:600}
+/* gráficas animadas */
+.chart{display:flex;flex-direction:column;gap:16px;max-width:780px}
+.row{display:grid;grid-template-columns:200px 1fr 110px;align-items:center;gap:16px;font-size:17px}
+.track{height:44px;background:var(--soft);border-radius:12px;overflow:hidden}
+.bar{height:100%;width:0;border-radius:12px;background:linear-gradient(90deg,var(--meta),var(--meta2));transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.bar.warm{background:linear-gradient(90deg,var(--warm),#FF8A6E)}
+.on .bar{width:var(--w)}
+.val{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.funnel{display:flex;flex-direction:column;gap:12px;align-items:center;max-width:720px}
+.stage{height:72px;border-radius:14px;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:18px;font-weight:600;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.on .stage{width:var(--w)}
+.stage span{font-size:14px;font-weight:500;opacity:.92}
+/* jerarquía de campaña */
+.tiers{display:flex;flex-direction:column;gap:10px;max-width:760px}
+.tier{border-radius:14px;padding:16px 22px;background:#fff;border:1px solid var(--line);transform:translateX(-30px);opacity:0;transition:all .6s}
+.on .tier{transform:none;opacity:1}
+.on .tier:nth-child(2){transition-delay:.25s}.on .tier:nth-child(3){transition-delay:.5s}
+.tier:nth-child(2){margin-left:30px}.tier:nth-child(3){margin-left:60px}
+.tier b{font-size:17px}.tier p{font-size:15px;margin-top:4px}
+/* glosario y pasos */
+.gl{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 28px}
+.gl div{border-bottom:1px solid var(--line);padding:10px 0}
+.gl b{font-size:16px}.gl p{font-size:15px;color:var(--mute)}
+.step{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;font-size:17px;line-height:1.5}
+.num{flex:0 0 36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{background:#fff;border:1px dashed #C7CDD8;border-radius:12px;padding:12px 16px;font-size:15px}
+.field b{display:block;color:var(--meta2);font-size:13px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+footer{position:absolute;bottom:3vh;left:8vw;right:8vw;display:flex;justify-content:space-between;gap:20px;font-size:12px;color:var(--mute)}
+.nav{position:fixed;bottom:2.5vh;right:3vw;display:flex;gap:10px;align-items:center;font-size:13px;color:var(--mute);z-index:5}
+.nav button{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;font-size:14px;color:var(--ink)}
+.nav button:hover{border-color:var(--meta);color:var(--meta)}
+.prog{position:fixed;top:0;left:0;height:3px;background:var(--meta);transition:width .5s;z-index:5}
+@media (max-width:820px){.grid,.grid3,.gl,.form{grid-template-columns:1fr}.row{grid-template-columns:110px 1fr 70px;font-size:14px}}
+/* fondo animado: red de partículas */
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.deck,.nav,.prog{position:relative;z-index:1}
+.nav{position:fixed}.prog{position:fixed}
+.slide{z-index:1}
+.card,.link,.field,.gl div{background:rgba(255,255,255,.88);backdrop-filter:blur(2px)}
+/* PDF: todas las diapositivas en estado final */
+@page{size:297mm 167mm;margin:0}
+@media print{
+  .deck{height:auto;overflow:visible}
+  .slide{position:relative;display:flex!important;height:167mm;width:297mm;page-break-after:always;animation:none;padding:12mm 22mm 18mm;overflow:hidden}
+  .bar,.stage,.tier{transition:none!important}
+  .bar{width:var(--w)!important}.stage{width:var(--w)!important}.tier{transform:none!important;opacity:1!important}
+  .nav,.prog,#bg{display:none!important}
+  footer{bottom:7mm;left:22mm;right:22mm}
+  html,body{height:auto;overflow:visible}
+}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="prog" id="prog"></div>
+<main class="deck" id="deck">
+
+<!-- 1 · PORTADA -->
+<section class="slide on">
+  <div class="kicker">Pauta Digital</div>
+  <h1>Meta Ads en la estrategia de marketing digital</h1>
+  <p class="lead" style="margin-top:24px">Por qué la pauta empieza con una estrategia y no con un anuncio, y qué cambió en Meta durante 2026.</p>
+  <div style="margin-top:28px"><span class="tag">Módulo 1 · Facebook Marketing</span></div>
+  <footer><span>Especialización en Gerencia de Negocios Digitales · Universidad Autónoma de Occidente</span><span>1 / 12</span></footer>
+</section>
+
+<!-- 2 · OBJETIVOS Y AGENDA -->
+<section class="slide">
+  <div class="kicker">Hoy</div>
+  <h2>Qué vas a poder hacer al terminar la sesión</h2>
+  <div class="grid">
+    <div class="card"><span class="n">OBJETIVO 1</span><p>Describir el papel de Facebook e Instagram dentro de un embudo de marketing digital.</p></div>
+    <div class="card"><span class="n">OBJETIVO 2</span><p>Relacionar cada objetivo de campaña de Meta con una etapa del embudo y con una métrica.</p></div>
+    <div class="card"><span class="n">OBJETIVO 3</span><p>Explicar qué automatizó Meta en 2026 y qué decisiones siguen siendo tuyas.</p></div>
+    <div class="card"><span class="n">OBJETIVO 4</span><p>Analizar una campaña real usando la Biblioteca de Anuncios de Meta, sin necesidad de cuenta.</p></div>
+  </div>
+  <footer><span>Módulo 1a · Rol de Facebook Marketing en la estrategia</span><span>2 / 12</span></footer>
+</section>
+
+<!-- 3 · AUDIENCIA -->
+<section class="slide">
+  <div class="kicker">Contexto · Colombia</div>
+  <h2>Meta llega a casi toda la población digital del país</h2>
+  <div class="chart">
+    <div class="row"><span>Facebook</span><div class="track"><div class="bar" style="--w:88%"></div></div><span class="val">44,3 M</span></div>
+    <div class="row"><span>Instagram</span><div class="track"><div class="bar" style="--w:47%"></div></div><span class="val">23,5 M</span></div>
+    <div class="row"><span>Redes sociales (todas)</span><div class="track"><div class="bar" style="--w:75%"></div></div><span class="val">37,7 M</span></div>
+  </div>
+  <p class="note">Facebook e Instagram: cuentas activas al menos una vez al mes, abril de 2026. Estimación de NapoleonCat con datos de la API de marketing de Meta, solo audiencia direccionable. Redes sociales: DataReportal Digital 2026 (octubre de 2025, equivalente al 70,4 % de la población). Las cifras no se suman: un mismo usuario aparece en varias redes.</p>
+  <div style="margin-top:14px">
+    <a class="tag" href="https://stats.napoleoncat.com/facebook-users-in-colombia/2026/04/" target="_blank" rel="noopener">Facebook Colombia · NapoleonCat ↗</a>
+    <a class="tag" href="https://stats.napoleoncat.com/instagram-users-in-colombia/2026/04/" target="_blank" rel="noopener">Instagram Colombia · NapoleonCat ↗</a>
+    <a class="tag" href="https://datareportal.com/reports/digital-2026-colombia" target="_blank" rel="noopener">Digital 2026 Colombia · DataReportal ↗</a>
+  </div>
+  <footer><span>Dato de contexto: la publicidad digital superó el 50 % de la inversión en medios en Colombia en 2025 (byyd, con datos de DataReportal e IAB Colombia)</span><span>3 / 12</span></footer>
+</section>
+
+<!-- 4 · ESTRUCTURA DE CAMPAÑA -->
+<section class="slide">
+  <div class="kicker">Fundamentos</div>
+  <h2>Cómo está organizada una campaña en Meta</h2>
+  <div class="tiers">
+    <div class="tier"><b>1 · Campaña</b><p>Define el <b>objetivo</b> (qué resultado busca Meta) y el presupuesto total. Es la decisión estratégica.</p></div>
+    <div class="tier"><b>2 · Conjunto de anuncios</b><p>Define el <b>público</b>, las ubicaciones (Feed, Reels, Stories, Messenger), el cronograma y el evento que se optimiza.</p></div>
+    <div class="tier"><b>3 · Anuncio</b><p>Define el <b>creativo</b> (imagen, video o carrusel), el texto, el titular y el botón de llamada a la acción.</p></div>
+  </div>
+  <p class="note">Con Advantage+ algunas de estas decisiones pasan a Meta, por eso el nivel 1 y el nivel 3 concentran hoy más peso. Los cuatro niveles del programa (Ads Manager → Campañas → Conjuntos → Anuncios) se practican en la sesión 2.</p>
+  <footer><span>Fuente de la estructura: Centro de ayuda de Meta Business (verificar la versión vigente antes de la clase)</span><span>4 / 12</span></footer>
+</section>
+
+<!-- 5 · EMBUDO Y OBJETIVOS -->
+<section class="slide">
+  <div class="kicker">Estrategia</div>
+  <h2>Cada etapa del embudo pide un objetivo distinto</h2>
+  <div class="funnel">
+    <div class="stage" style="--w:100%;background:#1877F2">Conciencia <span>Notoriedad · Alcance</span></div>
+    <div class="stage" style="--w:84%;background:#0866FF">Consideración <span>Tráfico · Interacción · Clientes potenciales</span></div>
+    <div class="stage" style="--w:68%;background:#FF6B4A">Conversión <span>Ventas · Promoción de la app</span></div>
+  </div>
+  <p class="note">Los seis objetivos de campaña en Meta son Notoriedad, Tráfico, Interacción, Clientes potenciales, Promoción de la aplicación y Ventas. El objetivo le dice a Meta a qué evento optimizar: si eliges Tráfico, optimiza para clics; si eliges Ventas, optimiza para compras. Elegir mal el objetivo es el error más caro de la pauta.</p>
+  <footer><span>Ejemplo: una universidad que quiere inscripciones usa Clientes potenciales (formulario) y mide costo por lead, no alcance.</span><span>5 / 12</span></footer>
+</section>
+
+<!-- 6 · GLOSARIO -->
+<section class="slide">
+  <div class="kicker">Vocabulario de la pauta</div>
+  <h2>Las siete métricas que vas a leer todas las semanas</h2>
+  <div class="gl">
+    <div><b>Impresiones</b><p>Veces que se mostró el anuncio, incluidas repeticiones a la misma persona.</p></div>
+    <div><b>Alcance</b><p>Personas únicas que vieron el anuncio al menos una vez.</p></div>
+    <div><b>Frecuencia</b><p>Impresiones ÷ alcance. Por encima de 3 o 4 en prospección suele haber fatiga creativa.</p></div>
+    <div><b>CPM</b><p>Costo por mil impresiones. Mide el precio de la atención, no del resultado.</p></div>
+    <div><b>CTR</b><p>Clics ÷ impresiones. Muestra si el mensaje despierta interés.</p></div>
+    <div><b>CPC</b><p>Costo por clic. Útil en objetivos de tráfico.</p></div>
+    <div><b>Costo por resultado (CPA)</b><p>Inversión ÷ conversiones del objetivo elegido.</p></div>
+    <div><b>ROAS</b><p>Ingresos atribuidos ÷ inversión. Depende de la ventana de atribución que configures.</p></div>
+  </div>
+  <p class="note">Regla de lectura: primero el objetivo, luego la métrica de ese objetivo, y solo después las demás. Un CTR alto con costo por resultado alto es un anuncio que atrae clics equivocados.</p>
+  <footer><span>Definiciones de uso general en la industria; confirma la definición exacta de cada métrica en el Centro de ayuda de Meta.</span><span>6 / 12</span></footer>
+</section>
+
+<!-- 7 · QUÉ CAMBIÓ EN 2026 -->
+<section class="slide">
+  <div class="kicker">Actualidad 2026</div>
+  <h2>Meta automatiza más. Tu trabajo se mueve al creativo y a la medición</h2>
+  <div class="grid">
+    <div class="card"><span class="n">CAMBIO 1</span><h3>Advantage+ por defecto</h3><p>Las campañas nuevas arrancan con segmentación, ubicaciones, creativos y presupuesto optimizados por Meta. Los controles manuales se reducen.</p></div>
+    <div class="card"><span class="n">CAMBIO 2</span><h3>Advantage+ Sales</h3><p>Antes "Advantage+ Shopping". Ya no es solo e-commerce: cubre servicios y productos digitales.</p></div>
+    <div class="card"><span class="n">CAMBIO 3</span><h3>Reglas de valor</h3><p>Puedes indicar que Meta pague más por segmentos concretos sin desactivar Advantage+.</p></div>
+    <div class="card"><span class="n">CAMBIO 4</span><h3>Creativo = segmentación</h3><p>Con menos control de audiencias, el mensaje y el formato son lo que el algoritmo aprende.</p></div>
+  </div>
+  <div style="margin-top:14px">
+    <a class="tag" href="https://ppc.land/advantage/" target="_blank" rel="noopener">Historia de Advantage+ · ppc.land ↗</a>
+    <a class="tag" href="https://www.prism-me.com/blog/advantage-features-explained-2026" target="_blank" rel="noopener">Reglas de valor · Prism ↗</a>
+    <a class="tag" href="https://www.ignitesocialmedia.com/?p=59106" target="_blank" rel="noopener">Andromeda y secuenciación · Ignite ↗</a>
+  </div>
+  <p class="note">Fuentes de terceros. Antes de la clase verifica estos cambios en el Centro de ayuda de Meta Business, porque la plataforma cambia con frecuencia.</p>
+  <footer><span>Actualidad verificada con fuentes de 2026; revisar antes de cada sesión</span><span>7 / 12</span></footer>
+</section>
+
+<!-- 8 · PENSAMIENTO CRÍTICO -->
+<section class="slide">
+  <div class="kicker">Pensamiento crítico</div>
+  <div class="big">+22 %</div>
+  <h2 style="margin-top:16px">ROAS atribuido a Advantage+, según benchmarks de Meta</h2>
+  <div class="grid">
+    <div class="card"><span class="n">PREGUNTA 1</span><p><b>¿Quién mide?</b> Meta compara sus propias campañas. No hay un grupo de control independiente en esa cifra.</p></div>
+    <div class="card"><span class="n">PREGUNTA 2</span><p><b>¿Qué cuenta como éxito?</b> Una ventana de atribución distinta (por ejemplo, 7 días de clic frente a 1 día de vista) cambia el ROAS sin cambiar el negocio.</p></div>
+    <div class="card"><span class="n">PREGUNTA 3</span><p><b>¿Qué pasa en tu cuenta?</b> Si tus datos de conversión están mal (píxel, eventos duplicados), Advantage+ optimiza el error más rápido.</p></div>
+    <div class="card"><span class="n">PREGUNTA 4</span><p><b>¿Para qué negocio?</b> Una cifra de e-commerce no predice el costo por inscrito de un programa académico.</p></div>
+  </div>
+  <footer><span>Regla de la clase: toda cifra de plataforma se valida con tu propia cuenta y tu propio negocio</span><span>8 / 12</span></footer>
+</section>
+
+<!-- 9 · TALLER (SIN ACCESO A PLATAFORMA) -->
+<section class="slide">
+  <div class="kicker">Taller grupal · 15 minutos en clase</div>
+  <h2>Auditoría de un anuncio real en la Biblioteca de Anuncios</h2>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div><b>Equipos de 3.</b> Elijan dos anunciantes colombianos de su categoría, uno líder y uno competidor. No necesitan cuenta ni acceso a Ads Manager.</div></div>
+    <div class="step"><div class="num">2</div><div><b>Busquen en la Biblioteca.</b> Abran <a href="https://www.facebook.com/ads/library/" target="_blank" rel="noopener">facebook.com/ads/library</a>, seleccionen país Colombia, categoría "Todos los anuncios" y busquen por anunciante.</div></div>
+    <div class="step"><div class="num">3</div><div><b>Describan tres anuncios activos.</b> Formato, mensaje, llamada a la acción, fecha de inicio y plataforma. Una campaña que lleva meses activa probablemente es rentable.</div></div>
+    <div class="step"><div class="num">4</div><div><b>Deduzcan el objetivo y la etapa del embudo</b> de cada anuncio.</div></div>
+    <div class="step"><div class="num">5</div><div><b>Diseñen su propia campaña en papel</b> para el mismo mercado: objetivo, público, formato, mensaje y métrica de éxito. Se llena en la ficha de la siguiente diapositiva.</div></div>
+  </div>
+  <p class="note">Entregable de la semana 2 (taller grupal, 25 %): la ficha completa, que se desarrolla en la sesión 2 con el mismo formato que los talleres en Word.</p>
+  <footer><span>Biblioteca de Anuncios de Meta: consulta pública, sin inicio de sesión</span><span>9 / 12</span></footer>
+</section>
+
+<!-- 10 · FICHA DEL TALLER -->
+<section class="slide">
+  <div class="kicker">Ficha de trabajo del equipo</div>
+  <h2>Lo que deben entregar en la ficha</h2>
+  <div class="form">
+    <div class="field"><b>Anunciante analizado</b>Nombre, categoría y país.</div>
+    <div class="field"><b>Objetivo que infieren</b>¿Notoriedad, tráfico, leads o ventas? ¿Por qué?</div>
+    <div class="field"><b>Etapa del embudo</b>Conciencia, consideración o conversión.</div>
+    <div class="field"><b>Formato y mensaje</b>Video, imagen o carrusel. Propuesta de valor del texto.</div>
+    <div class="field"><b>Público que parece segmentar</b>Edad, género, intereses o ubicación que se infieren.</div>
+    <div class="field"><b>Tiempo activo</b>Fecha de inicio del anuncio y cuántos días lleva.</div>
+    <div class="field"><b>Su campaña propia</b>Objetivo, público, formato y mensaje para el mismo mercado.</div>
+    <div class="field"><b>Métrica de éxito</b>Una métrica principal y el umbral que la haría exitosa.</div>
+  </div>
+  <p class="note">Criterio de evaluación: coherencia entre objetivo, público y métrica (no la creatividad). Un anuncio "bonito" con objetivo equivocado vale menos que uno sencillo bien alineado.</p>
+  <footer><span>La plantilla editable en Word llega antes de la sesión 2</span><span>10 / 12</span></footer>
+</section>
+
+<!-- 11 · LECTURAS Y RECURSOS -->
+<section class="slide">
+  <div class="kicker">Recursos para profundizar</div>
+  <h2>Lecturas, documentos y referencias</h2>
+  <div class="grid" style="gap:12px 20px">
+    <div>
+      <h3 style="margin-bottom:10px">Bibliografía básica (biblioteca UAO)</h3>
+      <a class="link" href="https://elibro.proxyuao.elogim.com/es/lc/bibliouao/titulos/106451" target="_blank" rel="noopener"><span>Guerrero, D. (2019). <i>Facebook Guía Práctica</i>. RA-MA<small>Lectura principal · sesiones 1 y 2</small></span><span class="arr">Abrir ↗</span></a>
+      <a class="link" href="https://elibro.proxyuao.elogim.com/es/lc/bibliouao/titulos/44623" target="_blank" rel="noopener"><span>Gálvez Clavijo, I. (2019). <i>Facebook para empresas y emprendedores</i>. IC Editorial<small>Estrategia para pymes y emprendedores</small></span><span class="arr">Abrir ↗</span></a>
+      <a class="link" href="https://elibro.proxyuao.elogim.com/es/lc/bibliouao/titulos/106408" target="_blank" rel="noopener"><span>Ortega, F. M. (2016). <i>Google Adwords: diseña tu estrategia ganadora</i>. RA-MA<small>Para la sesión 4</small></span><span class="arr">Abrir ↗</span></a>
+      <a class="link" href="https://elibro.proxyuao.elogim.com/es/lc/bibliouao/titulos/66738" target="_blank" rel="noopener"><span>Harnett, M. (2016). <i>Guía de acceso rápido a Google Adwords</i>. Granica<small>Para la sesión 4</small></span><span class="arr">Abrir ↗</span></a>
+    </div>
+    <div>
+      <h3 style="margin-bottom:10px">Fuentes oficiales y de datos</h3>
+      <a class="link" href="https://www.facebook.com/ads/library/" target="_blank" rel="noopener"><span>Biblioteca de Anuncios de Meta<small>Para el taller de hoy · pública</small></span><span class="arr">Abrir ↗</span></a>
+      <div class="link"><span>Centro de ayuda de Meta Business<small>Busca el término en el buscador de ayuda de Meta · definiciones y cambios oficiales</small></span><span class="arr">Buscar</span></div>
+      <a class="link" href="https://datareportal.com/reports/digital-2026-colombia" target="_blank" rel="noopener"><span>DataReportal · Digital 2026 Colombia<small>Cifras de uso digital</small></span><span class="arr">Abrir ↗</span></a>
+      <a class="link" href="https://stats.napoleoncat.com/facebook-users-in-colombia/2026/04/" target="_blank" rel="noopener"><span>NapoleonCat · Facebook Colombia<small>Audiencia mensual por edad y género</small></span><span class="arr">Abrir ↗</span></a>
+      <h3 style="margin:14px 0 10px">Formación oficial gratuita</h3>
+      <div class="link"><span>Meta Blueprint<small>Busca "Meta Blueprint" en el buscador de Meta · cursos gratuitos y certificaciones</small></span><span class="arr">Buscar</span></div>
+    </div>
+  </div>
+  <footer><span>Los enlaces de la biblioteca de la UAO requieren inicio de sesión institucional</span><span>11 / 12</span></footer>
+</section>
+
+<!-- 12 · CIERRE -->
+<section class="slide">
+  <div class="kicker">Para la próxima semana</div>
+  <h2>Sesión 2 · Campañas de Facebook por objetivo</h2>
+  <div class="grid">
+    <div class="card"><span class="n">ANTES DE LA SESIÓN 2</span><p>Termina la ficha del taller de hoy y elige el anunciante que analizarán.</p></div>
+    <div class="card"><span class="n">EN LA SESIÓN 2</span><p>Construiremos una campaña completa, nivel por nivel, con la plantilla de Word.</p></div>
+    <div class="card"><span class="n">PARA PENSAR</span><p>Si Meta decide a quién le muestra tu anuncio, ¿qué decisiones te corresponden a ti?</p></div>
+    <div class="card"><span class="n">PREGUNTA</span><p>¿Qué métrica usarías para decidir si tu campaña de admisiones funciona?</p></div>
+  </div>
+  <footer><span>Pauta Digital · UAO · Taller grupal semana 2 (25 %)</span><span>12 / 12</span></footer>
+</section>
+
+</main>
+
+<div class="nav">
+  <button id="prev">← Anterior</button>
+  <span id="count">1 / 12</span>
+  <button id="next">Siguiente →</button>
+</div>
+
+<script>
+(function(){
+  var c=document.getElementById('bg'),x=c.getContext('2d'),W,H,pts=[],dpr=Math.min(window.devicePixelRatio||1,2);
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';
+    var k=Math.round((innerWidth*innerHeight)/16000);pts=[];
+    for(var j=0;j<k;j++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35*dpr,vy:(Math.random()-.5)*.35*dpr,r:(1+Math.random()*2)*dpr});}
+  var t=0;
+  function frame(){
+    x.clearRect(0,0,W,H);t+=.004;
+    // onda suave de fondo
+    x.beginPath();
+    for(var px=0;px<=W;px+=24*dpr){var py=H*.82+Math.sin(px/(160*dpr)+t*6)*18*dpr+Math.sin(px/(70*dpr)-t*4)*8*dpr;px?x.lineTo(px,py):x.moveTo(px,py);}
+    x.strokeStyle='rgba(24,119,242,.14)';x.lineWidth=2*dpr;x.stroke();
+    x.beginPath();
+    for(var px2=0;px2<=W;px2+=24*dpr){var py2=H*.88+Math.sin(px2/(200*dpr)-t*5)*14*dpr;px2?x.lineTo(px2,py2):x.moveTo(px2,py2);}
+    x.strokeStyle='rgba(255,107,74,.10)';x.lineWidth=1.5*dpr;x.stroke();
+    // partículas y conexiones
+    for(var a=0;a<pts.length;a++){var p=pts[a];p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+      x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle='rgba(24,119,242,.35)';x.fill();
+      for(var b=a+1;b<pts.length;b++){var q=pts[b],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy),lim=130*dpr;
+        if(d<lim){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.strokeStyle='rgba(24,119,242,'+(0.16*(1-d/lim))+')';x.lineWidth=dpr;x.stroke();}}}
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  size();frame();window.addEventListener('resize',function(){size()});
+  if(reduce){/* fondo estático */}
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var i=0,n=slides.length;
+  var prog=document.getElementById('prog'),count=document.getElementById('count');
+  function paint(){count.textContent=(i+1)+' / '+n;prog.style.width=((i+1)/n*100)+'%';}
+  function show(k){
+    if(k<0||k>=n) return;
+    slides[i].classList.remove('on');
+    i=k;
+    slides[i].classList.remove('on'); void slides[i].offsetWidth; slides[i].classList.add('on');
+    paint();
+    try{history.replaceState(null,'','#'+(i+1))}catch(e){}
+  }
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('next').onclick=function(){show(i+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.target.tagName==='A') return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(i+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+  });
+  var h=parseInt((location.hash||'').replace('#',''),10);
+  slides.forEach(function(s){s.classList.remove('on')});
+  if(h>=1&&h<=n){i=h-1}
+  slides[i].classList.add('on');paint();
+})();
+</script>
+</body>
+</html>
